@@ -10,7 +10,6 @@ Braumeister::Application.configure do
   config.action_dispatch.best_standards_support = :builtin
 
   config.assets.compress = false
-
   config.assets.debug = true
 
   config.mongoid.preload_models = false

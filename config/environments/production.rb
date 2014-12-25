@@ -12,7 +12,6 @@ Braumeister::Application.configure do
   config.assets.compress = true
   config.assets.compile = false
   config.assets.digest = true
-  config.assets.precompile += %w{google-analytics.js}
 
   config.i18n.fallbacks = true
 

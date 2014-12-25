@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2012-2014, Sebastian Staudt
 
-Braumeister::Application.routes.draw do
+Rails.application.routes.draw do
 
   resources :repositories, path: 'repos', only: [],
             constraints: { repository_id: /[0-9A-Za-z_-]+?\/[0-9A-Za-z_-]+/ } do
