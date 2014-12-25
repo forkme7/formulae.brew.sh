@@ -3,11 +3,16 @@
 #
 # Copyright (c) 2014, Sebastian Staudt
 
-class ActionDispatch::Journey::Visitors::Formatter
+class ActionDispatch::Journey::Visitors::FormatBuilder
 
-  def visit_SYMBOL(node, name)
-    if value = options[name]
-      escape_path value
+  alias_method :orig_visit_SYMBOL, :visit_SYMBOL
+
+  def visit_SYMBOL(n)
+    symbol = n.to_sym
+    if symbol == :repository_id
+      [ActionDispatch::Journey::Format::Parameter.new(symbol, ->(value) { value })]
+    else
+      orig_visit_SYMBOL n
     end
   end
 
