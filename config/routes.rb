@@ -60,5 +60,7 @@ Rails.application.routes.draw do
   post '*url', to: 'application#forbidden', format: false
   put '/', to: 'application#forbidden', format: false
   put '*url', to: 'application#forbidden', format: false
+  match '/', via: :options, to: 'application#forbidden', format: false
+  match '*url', via: :options, to: 'application#forbidden', format: false
 
 end
