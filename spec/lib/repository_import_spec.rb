@@ -157,7 +157,7 @@ describe RepositoryImport do
 
     it 'uses a forked process to load formula information' do
       class Formulary
-        class StandardLoader; end
+        class FormulaLoader; end
       end
 
       git = mock deps: [], homepage: 'http://git-scm.com', keg_only?: false, name: 'git', stable: mock(version: '1.7.9'), devel: nil, head: mock(version: 'HEAD')
@@ -166,9 +166,11 @@ describe RepositoryImport do
       memcached_loader = mock get_formula: memcached
 
       Formula.expects(:class_s).with('git').returns :Git
-      Formulary::StandardLoader.expects(:new).with('git').returns git_loader
+      Formula.expects(:path).with('git').returns '/path/to/git'
+      Formulary::FormulaLoader.expects(:new).with('git', '/path/to/git').returns git_loader
       Formula.expects(:class_s).with('memcached').returns :Memcached
-      Formulary::StandardLoader.expects(:new).with('memcached').returns memcached_loader
+      Formula.expects(:path).with('memcached').returns '/path/to/memcached'
+      Formulary::FormulaLoader.expects(:new).with('memcached', '/path/to/memcached').returns memcached_loader
 
       formulae_info = repo.send :formulae_info, %w{git memcached}
       expect(formulae_info).to eq({

@@ -116,12 +116,12 @@ module RepositoryImport
               formula = Formula.factory name
             else
               if full?
-                loader = Formulary::StandardLoader
+                loader = Formulary::FormulaLoader.new name, Formula.path(name)
               else
-                loader = Formulary::FromPathLoader
                 name = File.join path, name unless name.start_with?(path)
+                loader = Formulary::FromPathLoader.new name
               end
-              formula = loader.new(name).get_formula :stable
+              formula = loader.get_formula :stable
             end
 
             current_formula_info = formulae_info[formula.name] = {
