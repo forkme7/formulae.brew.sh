@@ -5,9 +5,7 @@ gem 'dalli', '~> 2.7.0'
 gem 'jquery-cdn', '~> 2.1.1'
 gem 'kaminari', '~> 0.16.0'
 gem 'mongoid', '~> 4.0.0'
-gem 'newrelic_rpm', '~> 3.10'
 gem 'rails', '4.2.0'
-gem 'skylight', '~> 0.6.0'
 gem 'text', '~> 1.3.0'
 gem 'unicorn', '~> 4.8.1', platforms: :ruby
 
@@ -29,7 +27,9 @@ end
 
 group :production do
   gem 'airbrake', '~> 4.1.0'
+  gem 'newrelic_rpm', '~> 3.10'
   gem 'rails_12factor', '~> 0.0.2'
+  gem 'skylight', '~> 0.6.0'
 end
 
 group :test do
