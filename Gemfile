@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.2.0'
+ruby '2.2.1'
 
 gem 'dalli', '~> 2.7.0'
 gem 'jquery-cdn', '~> 2.1.1'
