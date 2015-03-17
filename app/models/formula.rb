@@ -25,10 +25,10 @@ class Formula
   alias_method :to_param, :name
 
   belongs_to :repository, validate: false
-  has_and_belongs_to_many :revisions, inverse_of: nil, validate: false
+  has_and_belongs_to_many :revisions, inverse_of: nil, validate: false, index: true
 
-  has_and_belongs_to_many :deps, class_name: self.to_s, inverse_of: :revdeps, validate: false
-  has_and_belongs_to_many :revdeps, class_name: self.to_s, inverse_of: :deps, validate: false
+  has_and_belongs_to_many :deps, class_name: self.to_s, inverse_of: :revdeps, validate: false, index: true
+  has_and_belongs_to_many :revdeps, class_name: self.to_s, inverse_of: :deps, validate: false, index: true
 
   scope :letter, ->(letter) { where(name: /^#{letter.downcase}/) }
 
