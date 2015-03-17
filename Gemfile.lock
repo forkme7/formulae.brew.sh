@@ -56,7 +56,7 @@ GEM
       simplecov (>= 0.7)
       term-ansicolor
       thor
-    dalli (2.7.2)
+    dalli (2.7.3)
     diff-lcs (1.2.5)
     docile (1.1.5)
     dotenv (1.0.2)
