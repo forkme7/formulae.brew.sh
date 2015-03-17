@@ -65,7 +65,8 @@ class FormulaeController < ApplicationController
   end
 
   def show
-    @formula = @repository.formulae.where(name: params[:id]).first
+    formula_id = "#{repository_id}/#{params[:id]}"
+    @formula = Formula.find formula_id
     if @formula.nil?
       formula = @repository.formulae.all_in(aliases: [params[:id]]).first
       unless formula.nil?
@@ -93,14 +94,16 @@ class FormulaeController < ApplicationController
     end
   end
 
+  def repository_id
+    @repository_id ||= params[:repository_id] || Repository::MAIN
+  end
+
   def select_repository
     main_repo_url = "/repos/#{Repository::MAIN}/"
     if request.url.match main_repo_url
       redirect_to '/' + request.url.split(main_repo_url, 2)[1]
       return
     end
-
-    repository_id = params[:repository_id] || Repository::MAIN
 
     @repository = Repository.where(name: /^#{repository_id}$/i).
             only(:_id, :name, :sha, :updated_at).first
