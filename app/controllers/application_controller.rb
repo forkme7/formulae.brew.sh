@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2014, Sebastian Staudt
+# Copyright (c) 2012-2015, Sebastian Staudt
 
 class ApplicationController < ActionController::Base
 
@@ -50,7 +50,7 @@ class ApplicationController < ActionController::Base
   end
 
   def sitemap
-    @repository = Repository.main
+    @repository = Repository.only(:_id, :sha, :updated_at).main
 
     respond_to do |format|
       format.xml
