@@ -10,7 +10,7 @@ gem 'mongoid', '~> 4.0.0'
 gem 'rails', '4.2.1'
 gem 'sass-rails', '~> 5.0'
 gem 'text', '~> 1.3.0'
-gem 'uglifier', '~> 2.5.0'
+gem 'uglifier', '~> 2.7'
 gem 'unicorn', '~> 4.8.1', platforms: :ruby
 
 group :development do
