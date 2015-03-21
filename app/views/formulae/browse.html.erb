@@ -29,7 +29,7 @@
   <% end %>
 </ul>
 
-<% if @formulae.empty? %>
+<% if @formulae.total_count == 0 %>
   <div class="error">Sorry, no formulae are matching your search.</div>
 <% else
   page_params = { id: nil }
