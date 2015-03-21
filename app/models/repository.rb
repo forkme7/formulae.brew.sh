@@ -8,7 +8,7 @@ class Repository
   include Mongoid::Document
   include Mongoid::Timestamps::Updated
 
-  MAIN        = 'Homebrew/homebrew'
+  MAIN = 'Homebrew/homebrew'
 
   field :_id, type: String, overwrite: true, default: ->{ name }
   field :date, type: Time
