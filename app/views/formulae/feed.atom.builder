@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2013, Sebastian Staudt
+# Copyright (c) 2012-2015, Sebastian Staudt
 
 atom_feed :id => "tag:braumeister.org,2012:#{@repository.name}",
           :schema_data => 2012,
@@ -11,6 +11,8 @@ atom_feed :id => "tag:braumeister.org,2012:#{@repository.name}",
 
   feed.link rel: 'search', href: '/opensearch.xml', title: 'braumeister.org – Search',
             type: 'application/opensearchdescription+xml'
+  feed.link rel: 'shortcut icon', href: 'data:image/x-icon;,',
+            type: 'image/x-icon'
 
   add_entry = ->(status, formula, revision) do
     entry_options = {
