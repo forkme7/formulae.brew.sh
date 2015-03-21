@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2014, Sebastian Staudt
+# Copyright (c) 2012-2015, Sebastian Staudt
 
 class Repository
 
@@ -32,7 +32,7 @@ class Repository
   end
 
   def first_letter
-    self.formulae.order_by(%i{name asc}).first.name[0]
+    self.formulae.order_by(%i{name asc}).only(:name).limit(1).to_a.first.name[0]
   end
 
   def main?
