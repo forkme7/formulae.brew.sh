@@ -60,7 +60,7 @@ GEM
     diff-lcs (1.2.5)
     docile (1.1.5)
     erubis (2.7.0)
-    execjs (2.2.2)
+    execjs (2.4.0)
     font-awesome-sass (4.1.0)
       sass (~> 3.2)
     foreman (0.78.0)
