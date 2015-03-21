@@ -27,7 +27,7 @@ class Repository
 
   def feed_link
     feed_link = '/feed.atom'
-    feed_link = "/repos/#{name}" + feed_link unless name == MAIN
+    feed_link = "/repos/#{name}" + feed_link unless main?
     feed_link
   end
 
