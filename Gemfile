@@ -1,20 +1,17 @@
 source 'https://rubygems.org'
 ruby '2.2.1'
 
+gem 'compass-rails', '~> 2.0.0'
 gem 'dalli', '~> 2.7.0'
+gem 'font-awesome-sass', '~> 4.1.0'
 gem 'jquery-cdn', '~> 2.1.1'
 gem 'kaminari', '~> 0.16.0'
 gem 'mongoid', '~> 4.0.0'
 gem 'rails', '4.2.1'
+gem 'sass-rails', '~> 4.0.3'
 gem 'text', '~> 1.3.0'
+gem 'uglifier', '~> 2.5.0'
 gem 'unicorn', '~> 4.8.1', platforms: :ruby
-
-group :assets do
-  gem 'compass-rails', '~> 2.0.0'
-  gem 'font-awesome-sass', '~> 4.1.0'
-  gem 'sass-rails', '~> 4.0.3'
-  gem 'uglifier', '~> 2.5.0'
-end
 
 group :development do
   gem 'foreman', '~> 0.60'
