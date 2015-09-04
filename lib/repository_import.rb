@@ -127,7 +127,7 @@ module RepositoryImport
             current_formula_info = formulae_info[formula.name] = {
               deps: formula.deps.map(&:to_s),
               homepage: formula.homepage,
-              keg_only: formula.keg_only? != false,
+              keg_only: !!formula.keg_only?,
               stable_version: (formula.stable.version.to_s rescue nil),
               devel_version: (formula.devel.version.to_s rescue nil),
               head_version: (formula.head.version.to_s rescue nil)
