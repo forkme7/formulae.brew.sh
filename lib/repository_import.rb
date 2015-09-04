@@ -368,7 +368,7 @@ module RepositoryImport
       reset_head
 
       formulae = self.formulae.where(removed: false).map do |formula|
-        formula.path || formula.name
+        full? ? formula.name : formula.path
       end
 
       formulae_info(formulae).each do |name, formula_info|
