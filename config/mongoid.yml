@@ -1,22 +1,29 @@
 development:
-  sessions:
+  clients:
     default:
+      database: braumeister
       hosts:
         - localhost:27017
-      database: braumeister
-      username: braumeister
-      password: braumeister
+      options:
+        user: braumeister
+        password: braumeister
 
 production:
-  sessions:
+  clients:
     default:
-      uri: <%= ENV['MONGOLAB_URI'] %>
+      database: <%= ENV['MONGOLAB_DB'] %>
+      hosts:
+        - <%= ENV['MONGOLAB_HOST'] %>
+      options:
+        user: <%= ENV['MONGOLAB_USERNAME'] %>
+        password: <%= ENV['MONGOLAB_PASSWORD'] %>
 
 test:
-  sessions:
+  clients:
     default:
+      database: braumeister-test
       hosts:
         - localhost:27017
-      database: braumeister-test
-      username: braumeister
-      password: braumeister
+      options:
+        user: braumeister
+        password: braumeister
