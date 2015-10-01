@@ -13,6 +13,9 @@ Braumeister::Application.configure do
   config.assets.debug = true
 
   config.mongoid.preload_models = false
+
+  Mongo::Logger.logger.level = Logger::INFO
+  Mongoid.logger.level = Logger::INFO
 end
 
 $stdout.sync = true

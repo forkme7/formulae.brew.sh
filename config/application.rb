@@ -21,6 +21,9 @@ module Braumeister
 
     config.middleware.use Mongoid::QueryCache::Middleware
 
+    Mongo::Logger.logger.level = Logger::WARN
+    Mongoid.logger.level = Logger::WARN
+
     def self.tmp_path
       @@tmp_path ||= File.join Rails.root, 'tmp'
     end
