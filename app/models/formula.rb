@@ -74,6 +74,10 @@ class Formula
     stable_version || devel_version || head_version
   end
 
+  def versions
+    [ stable_version, devel_version, head_version ].compact
+  end
+
   private
 
   def set_id

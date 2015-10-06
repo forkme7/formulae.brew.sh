@@ -7,7 +7,7 @@
   <% if @formula.removed? %>
     <h2 class="removed">Formula was removed<br>Last version was:
   <% else %>
-    <h2>Current versions:
+    <h2>Current version<% if @formula.versions.size > 1 %>s<% end %>:
   <% end %>
   <div class="versions">
     <% unless @formula.stable_version.nil? %>
