@@ -82,6 +82,8 @@ module RepositoryImport
 
     pid = fork do
       begin
+        Mongoid::Clients.clear
+
         require 'sandbox_backtick'
         require 'sandbox_io_popen'
 
