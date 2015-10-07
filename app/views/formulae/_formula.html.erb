@@ -1,7 +1,7 @@
 <div class="formula <%= cycle 'even', 'odd' %><%= ' removed' if formula.removed? %>">
   <%= formula_link formula %><br>
+  <%= formula.description %><br>
   Current version: <strong class="version spec-<%= formula.best_spec %>">
     <%= formula.version %>
   </strong><br>
-  Homepage: <%= link_to formula.homepage, formula.homepage %>
 </div>
