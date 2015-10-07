@@ -6,11 +6,15 @@ class Formulary
 
   def self.factory(ref)
     path = nil
-    repo = Repository.all.detect do |repo|
+    repo = @repositories.detect do |repo|
       repo.extend RepositoryImport
       path = repo.find_formula ref
     end
     original_factory(path.nil? ? ref : File.join(repo.path, path))
+  end
+
+  def self.repositories=(repositories)
+    @repositories = repositories
   end
 
 end

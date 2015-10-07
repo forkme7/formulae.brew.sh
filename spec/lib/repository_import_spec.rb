@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2014, Sebastian Staudt
+# Copyright (c) 2014-2015, Sebastian Staudt
 
 require 'repository_import'
 
@@ -127,6 +127,11 @@ describe RepositoryImport do
       class FormulaSpecificationError; end
       class FormulaUnavailableError; end
       class FormulaValidationError; end
+      class Formulary
+        class FormulaLoader; end
+
+        def self.repositories=(repositories); end
+      end
 
       def repo.fork
         yield
@@ -157,10 +162,6 @@ describe RepositoryImport do
     end
 
     it 'uses a forked process to load formula information' do
-      class Formulary
-        class FormulaLoader; end
-      end
-
       git = mock deps: [], desc: 'Distributed revision control system', homepage: 'http://git-scm.com', keg_only?: false, name: 'git', stable: mock(version: '1.7.9'), devel: nil, head: mock(version: 'HEAD')
       git_loader = mock get_formula: git
       memcached = mock deps: %w(libevent), desc: 'High performance, distributed memory object caching system', homepage: 'http://memcached.org/', keg_only?: false, name: 'memcached', stable: mock(version: '1.4.11'), devel: mock(version: '2.0.0.dev') , head: nil

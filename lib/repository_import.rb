@@ -80,10 +80,10 @@ module RepositoryImport
 
     tmp_file = Tempfile.new 'braumeister-import'
 
+    repositories = Repository.all.to_a
+
     pid = fork do
       begin
-        Mongoid::Clients.clear
-
         require 'sandbox_backtick'
         require 'sandbox_io_popen'
 
@@ -103,6 +103,8 @@ module RepositoryImport
         require 'sandbox_formulary'
         require 'sandbox_macos'
         require 'sandbox_utils'
+
+        Formulary.repositories = repositories
 
         formulae_info = {}
         formulae.each do |name|
