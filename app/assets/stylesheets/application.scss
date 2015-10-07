@@ -217,6 +217,10 @@ div#deps, div#revdeps {
   }
 }
 
+div#description {
+  padding: 0 0 1em 0 !important;
+}
+
 div#flash-error, div#flash-notice {
   @include border-radius(0 0 5px 5px);
 

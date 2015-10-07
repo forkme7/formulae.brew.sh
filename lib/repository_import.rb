@@ -126,6 +126,7 @@ module RepositoryImport
             end
 
             current_formula_info = formulae_info[formula.name] = {
+              description: formula.desc,
               deps: formula.deps.map(&:to_s),
               homepage: formula.homepage,
               keg_only: !!formula.keg_only?,

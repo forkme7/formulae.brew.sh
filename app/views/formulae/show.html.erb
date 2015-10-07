@@ -4,6 +4,8 @@
 <% end %>
 
 <div id="basic">
+  <div id="description"><%= @formula.description %></div>
+
   <% if @formula.removed? %>
     <h2 class="removed">Formula was removed<br>Last version was:
   <% else %>

@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2014, Sebastian Staudt
+# Copyright (c) 2012-2015, Sebastian Staudt
 
 class Formula
 
@@ -11,6 +11,7 @@ class Formula
   field :_id, type: String, overwrite: true
   field :aliases, type: Array
   field :date, type: Time
+  field :description, type: String
   field :devel_version, type: String
   field :head_version, type: String
   field :keg_only, type: Boolean, default: false
@@ -63,6 +64,7 @@ class Formula
   end
 
   def update_metadata(formula_info)
+    self.description = formula_info[:description]
     self.homepage = formula_info[:homepage]
     self.keg_only = formula_info[:keg_only]
     self.stable_version = formula_info[:stable_version]
