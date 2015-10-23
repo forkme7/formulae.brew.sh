@@ -10,13 +10,13 @@ end
 if defined? ::MacOS
   MacOS.methods.select { |m| m.to_s =~ /_version$/ }.each do |m|
     MacOS.send :undef_method, m
-    MacOS.send :define_method, m, ->{ '0' }
+    MacOS.send :define_method, m, ->{ '1.0' }
   end
 
   if defined? ::MacOS::Xcode
     MacOS::Xcode.methods.select { |m| m.to_s =~ /_version$/ }.each do |m|
       MacOS::Xcode.send :undef_method, m
-      MacOS::Xcode.send :define_method, m, ->{ '0' }
+      MacOS::Xcode.send :define_method, m, ->{ '1.0' }
     end
   end
 end
