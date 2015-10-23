@@ -98,6 +98,7 @@ module RepositoryImport
 
         require 'Library/Homebrew/global'
         require 'Library/Homebrew/formula'
+        require 'Library/Homebrew/os/mac'
 
         require 'sandbox_argv'
         require 'sandbox_formulary'
