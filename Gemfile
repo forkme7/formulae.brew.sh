@@ -24,7 +24,7 @@ end
 
 group :production do
   gem 'airbrake', '~> 4.1.0'
-  gem 'newrelic_rpm', '~> 3.10'
+  gem 'newrelic_rpm', '~> 3.14'
   gem 'rails_12factor', '~> 0.0.2'
   gem 'skylight', '~> 0.6.0'
 end
