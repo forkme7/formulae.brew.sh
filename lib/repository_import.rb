@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2014, Sebastian Staudt
+# Copyright (c) 2014-2015, Sebastian Staudt
 
 module RepositoryImport
 
@@ -424,7 +424,7 @@ module RepositoryImport
       unless full?
         formulae_path = File.join main_repo.path, 'Library', 'Formula'
         Dir.glob File.join(path, '*.rb') do |formula|
-          `ln -s #{formula} #{formulae_path} 2>/dev/null`
+          system('ln', '-s', formula, formulae_path, err: '/dev/null')
         end
       end
 
