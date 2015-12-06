@@ -38,8 +38,12 @@ class FormulaeController < ApplicationController
     term = params[:search]
     @title = "Search for: #{term}"
     @title << " in #{@repository.name}" unless @repository.main?
-    @formulae = @repository.formulae.
-      where name: /#{Regexp.escape term}/i, removed: false
+    search_term = /#{Regexp.escape term}/i
+    @formulae = @repository.formulae.and(removed: false, :$or => [
+            { aliases: search_term },
+            { description: search_term },
+            { name: search_term }
+    ])
 
     if @formulae.size == 1 && term == @formulae.first.name
       if @repository.main?
