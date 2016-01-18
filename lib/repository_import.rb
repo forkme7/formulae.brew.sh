@@ -91,6 +91,9 @@ module RepositoryImport
         $LOAD_PATH.unshift $homebrew_path
         $LOAD_PATH.unshift File.join($homebrew_path, 'Library', 'Homebrew')
         ENV['HOMEBREW_BREW_FILE'] = File.join $homebrew_path, 'bin', 'brew'
+        ENV['HOMEBREW_LIBRARY'] = File.join $homebrew_path, 'Library'
+        ENV['HOMEBREW_PREFIX'] = $homebrew_path
+        ENV['HOMEBREW_REPOSITORY'] = File.join $homebrew_path, '.git'
 
         Object.send(:remove_const, :Formula) if Object.const_defined? :Formula
 
