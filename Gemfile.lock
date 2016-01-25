@@ -110,7 +110,7 @@ GEM
     multi_json (1.11.2)
     netrc (0.10.3)
     newrelic_rpm (3.14.0.305)
-    nokogiri (1.6.7.1)
+    nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     origin (2.1.1)
     rack (1.6.4)
