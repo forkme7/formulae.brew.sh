@@ -100,7 +100,7 @@ GEM
     minitest (5.8.3)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
-    mongo (2.2.1)
+    mongo (2.2.2)
       bson (~> 4.0)
     mongoid (5.0.2)
       activemodel (~> 4.0)
