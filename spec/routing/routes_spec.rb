@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2014, Sebastian Staudt
+# Copyright (c) 2012-2016, Sebastian Staudt
 
 require 'rails_helper'
 
@@ -137,9 +137,22 @@ describe 'routing' do
     expect(get: '/unknown').to route_to('application#not_found', url: 'unknown')
   end
 
-  it 'disallows DELETE requests'
+  it 'disallows DELETE requests' do
+    expect(delete: '/').to route_to('application#forbidden')
+    expect(delete: '/formula/git').to route_to('application#forbidden', url: 'formula/git')
+    expect(delete: '/repos/adamv/homebrew-alt/formula/git').to route_to('application#forbidden', url: 'repos/adamv/homebrew-alt/formula/git')
+  end
 
-  it 'disallows POST requests'
+  it 'disallows POST requests' do
+    expect(post: '/').to route_to('application#forbidden')
+    expect(post: '/formula/git').to route_to('application#forbidden', url: 'formula/git')
+    expect(post: '/repos/adamv/homebrew-alt/formula/git').to route_to('application#forbidden', url: 'repos/adamv/homebrew-alt/formula/git')
+  end
 
-  it 'disallows PUT requests'
+  it 'disallows PUT requests' do
+    expect(put: '/').to route_to('application#forbidden')
+    expect(put: '/formula/git').to route_to('application#forbidden', url: 'formula/git')
+    expect(put: '/repos/adamv/homebrew-alt/formula/git').to route_to('application#forbidden', url: 'repos/adamv/homebrew-alt/formula/git')
+  end
+
 end
