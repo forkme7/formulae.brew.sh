@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2014, Sebastian Staudt
+# Copyright (c) 2012-2016, Sebastian Staudt
 
 Rails.application.routes.draw do
 
@@ -20,7 +20,10 @@ Rails.application.routes.draw do
     end
 
     resources :formula, controller: :formulae, only: :show,
-              constraints: { id: /.*/, format: 'html' }
+              constraints: { id: /.*/, format: 'html' } do
+      get '/version', controller: :api, action: :version,
+          constraints: { format: :json }, defaults: { format: :json }
+    end
 
     scope format: true, :constraints => { :format => 'atom' } do
       get '/feed' => 'formulae#feed', as: :feed
@@ -40,7 +43,10 @@ Rails.application.routes.draw do
   end
 
   resources :formula, controller: :formulae, only: :show,
-            constraints: { id: /.*/, format: 'html' }
+            constraints: { id: /.*/, format: 'html' } do
+    get '/version', controller: :api, action: :version,
+        constraints: { format: :json }, defaults: { format: :json }
+  end
 
   scope format: true, :constraints => { :format => 'atom' } do
     get '/feed' => 'formulae#feed', as: :feed
