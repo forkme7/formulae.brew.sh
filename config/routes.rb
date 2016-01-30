@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
     resources :formula, controller: :formulae, only: :show,
               constraints: { id: /.*/, format: :html } do
-      get '/version', controller: :api, action: :version,
+      get '/version', controller: :api, action: :version, as: :version,
           constraints: { format: :json }, defaults: { format: :json }
     end
 
@@ -44,7 +44,7 @@ Rails.application.routes.draw do
 
   resources :formula, controller: :formulae, only: :show,
             constraints: { id: /.*/, format: :html } do
-    get '/version', controller: :api, action: :version,
+    get '/version', controller: :api, action: :version, as: :version,
         constraints: { format: :json }, defaults: { format: :json }
   end
 
