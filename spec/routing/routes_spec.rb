@@ -51,6 +51,14 @@ describe 'routing' do
     )
   end
 
+  it 'routes /formula/:name/version to api#version for name' do
+    expect(get: '/formula/git/version').to route_to(
+      'api#version',
+      format: :json,
+      formula_id: 'git'
+    )
+  end
+
   it 'routes /feed.atom to formulae#feed' do
     expect(get: '/feed.atom').to route_to('formulae#feed', format: 'atom')
   end
@@ -100,6 +108,15 @@ describe 'routing' do
     expect(get: '/repos/adamv/homebrew-alt/formula/git').to route_to(
       'formulae#show',
       id: 'git',
+      repository_id: 'adamv/homebrew-alt'
+    )
+  end
+
+  it 'routes /repos/adamv/homebrew-alt/formula/:name/version to api#version for name' do
+    expect(get: '/repos/adamv/homebrew-alt/formula/git/version').to route_to(
+      'api#version',
+      format: :json,
+      formula_id: 'git',
       repository_id: 'adamv/homebrew-alt'
     )
   end
