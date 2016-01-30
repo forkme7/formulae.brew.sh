@@ -23,6 +23,7 @@ module Braumeister
 
     Mongo::Logger.logger.level = Logger::WARN
     Mongoid.logger.level = Logger::WARN
+    Mongoid.raise_not_found_error = false
 
     def self.tmp_path
       @@tmp_path ||= File.join Rails.root, 'tmp'
