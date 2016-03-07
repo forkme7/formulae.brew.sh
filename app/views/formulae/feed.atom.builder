@@ -18,7 +18,8 @@ atom_feed :id => "tag:braumeister.org,2012:#{@repository.name}",
     entry_options = {
       id: "tag:braumeister.org,2012:#{@repository.name}/#{formula.name}-#{revision.sha}",
       published: revision.date,
-      updated:   revision.date
+      updated:   revision.date,
+      url: formula.in_main? ? polymorphic_path(formula) : polymorphic_path([@repository, formula])
     }
 
     feed.entry formula, entry_options do |entry|
