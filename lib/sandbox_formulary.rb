@@ -4,6 +4,10 @@ class Formulary
     alias_method :original_factory, :factory
   end
 
+  def self.core_path(name)
+    Repository.main.extend(RepositoryImport).find_formula name
+  end
+
   def self.factory(ref)
     path = nil
     repo = @repositories.detect do |repo|
