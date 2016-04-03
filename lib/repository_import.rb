@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2014-2015, Sebastian Staudt
+# Copyright (c) 2014-2016, Sebastian Staudt
 
 module RepositoryImport
 
@@ -105,6 +105,7 @@ module RepositoryImport
         require 'Library/Homebrew/os/mac'
 
         require 'sandbox_argv'
+        require 'sandbox_coretap'
         require 'sandbox_formulary'
         require 'sandbox_macos'
         require 'sandbox_utils'
