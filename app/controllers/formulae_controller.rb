@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2014, Sebastian Staudt
+# Copyright (c) 2012-2016, Sebastian Staudt
 
 require 'text'
 
@@ -99,11 +99,11 @@ class FormulaeController < ApplicationController
   end
 
   def repository_id
-    @repository_id ||= params[:repository_id] || Repository::MAIN
+    @repository_id ||= params[:repository_id] || Repository::CORE
   end
 
   def select_repository
-    main_repo_url = "/repos/#{Repository::MAIN}/"
+    main_repo_url = "/repos/#{Repository::CORE}/"
     if request.url.match main_repo_url
       redirect_to '/' + request.url.split(main_repo_url, 2)[1]
       return

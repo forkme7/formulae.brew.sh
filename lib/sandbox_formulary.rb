@@ -5,7 +5,7 @@ class Formulary
   end
 
   def self.core_path(name)
-    Repository.main.extend(RepositoryImport).find_formula name
+    Pathname.new Repository.core.extend(RepositoryImport).find_formula(name)
   end
 
   def self.factory(ref)
@@ -15,6 +15,10 @@ class Formulary
       path = repo.find_formula ref
     end
     original_factory(path.nil? ? ref : File.join(repo.path, path))
+  end
+
+  class << self
+    alias_method :get_formula, :factory
   end
 
   def self.repositories=(repositories)

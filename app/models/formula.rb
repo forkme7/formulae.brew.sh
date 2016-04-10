@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2015, Sebastian Staudt
+# Copyright (c) 2012-2016, Sebastian Staudt
 
 class Formula
 
@@ -45,8 +45,8 @@ class Formula
     end
   end
 
-  def in_main?
-    self.repository_id == Repository::MAIN
+  def in_core?
+    self.repository_id == Repository::CORE
   end
 
   def path

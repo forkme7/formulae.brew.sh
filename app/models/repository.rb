@@ -1,14 +1,15 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2015, Sebastian Staudt
+# Copyright (c) 2012-2016, Sebastian Staudt
 
 class Repository
 
   include Mongoid::Document
   include Mongoid::Timestamps::Updated
 
-  MAIN = 'Homebrew/homebrew'
+  CORE = 'Homebrew/homebrew-core'
+  MAIN = 'Homebrew/brew'
 
   field :_id, type: String, overwrite: true, default: ->{ name }
   field :date, type: Time
@@ -21,8 +22,18 @@ class Repository
   has_many :formulae, dependent: :destroy, validate: false
   has_many :revisions, dependent: :destroy, validate: false
 
+  default_scope -> { where :name.ne => MAIN }
+
+  def self.core
+    find CORE
+  end
+
   def self.main
-    find MAIN
+    unscoped.find MAIN
+  end
+
+  def core?
+    name == CORE
   end
 
   def feed_link

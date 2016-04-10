@@ -71,13 +71,18 @@ module RepositoryImport
     end
   end
 
-  def find_formula(name)
-    git("ls-files | grep -E '(^|/)#{name}.rb'").lines.first.strip rescue nil
+  def core_repo
+    Repository.core.extend RepositoryImport
+  end
+
+  def find_formula(file)
+    file = file.to_s
+    file.gsub! /(?<=[^\\])\+/, '\\\\+'
+    file = file + '.rb' unless file.end_with? '.rb'
+    git("ls-files | grep -E '(^|/)#{file}'").lines.first.strip rescue nil
   end
 
   def formulae_info(formulae, backward_compat = false)
-    base_repo = full? ? self : main_repo
-
     tmp_file = Tempfile.new 'braumeister-import'
 
     repositories = Repository.all.to_a
@@ -87,12 +92,13 @@ module RepositoryImport
         require 'sandbox_backtick'
         require 'sandbox_io_popen'
 
-        $homebrew_path = base_repo.path
+        $homebrew_path = main_repo.path
         $LOAD_PATH.unshift $homebrew_path
         $LOAD_PATH.unshift File.join($homebrew_path, 'Library', 'Homebrew')
         ENV['HOMEBREW_BREW_FILE'] = File.join $homebrew_path, 'bin', 'brew'
         ENV['HOMEBREW_CELLAR'] = File.join $homebrew_path, 'Cellar'
         ENV['HOMEBREW_LIBRARY'] = File.join $homebrew_path, 'Library'
+        ENV['HOMEBREW_OSX_VERSION'] = '10.11'
         ENV['HOMEBREW_PREFIX'] = $homebrew_path
         ENV['HOMEBREW_REPOSITORY'] = File.join $homebrew_path, '.git'
 
@@ -123,16 +129,11 @@ module RepositoryImport
             end
 
             if backward_compat
-              name = File.join path, name unless full? || name.start_with?(path)
+              name = File.join path, name unless core? || name.start_with?(path)
               formula = Formula.factory name
             else
-              if full?
-                loader = Formulary::FormulaLoader.new name, Formula.path(name)
-              else
-                name = File.join path, name unless name.start_with?(path)
-                loader = Formulary::FromPathLoader.new name
-              end
-              formula = loader.get_formula :stable
+              Rails.logger.debug Formula.path(name)
+              formula = Formulary.factory Formula.path(name)
             end
 
             current_formula_info = formulae_info[formula.name] = {
@@ -140,9 +141,9 @@ module RepositoryImport
               deps: formula.deps.map(&:to_s),
               homepage: formula.homepage,
               keg_only: !!formula.keg_only?,
-              stable_version: (formula.stable.version.to_s rescue nil),
-              devel_version: (formula.devel.version.to_s rescue nil),
-              head_version: (formula.head.version.to_s rescue nil)
+              stable_version: formula.stable.try(:version).try(:to_s),
+              devel_version: formula.devel.try(:version).try(:to_s),
+              head_version: formula.head.try(:version).try(:to_s)
             }
 
             if current_formula_info[:stable_version].nil? &&
@@ -181,7 +182,7 @@ module RepositoryImport
   def formula_regex
     return Regexp.new(special_formula_regex) unless special_formula_regex.nil?
 
-    full? ? /^(?:Library\/)?Formula\/(.+?)\.rb$/ : /^(.+?\.rb)$/
+    core? ? /^(?:Library\/)?Formula\/(.+?)\.rb$/ : /^(.+?\.rb)$/
   end
 
   def generate_formula_history(formula)
@@ -209,7 +210,7 @@ module RepositoryImport
     Rails.logger.info "Regenerating history for #{ref}..."
 
     log_cmd = ref
-    log_cmd << " -- 'Formula' 'Library/Formula'" if full?
+    log_cmd << " -- 'Formula'" if core?
 
     analyze_commits log_cmd
   end
@@ -237,7 +238,7 @@ module RepositoryImport
     reset_head
 
     log_cmd = "log --format=format:'%H' --diff-filter=D -M --name-only"
-    log_cmd << " -- 'Formula' 'Library/Formula'" if full?
+    log_cmd << " -- 'Formula'" if core?
 
     git(log_cmd).split(/\n\n/).each do |commit|
       sha, *files = commit.lines
@@ -267,7 +268,7 @@ module RepositoryImport
           next if formula_info.nil?
           formula.deps = formula_info[:deps].map do |dep|
             self.formulae.where(name: dep).first ||
-              Repository.main.formulae.where(name: dep).first
+              Repository.core.formulae.where(name: dep).first
           end
           formula.removed  = true
           formula.update_metadata formula_info
@@ -302,7 +303,7 @@ module RepositoryImport
       path, name = File.split fpath.match(formula_regex)[1]
       name = File.basename name, '.rb'
       formula = self.formulae.find_or_initialize_by name: name
-      formula.path = (full? || path == '.' ? nil : path)
+      formula.path = (core? || path == '.' ? nil : path)
       if type == 'D'
         removed += 1
         formula.removed = true
@@ -319,7 +320,7 @@ module RepositoryImport
         next if formula_info.nil?
         formula.deps = formula_info[:deps].map do |dep|
           self.formulae.where(name: dep).first ||
-            Repository.main.formulae.where(name: dep).first
+            Repository.core.formulae.where(name: dep).first
         end
         formula.update_metadata formula_info
         formula.removed = false
@@ -380,7 +381,7 @@ module RepositoryImport
       reset_head
 
       formulae = self.formulae.where(removed: false).map do |formula|
-        full? ? formula.name : formula.path
+        core? ? formula.name : formula.path
       end
 
       formulae_info(formulae).each do |name, formula_info|
@@ -401,11 +402,11 @@ module RepositoryImport
       return [], [], sha if sha == last_sha
 
       if last_sha.nil?
-        if full?
-          formulae = git 'ls-tree --name-only HEAD Library/Formula/'
+        if core?
+          formulae = git 'ls-tree --name-only HEAD Formula/'
           formulae = formulae.lines.map { |file| ['A', file.strip] }
 
-          aliases = git 'ls-tree --name-only HEAD Library/Aliases/'
+          aliases = git 'ls-tree --name-only HEAD Aliases/'
           aliases = aliases.lines.map { |file| ['A', file.strip] }
         else
           formulae = git 'ls-tree --name-only -r HEAD'
@@ -421,13 +422,13 @@ module RepositoryImport
         diff = diff.lines.map { |file| file.split }
 
         formulae = diff.select { |file| file[1] =~ formula_regex }
-        aliases = full? ? diff.select { |file| file[1] =~ ALIAS_REGEX } : []
+        aliases = core? ? diff.select { |file| file[1] =~ ALIAS_REGEX } : []
 
         Rails.logger.info "Updated #{name} from #{last_sha} to #{sha}:"
       end
 
-      unless full?
-        formulae_path = File.join main_repo.path, 'Library', 'Formula'
+      unless core?
+        formulae_path = File.join core_repo.path, 'Formula'
         Dir.glob File.join(path, '*.rb') do |formula|
           system('ln', '-s', formula, formulae_path, err: '/dev/null')
         end

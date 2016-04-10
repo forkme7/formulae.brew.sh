@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2015, Sebastian Staudt
+# Copyright (c) 2012-2016, Sebastian Staudt
 
 class ApplicationController < ActionController::Base
 
@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
       format.any { render nothing: true, status: :not_found }
     end
 
-    fresh_when etag: Repository.main.sha, public: true
+    fresh_when etag: Repository.core.sha, public: true
   end
 
   def error_page
@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
   end
 
   def sitemap
-    @repository = Repository.only(:_id, :sha, :updated_at).main
+    @repository = Repository.only(:_id, :sha, :updated_at).core
 
     respond_to do |format|
       format.xml
@@ -63,8 +63,10 @@ class ApplicationController < ActionController::Base
   private
 
   def main_page
-    @alt_repos = Repository.only(:_id, :date, :name, :sha, :updated_at).order_by([:name, :asc]).to_a
-    @repository = @alt_repos.find { |repo| repo.name == Repository::MAIN }
+    @alt_repos = Repository.only(:_id, :date, :name, :sha, :updated_at).
+            order_by([:name, :asc]).
+            where(:name.ne => Repository::MAIN).to_a
+    @repository = @alt_repos.find { |repo| repo.name == Repository::CORE }
     @alt_repos -= [ @repository ]
 
     @added = @repository.formulae.with_size(revision_ids: 1).
