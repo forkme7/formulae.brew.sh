@@ -1,13 +1,13 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2013, Sebastian Staudt
+# Copyright (c) 2013-2016, Sebastian Staudt
 
 module Kernel
 
   ENCODING_HEADER = "# encoding: ascii\n"
 
-  HOMEBREW_PREFIX = Repository.main.path
+  HOMEBREW_PREFIX = Repository.main.extend(RepositoryImport).path
   VERSION = RUBY_VERSION
 
   alias_method :orig_require, :require
