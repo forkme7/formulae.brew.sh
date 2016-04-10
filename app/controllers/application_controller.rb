@@ -5,8 +5,13 @@
 
 class ApplicationController < ActionController::Base
 
+  class RepositoryUnavailable < StandardError; end
+
   protect_from_forgery with: :exception
   rescue_from Mongoid::Errors::DocumentNotFound, with: :not_found
+  rescue_from RepositoryUnavailable do
+    error_page :service_unavailable
+  end
 
   def index
     main_page
@@ -19,12 +24,14 @@ class ApplicationController < ActionController::Base
     fresh_when etag: Repository.core.sha, public: true
   end
 
-  def error_page
+  def error_page(status = :internal_server_error)
     Airbrake.notify $! if defined? Airbrake
 
+    view = 'application/%d' % [ Rack::Utils::SYMBOL_TO_STATUS_CODE[status] ]
+
     respond_to do |format|
-      format.html { render 'application/500', status: :internal_server_error }
-      format.any { render nothing: true, status: :internal_server_error }
+      format.html { render view, status: status }
+      format.any { render nothing: true, status: status }
     end
 
     headers.delete 'ETag'
@@ -68,6 +75,8 @@ class ApplicationController < ActionController::Base
             where(:name.ne => Repository::MAIN).to_a
     @repository = @alt_repos.find { |repo| repo.name == Repository::CORE }
     @alt_repos -= [ @repository ]
+
+    raise RepositoryUnavailable if @repository.nil?
 
     @added = @repository.formulae.with_size(revision_ids: 1).
             order_by(%i{date desc}).
