@@ -156,6 +156,9 @@ module RepositoryImport
                  SyntaxError, TypeError
             error_msg = "Formula '#{name}' could not be imported because of an error:\n" <<
                     "    #{$!.class}: #{$!.message}"
+            if $DEBUG
+              $!.backtrace.each { |line| error_msg << "  #{line}\n" }
+            end
             Rails.logger.warn error_msg
             if defined? Airbrake
               Airbrake.notify $!, { error_message: error_msg }
@@ -276,7 +279,11 @@ module RepositoryImport
           Rails.logger.info "Successfully recovered #{formula.name} from commit #{sha}"
         end
       rescue
-        Rails.logger.debug "Commit #{sha} could not be imported because of an error: #{$!.message}"
+        error_msg = "Commit #{sha} could not be imported because of an error: #{$!.message}"
+        if $DEBUG
+          $!.backtrace.each { |line| error_msg << "  #{line}\n" }
+        end
+        Rails.logger.debug error_msg
         retry unless sha =~ /\^\^\^\^\^/
       end
     end
