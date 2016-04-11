@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2014, Sebastian Staudt
+# Copyright (c) 2012-2016, Sebastian Staudt
 
 require 'repository_import'
 
@@ -44,7 +44,7 @@ namespace :braumeister do
 
   task :select_repos, [:repo] => :environment do |_, args|
     @repos = if args[:repo].nil?
-      repos = ([Repository.main] + Repository.all).uniq
+      repos = ([Repository.core] + Repository.all).uniq
       repos.each { |repo| repo.extend RepositoryImport }
     else
       repo = Repository.where(name: args[:repo])
