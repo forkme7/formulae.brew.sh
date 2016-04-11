@@ -47,8 +47,9 @@ namespace :braumeister do
       repos = ([Repository.core] + Repository.all).uniq
       repos.each { |repo| repo.extend RepositoryImport }
     else
-      repo = Repository.where(name: args[:repo])
+      repo = Repository.where(name: args[:repo]).first
       repo.extend RepositoryImport
+      [ repo ]
     end
   end
 
