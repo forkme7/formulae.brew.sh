@@ -132,7 +132,6 @@ module RepositoryImport
               name = File.join path, name unless core? || name.start_with?(path)
               formula = Formula.factory name
             else
-              Rails.logger.debug Formula.path(name)
               formula = Formulary.factory Formula.path(name)
             end
 
