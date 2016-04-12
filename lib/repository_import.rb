@@ -199,7 +199,7 @@ module RepositoryImport
 
     Rails.logger.info "Resetting history of #{name}"
     self.formulae.each { |f| f.revisions.nullify }
-    self.revisions.destroy
+    self.revisions.unscoped.destroy
     self.revisions.clear
     self.authors.destroy
     self.authors.clear
