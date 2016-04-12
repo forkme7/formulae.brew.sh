@@ -23,18 +23,18 @@ describe FormulaeController do
 
     it 'redirects to the short url for Repository::MAIN' do
       request = mock
-      request.expects(:url).twice.returns "http://braumeister.org/repos/#{Repository::MAIN}/browse"
+      request.expects(:url).twice.returns "http://braumeister.org/repos/#{Repository::CORE}/browse"
       controller.expects(:request).twice.returns request
       controller.expects(:redirect_to).with '/browse'
 
       controller.send :select_repository
     end
 
-    it 'the repository defaults to Repository::MAIN' do
+    it 'the repository defaults to Repository::CORE' do
       repo = mock
-      repo.expects(:name).returns Repository::MAIN
+      repo.expects(:name).returns Repository::CORE
       criteria = mock
-      Repository.expects(:where).with(name: /^#{Repository::MAIN}$/i).returns criteria
+      Repository.expects(:where).with(name: /^#{Repository::CORE}$/i).returns criteria
       criteria.expects(:only).with(:_id, :name, :sha, :updated_at).returns [ repo ]
 
       controller.send :select_repository
