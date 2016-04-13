@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2015, Sebastian Staudt
+# Copyright (c) 2012-2016, Sebastian Staudt
 
 atom_feed :id => "tag:braumeister.org,2012:#{@repository.name}",
           :schema_data => 2012,
@@ -19,7 +19,7 @@ atom_feed :id => "tag:braumeister.org,2012:#{@repository.name}",
       id: "tag:braumeister.org,2012:#{@repository.name}/#{formula.name}-#{revision.sha}",
       published: revision.date,
       updated:   revision.date,
-      url: formula.in_main? ? polymorphic_path(formula) : polymorphic_path([@repository, formula])
+      url: formula.in_core? ? polymorphic_path(formula) : polymorphic_path([@repository, formula])
     }
 
     feed.entry formula, entry_options do |entry|

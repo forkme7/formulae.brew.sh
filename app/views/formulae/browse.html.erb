@@ -1,6 +1,6 @@
 <h1>Package listing</h1>
 
-<% if @repository.main? %>
+<% if @repository.core? %>
   This is a listing of all packages available via the Homebrew package manager
   for MacOS X.
 <% else %>
@@ -15,7 +15,7 @@
 
 <ul id="letters">
   <% ('A'..'Z').each do |letter|
-    letter_url = @repository.main? ? letter_formulae_path(letter.downcase) : letter_repository_formulae_path(@repository.name, letter.downcase) %>
+    letter_url = @repository.core? ? letter_formulae_path(letter.downcase) : letter_repository_formulae_path(@repository.name, letter.downcase) %>
     <li>
       <% if @letters.include? letter
         letter_class = 'current' if letter == (params[:letter] || '').upcase %>

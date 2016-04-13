@@ -13,7 +13,7 @@ class FormulaeController < ApplicationController
   def browse
     letter = params[:letter]
     @title = "Browse formulae – #{letter.upcase}"
-    @title << " – #{@repository.name}" unless @repository.main?
+    @title << " – #{@repository.name}" unless @repository.core?
 
     @formulae = @repository.formulae.letter(letter).
             where(removed: false).order_by([:name, :asc]).
@@ -37,7 +37,7 @@ class FormulaeController < ApplicationController
 
     term = params[:search]
     @title = "Search for: #{term}"
-    @title << " in #{@repository.name}" unless @repository.main?
+    @title << " in #{@repository.name}" unless @repository.core?
     search_term = /#{Regexp.escape term}/i
     @formulae = @repository.formulae.and(removed: false, :$or => [
             { aliases: search_term },
@@ -46,7 +46,7 @@ class FormulaeController < ApplicationController
     ])
 
     if @formulae.size == 1 && term == @formulae.first.name
-      if @repository.main?
+      if @repository.core?
         redirect_to formula_path(@formulae.first)
       else
         redirect_to repository_formula_path(@repository.name, @formulae.first)
@@ -74,7 +74,7 @@ class FormulaeController < ApplicationController
     if @formula.nil?
       formula = @repository.formulae.all_in(aliases: [params[:id]]).first
       unless formula.nil?
-        if @repository.main?
+        if @repository.core?
           redirect_to formula
         else
           redirect_to repository_formula_path(@repository.name, formula)
@@ -84,7 +84,7 @@ class FormulaeController < ApplicationController
       raise Mongoid::Errors::DocumentNotFound.new(Formula, [], params[:id])
     end
     @title = @formula.name.dup
-    @title << " – #{@repository.name}" unless @repository.main?
+    @title << " – #{@repository.name}" unless @repository.core?
     @revisions = @formula.revisions.includes(:author).order_by %i{date desc}
 
     fresh_when etag: @revisions.first.sha, public: true
@@ -103,9 +103,9 @@ class FormulaeController < ApplicationController
   end
 
   def select_repository
-    main_repo_url = "/repos/#{Repository::CORE}/"
-    if request.url.match main_repo_url
-      redirect_to '/' + request.url.split(main_repo_url, 2)[1]
+    core_repo_url = "/repos/#{Repository::CORE}/"
+    if request.url.match core_repo_url
+      redirect_to '/' + request.url.split(core_repo_url, 2)[1]
       return
     end
 

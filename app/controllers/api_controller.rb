@@ -11,7 +11,7 @@ class ApiController < FormulaeController
     if @formula.nil?
       formula = @repository.formulae.all_in(aliases: [params[:formula_id]]).first
       unless formula.nil?
-        if @repository.main?
+        if @repository.core?
           redirect_to formula_version_path(formula)
         else
           redirect_to repository_formula_version_path(@repository.name, formula)
