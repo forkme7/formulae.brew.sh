@@ -5,7 +5,8 @@ class Formulary
   end
 
   def self.core_path(name)
-    Pathname.new Repository.core.extend(RepositoryImport).find_formula(name)
+    formula = Repository.core.extend(RepositoryImport).find_formula(name) || ''
+    Pathname.new formula
   end
 
   def self.factory(ref)
