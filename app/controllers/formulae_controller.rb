@@ -23,7 +23,7 @@ class FormulaeController < ApplicationController
   end
 
   def feed
-    @revisions = @repository.revisions.order_by([:date, :desc]).limit 50
+    @revisions = @repository.revisions.without_bot.order_by([:date, :desc]).limit 50
 
     respond_to do |format|
       format.atom
@@ -85,7 +85,7 @@ class FormulaeController < ApplicationController
     end
     @title = @formula.name.dup
     @title << " – #{@repository.name}" unless @repository.core?
-    @revisions = @formula.revisions.includes(:author).order_by %i{date desc}
+    @revisions = @formula.revisions.without_bot.includes(:author).order_by %i{date desc}
 
     fresh_when etag: @revisions.first.sha, public: true
   end

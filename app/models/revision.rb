@@ -19,6 +19,6 @@ class Revision
   has_and_belongs_to_many :updated_formulae, class_name: 'Formula', inverse_of: nil, validate: false
   has_and_belongs_to_many :removed_formulae, class_name: 'Formula', inverse_of: nil, validate: false
 
-  default_scope -> { where :author_id.ne => 'brew-test-bot@googlegroups.com' }
+  scope :without_bot, -> { where :author_id.ne => 'brew-test-bot@googlegroups.com' }
 
 end
