@@ -71,8 +71,7 @@ class ApplicationController < ActionController::Base
 
   def main_page
     @alt_repos = Repository.only(:_id, :date, :name, :sha, :updated_at).
-            order_by([:name, :asc]).
-            where(:name.ne => Repository::MAIN).to_a
+            order_by([:name, :asc]).to_a
     @repository = @alt_repos.find { |repo| repo.name == Repository::CORE }
     @alt_repos -= [ @repository ]
 
