@@ -1,13 +1,14 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2015, Sebastian Staudt
+# Copyright (c) 2012-2016, Sebastian Staudt
 
 require 'repository_import'
 
 Repository.include RepositoryImport
 
-Repository.find_or_create_by name: 'Homebrew/homebrew'
+Repository.find_or_create_by name: 'Homebrew/brew'
+Repository.find_or_create_by name: 'Homebrew/homebrew-core'
 Repository.find_or_create_by name: 'Homebrew/homebrew-apache'
 Repository.find_or_create_by name: 'Homebrew/homebrew-binary'
 Repository.find_or_create_by name: 'Homebrew/homebrew-boneyard'
