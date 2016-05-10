@@ -36,9 +36,9 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    airbrake (4.3.6)
-      builder
-      multi_json
+    airbrake (5.2.3)
+      airbrake-ruby (~> 1.2)
+    airbrake-ruby (1.2.4)
     arel (6.0.3)
     bson (4.0.4)
     builder (3.2.2)
@@ -218,7 +218,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airbrake (~> 4.3.3)
+  airbrake (~> 5.2)
   compass-rails (~> 2.0.0)
   coveralls (~> 0.8)
   dalli (~> 2.7.0)
