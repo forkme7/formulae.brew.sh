@@ -36,9 +36,9 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    airbrake (5.2.3)
-      airbrake-ruby (~> 1.2)
-    airbrake-ruby (1.2.4)
+    airbrake (5.4.0)
+      airbrake-ruby (~> 1.4)
+    airbrake-ruby (1.4.3)
     arel (6.0.3)
     bson (4.1.1)
     builder (3.2.2)
@@ -238,5 +238,8 @@ DEPENDENCIES
   uglifier (~> 2.7)
   unicorn (~> 4.8.1)
 
+RUBY VERSION
+   ruby 2.3.1p112
+
 BUNDLED WITH
-   1.11.2
+   1.12.5
