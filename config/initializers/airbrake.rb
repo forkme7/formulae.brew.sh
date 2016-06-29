@@ -12,7 +12,7 @@ if ENV.include? 'AIRBRAKE_API_KEY'
 
   Airbrake.add_filter do |notice|
     begin
-      route = Rails.application.routes.recognize_path notice.url
+      route = Rails.application.routes.recognize_path notice[:params]['url']
       route[:action] == 'not_found' || route[:action] == 'forbidden'
     rescue ActionController::RoutingError
       notice.ignore!
