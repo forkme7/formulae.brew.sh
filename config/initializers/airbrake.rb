@@ -5,7 +5,12 @@ if ENV.include? 'AIRBRAKE_API_KEY'
   end
 
   Airbrake.add_filter do |notice|
-    if notice[:errors].any? { |error| error[:type] == 'ActionController::BadRequest' }
+    ignored_errors = [
+      ActionController::BadRequest,
+      ActionController::InvalidAuthenticityToken
+    ].map &:name
+
+    if notice[:errors].any? { |error| error[:type].in? ignored_errors }
       notice.ignore!
     end
   end
