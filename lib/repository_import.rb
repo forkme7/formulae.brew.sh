@@ -96,6 +96,7 @@ module RepositoryImport
         $LOAD_PATH.unshift $homebrew_path
         $LOAD_PATH.unshift File.join($homebrew_path, 'Library', 'Homebrew')
         ENV['HOMEBREW_BREW_FILE'] = File.join $homebrew_path, 'bin', 'brew'
+        ENV['HOMEBREW_CACHE'] = File.join $homebrew_path, 'Cache'
         ENV['HOMEBREW_CELLAR'] = File.join $homebrew_path, 'Cellar'
         ENV['HOMEBREW_LIBRARY'] = File.join $homebrew_path, 'Library'
         ENV['HOMEBREW_OSX_VERSION'] = '10.11'
