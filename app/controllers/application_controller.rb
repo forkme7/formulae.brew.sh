@@ -8,6 +8,8 @@ class ApplicationController < ActionController::Base
   class RepositoryUnavailable < StandardError; end
 
   protect_from_forgery with: :exception
+  skip_before_action :verify_authenticity_token, only: :forbidden
+
   rescue_from Mongoid::Errors::DocumentNotFound, with: :not_found
   rescue_from RepositoryUnavailable do
     error_page :service_unavailable
