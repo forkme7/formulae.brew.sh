@@ -8,12 +8,12 @@ unless defined? ::MacOS
 end
 
 if defined? ::MacOS
-  MacOS.methods.select { |m| m.to_s =~ /_version$/ }.each do |m|
-    MacOS.send :undef_method, m
+  MacOS.singleton_class.instance_methods.select { |m| m.to_s =~ /_version$/ }.each do |m|
+    MacOS.singleton_class.send :undef_method, m
     if m == :full_version
-      MacOS.send :define_method, m, ->{ '10.11' }
+      MacOS.singleton_class.send :define_method, m, ->{ '10.11' }
     else
-      MacOS.send :define_method, m, ->{ '1.0' }
+      MacOS.singleton_class.send :define_method, m, ->{ '1.0' }
     end
   end
 

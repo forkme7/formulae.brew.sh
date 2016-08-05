@@ -3,6 +3,22 @@
 #
 # Copyright (c) 2013-2016, Sebastian Staudt
 
+unless defined? ::MacOS
+  ::MacOS = ::OS::Mac if defined? ::OS::Mac
+end
+
+if defined? ::MacOS
+  MacOS.instance_methods.select { |m| m.to_s =~ /_version$/ }.each do |m|
+    MacOS.send :undef_method, m
+    if m == :full_version
+      MacOS.send :define_method, m, ->{ '10.11' }
+    else
+      MacOS.send :define_method, m, ->{ '1.0' }
+    end
+  end
+
+end
+
 module Kernel
 
   ENCODING_HEADER = "# encoding: ascii\n"
