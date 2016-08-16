@@ -11,7 +11,7 @@ class IO
     alias_method :orig_popen, :popen
   end
 
-  def self.popen(command, mode = 'r')
+  def self.popen(command, mode = 'r', &block)
     if command.end_with? 'phpize -v'
       StringIO.new <<PHPIZE
 Configuring for:
@@ -19,6 +19,16 @@ PHP Api Version:         20090626
 Zend Module Api No:      20090626
 Zend Extension Api No:   220090626
 PHPIZE
+    elsif command == '-' && block_given?
+      block_self = block.binding.receiver
+      def block_self.exec(*args)
+        if args.first.to_s.end_with? 'gpg'
+          'gpg (GnuPG) 1.4.20'
+        end
+      end
+      result = yield
+      block_self.singleton_class.send :undef_method, :exec
+      result
     else
       self.orig_popen command, mode
     end
