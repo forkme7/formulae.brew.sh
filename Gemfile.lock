@@ -70,7 +70,7 @@ GEM
     docile (1.1.5)
     erubis (2.7.0)
     execjs (2.4.0)
-    ffi (1.9.8)
+    ffi (1.9.14)
     font-awesome-sass (4.3.2.1)
       sass (~> 3.2)
     foreman (0.82.0)
