@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012, Sebastian Staudt
+# Copyright (c) 2012-2016, Sebastian Staudt
 
 require 'stringio'
 
@@ -22,9 +22,8 @@ PHPIZE
     elsif command == '-' && block_given?
       block_self = block.binding.receiver
       def block_self.exec(*args)
-        if args.first.to_s.end_with? 'gpg'
-          'gpg (GnuPG) 1.4.20'
-        end
+        return 'gpg (GnuPG) 1.4.20' if args.first.to_s.end_with? 'gpg'
+        ''
       end
       result = yield
       block_self.singleton_class.send :undef_method, :exec
