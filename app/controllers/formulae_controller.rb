@@ -7,8 +7,8 @@ require 'text'
 
 class FormulaeController < ApplicationController
 
-  before_filter :select_repository
-  before_filter :letters, only: [ :browse, :search ]
+  before_action :select_repository
+  before_action :letters, only: [ :browse, :search ]
 
   def browse
     letter = params[:letter]
