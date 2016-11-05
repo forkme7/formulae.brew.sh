@@ -157,6 +157,7 @@ describe RepositoryImport do
       core_repo.expects(:require).with 'Library/Homebrew/os/mac'
       core_repo.expects(:require).with 'sandbox_argv'
       core_repo.expects(:require).with 'sandbox_coretap'
+      core_repo.expects(:require).with 'sandbox_development_tools'
       core_repo.expects(:require).with 'sandbox_formulary'
       core_repo.expects(:require).with 'sandbox_macos'
       core_repo.expects(:require).with 'sandbox_utils'
