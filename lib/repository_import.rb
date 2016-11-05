@@ -116,7 +116,6 @@ module RepositoryImport
         require 'sandbox_development_tools'
         require 'sandbox_formulary'
         require 'sandbox_macos'
-        require 'sandbox_utils'
 
         Formulary.repositories = repositories
 

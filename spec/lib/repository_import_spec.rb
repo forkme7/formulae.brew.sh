@@ -160,7 +160,6 @@ describe RepositoryImport do
       core_repo.expects(:require).with 'sandbox_development_tools'
       core_repo.expects(:require).with 'sandbox_formulary'
       core_repo.expects(:require).with 'sandbox_macos'
-      core_repo.expects(:require).with 'sandbox_utils'
     end
 
     it 'sets some global information on the repo path' do
