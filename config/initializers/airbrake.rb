@@ -7,7 +7,8 @@ if ENV.include? 'AIRBRAKE_API_KEY'
   Airbrake.add_filter do |notice|
     ignored_errors = [
       ActionController::BadRequest,
-      ActionController::InvalidAuthenticityToken
+      ActionController::InvalidAuthenticityToken,
+      ActionController::InvalidCrossOriginRequest
     ].map &:name
 
     if notice[:errors].any? { |error| error[:type].in? ignored_errors }
