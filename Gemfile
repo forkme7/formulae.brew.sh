@@ -11,7 +11,7 @@ gem 'rails', '5.0.0.1'
 gem 'sass-rails', '~> 5.0'
 gem 'text', '~> 1.3.0'
 gem 'uglifier', '~> 3.0'
-gem 'unicorn', '~> 5.1.0', platforms: :ruby
+gem 'unicorn', '~> 5.2.0', platforms: :ruby
 
 group :development do
   gem 'foreman', '~> 0.60'
