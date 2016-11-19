@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.3.1'
+ruby '2.3.2'
 
 gem 'compass-rails', '~> 3.0.2'
 gem 'dalli', '~> 2.7.0'
