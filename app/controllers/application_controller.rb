@@ -52,7 +52,7 @@ class ApplicationController < ActionController::Base
 
     respond_to do |format|
       format.html { render 'application/index', status: :not_found }
-      format.any { render nothing: true, status: :not_found }
+      format.any { head :not_found }
     end
 
     headers.delete 'ETag'
