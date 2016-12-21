@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2014, Sebastian Staudt
+# Copyright (c) 2012-2016, Sebastian Staudt
 
 require 'rails_helper'
 
@@ -21,7 +21,7 @@ describe FormulaeController do
       expect(controller.instance_variable_get(:@repository)).to eq(repo)
     end
 
-    it 'redirects to the short url for Repository::MAIN' do
+    it 'redirects to the short url for Repository::CORE' do
       request = mock
       request.expects(:url).twice.returns "http://braumeister.org/repos/#{Repository::CORE}/browse"
       controller.expects(:request).twice.returns request
@@ -42,9 +42,30 @@ describe FormulaeController do
       expect(controller.instance_variable_get(:@repository)).to eq(repo)
     end
 
-    it 'redirects to the correct repository if capitalization is incorrect'
+    it 'redirects to the correct repository if capitalization is incorrect' do
+      request = mock
+      request.expects(:url).twice.returns 'http://braumeister.org/repos/Homebrew/Homebrew-versions/browse'
+      controller.expects(:request).twice.returns request
 
-    it 'raises Mongoid::Errors::DocumentNotFound if no repository is found'
+      repo = mock
+      repo.expects(:name).twice.returns 'Homebrew/homebrew-versions'
+      criteria = mock
+      Repository.expects(:where).with(name: /^Homebrew\/Homebrew-versions$/i).returns criteria
+      criteria.expects(:only).with(:_id, :name, :sha, :updated_at).returns [ repo ]
+      controller.expects(:params).returns({ repository_id: 'Homebrew/Homebrew-versions' })
+      controller.expects(:redirect_to).with 'http://braumeister.org/repos/Homebrew/homebrew-versions/browse'
+
+      controller.send :select_repository
+    end
+
+    it 'raises Mongoid::Errors::DocumentNotFound if no repository is found' do
+      criteria = mock
+      Repository.expects(:where).with(name: /^Homebrew\/unknown$/i).returns criteria
+      criteria.expects(:only).with(:_id, :name, :sha, :updated_at).returns []
+      controller.expects(:params).returns({ repository_id: 'Homebrew/unknown' })
+
+      expect { controller.send :select_repository }.to raise_error(Mongoid::Errors::DocumentNotFound)
+    end
   end
 
   describe '#show' do
