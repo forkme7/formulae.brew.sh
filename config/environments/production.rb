@@ -23,4 +23,9 @@ Braumeister::Application.configure do
                          username: ENV['MEMCACHIER_USERNAME'],
                          password: ENV['MEMCACHIER_PASSWORD']
                        }
+
+  config.public_file_server.headers = {
+    'Cache-Control' => 'public, s-maxage=31536000, maxage=15552000',
+    'Expires' => 1.year.from_now.to_formatted_s(:rfc822)
+  }
 end
