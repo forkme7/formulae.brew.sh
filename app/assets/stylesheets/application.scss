@@ -1,7 +1,11 @@
 @import "compass/css3/border-radius";
 @import "compass/css3/box-shadow";
 @import "font-awesome-sprockets";
-@import "font-awesome";
+@import "font-awesome/variables";
+@import "font-awesome/mixins";
+@import "font-awesome/path";
+@import "font-awesome/core";
+@import "font-awesome/icons";
 @import url(http://fonts.googleapis.com/css?family=Neuton:400,800);
 
 $black:    #000000;
