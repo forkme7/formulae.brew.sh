@@ -5,6 +5,7 @@
 
   <%= auto_discovery_link_tag :atom, feed_path(format: :atom) %>
   <%= javascript_include_tag '//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js', async: true %>
+  <%= javascript_include_tag 'https://apis.google.com/js/platform.js', async: true, defer: true %>
   <%= javascript_include_tag '//platform.twitter.com/widgets.js', async: true %>
   <%= javascript_include_tag 'application', defer: true %>
   <%= stylesheet_link_tag 'application' %>
@@ -77,12 +78,5 @@
         Follow <a href="https://twitter.com/braumeister_org">@braumeister_org</a>
         on Twitter.
     </div>
-    <script type="text/javascript">
-      (function() {
-        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-        po.src = 'https://apis.google.com/js/plusone.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-      })();
-    </script>
 </body>
 </html>
