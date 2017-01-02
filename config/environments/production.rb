@@ -28,4 +28,6 @@ Braumeister::Application.configure do
     'Cache-Control' => 'public, s-maxage=31536000, maxage=15552000',
     'Expires' => 1.year.from_now.to_formatted_s(:rfc822)
   }
+
+  config.middleware.use Rack::Deflater
 end
