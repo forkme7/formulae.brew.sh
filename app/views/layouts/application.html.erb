@@ -4,7 +4,7 @@
   <title><%= title %></title>
 
   <%= auto_discovery_link_tag :atom, feed_path(format: :atom) %>
-  <%= include_jquery defer: true %>
+  <%= javascript_include_tag '//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js', async: true %>
   <%= javascript_include_tag 'application', defer: true %>
   <%= stylesheet_link_tag 'application' %>
   <%= csrf_meta_tag %>
