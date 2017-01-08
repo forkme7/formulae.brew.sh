@@ -77,7 +77,7 @@ module TapImport
   def formulae_info(formulae, backward_compat = false)
     tmp_file = Tempfile.new 'braumeister-import'
 
-    repositories = Repository.all.to_a
+    repositories = ([ Repository.core, self ] + Repository.all).uniq
 
     pid = fork do
       begin
