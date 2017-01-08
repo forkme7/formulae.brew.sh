@@ -10,14 +10,13 @@ class Formulary
   end
 
   def self.core_path(name)
-    formula = Repository.core.extend(TapImport).find_formula(name) || ''
+    formula = core_repo.find_formula(name) || ''
     Pathname.new formula
   end
 
   def self.factory(ref)
     path = nil
     repo = @repositories.detect do |repo|
-      repo.extend TapImport
       path = repo.find_formula ref
     end
     original_factory(path.nil? ? ref : File.join(repo.path, path))
@@ -27,8 +26,12 @@ class Formulary
     alias_method :get_formula, :factory
   end
 
+  def self.core_repo
+    @core_repo ||= Repository.core.extend(TapImport)
+  end
+
   def self.repositories=(repositories)
-    @repositories = repositories
+    @repositories = repositories.each { |r| r.extend TapImport }
   end
 
 end
