@@ -122,10 +122,9 @@ module TapImport
             end
 
             if backward_compat
-              name = File.join path, name unless core? || name.start_with?(path)
               formula = Formula.factory name
             else
-              formula = Formulary.factory Formula.path(name)
+              formula = Formulary.factory name
             end
 
             current_formula_info = formulae_info[formula.name] = {

@@ -83,11 +83,9 @@ describe TapImport do
       memcached = mock deps: %w(libevent), desc: 'High performance, distributed memory object caching system', homepage: 'http://memcached.org/', keg_only?: false, name: 'memcached', stable: mock(version: '1.4.11'), devel: mock(version: '2.0.0.dev') , head: nil
 
       Formula.expects(:class_s).with('git').returns :Git
-      Formula.expects(:path).with('git').returns '/path/to/git'
-      Formulary.expects(:factory).with('/path/to/git').returns git
+      Formulary.expects(:factory).with('git').returns git
       Formula.expects(:class_s).with('memcached').returns :Memcached
-      Formula.expects(:path).with('memcached').returns '/path/to/memcached'
-      Formulary.expects(:factory).with('/path/to/memcached').returns memcached
+      Formulary.expects(:factory).with('memcached').returns memcached
 
       formulae_info = core_repo.send :formulae_info, %w{git memcached}
       expect(formulae_info).to eq({
