@@ -5,8 +5,8 @@
 
   <%= auto_discovery_link_tag :atom, feed_path(format: :atom) %>
   <%= javascript_include_tag '//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js', async: true %>
-  <%= javascript_include_tag 'https://apis.google.com/js/platform.js', async: true, defer: true %>
-  <%= javascript_include_tag '//platform.twitter.com/widgets.js', async: true %>
+  <%= javascript_include_tag 'https://apis.google.com/js/platform.js', defer: true %>
+  <%= javascript_include_tag '//platform.twitter.com/widgets.js', defer: true %>
   <%= javascript_include_tag 'application', defer: true %>
   <%= stylesheet_link_tag 'application' %>
   <%= csrf_meta_tag %>
