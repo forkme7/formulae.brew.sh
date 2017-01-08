@@ -1,9 +1,10 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2016, Sebastian Staudt
+# Copyright (c) 2012-2017, Sebastian Staudt
 
-require 'repository_import'
+require 'main_import'
+require 'tap_import'
 
 if defined? ::NewRelic
   def task_with_tracing(*options)
@@ -42,15 +43,14 @@ namespace :braumeister do
 
   Rails.logger = Logger.new STDOUT
 
-  task :select_repos, [:repo] => :environment do |_, args|
-    @repos = if args[:repo].nil?
-      repos = ([Repository.core] + Repository.all).uniq
-      repos.each { |repo| repo.extend RepositoryImport }
+  task :select_repos, [:repo] => :update_main do |_, args|
+    if args[:repo].nil?
+      repos = Repository.all - [ Repository.main ]
     else
-      repo = Repository.unscoped.find args[:repo]
-      repo.extend RepositoryImport
-      [ repo ]
-    end
+      repos = [ Repository.unscoped.find(args[:repo]) ]
+   end
+
+    @repos = repos.each { |repo| repo.extend TapImport }
   end
 
   desc 'Completely regenerates one or all repositories and their formulae'
@@ -70,6 +70,15 @@ namespace :braumeister do
         last_sha = repo.refresh
         repo.generate_history last_sha
       end
+    end
+  end
+
+  desc 'Pulls the latest changes from the main repository'
+  task_with_tracing :update_main => :environment do
+    airbrake_rescued do
+      repo = Repository.main.extend MainImport
+      repo.update_status
+      repo.create_missing_taps
     end
   end
 

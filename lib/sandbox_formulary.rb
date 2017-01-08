@@ -1,3 +1,8 @@
+# This code is free software; you can redistribute it and/or modify it under
+# the terms of the new BSD License.
+#
+# Copyright (c) 2014-2017, Sebastian Staudt
+
 class Formulary
 
   class << self
@@ -5,14 +10,14 @@ class Formulary
   end
 
   def self.core_path(name)
-    formula = Repository.core.extend(RepositoryImport).find_formula(name) || ''
+    formula = Repository.core.extend(TapImport).find_formula(name) || ''
     Pathname.new formula
   end
 
   def self.factory(ref)
     path = nil
     repo = @repositories.detect do |repo|
-      repo.extend RepositoryImport
+      repo.extend TapImport
       path = repo.find_formula ref
     end
     original_factory(path.nil? ? ref : File.join(repo.path, path))
