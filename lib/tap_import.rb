@@ -81,8 +81,8 @@ module TapImport
 
     pid = fork do
       begin
-        require 'sandbox_backtick'
-        require 'sandbox_io_popen'
+        require 'sandbox/backtick'
+        require 'sandbox/io_popen'
 
         $homebrew_path = main_repo.path
         $LOAD_PATH.unshift $homebrew_path
@@ -103,11 +103,11 @@ module TapImport
         require 'Library/Homebrew/formula'
         require 'Library/Homebrew/os/mac'
 
-        require 'sandbox_argv'
-        require 'sandbox_coretap'
-        require 'sandbox_development_tools'
-        require 'sandbox_formulary'
-        require 'sandbox_macos'
+        require 'sandbox/argv'
+        require 'sandbox/coretap'
+        require 'sandbox/development_tools'
+        require 'sandbox/formulary'
+        require 'sandbox/macos'
 
         Formulary.repositories = repositories
 

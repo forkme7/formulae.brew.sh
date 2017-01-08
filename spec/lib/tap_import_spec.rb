@@ -59,13 +59,13 @@ describe TapImport do
       core_repo.expects(:require).with 'Library/Homebrew/formula'
       core_repo.expects(:require).with 'Library/Homebrew/global'
       core_repo.expects(:require).with 'Library/Homebrew/os/mac'
-      core_repo.expects(:require).with 'sandbox_argv'
-      core_repo.expects(:require).with 'sandbox_backtick'
-      core_repo.expects(:require).with 'sandbox_coretap'
-      core_repo.expects(:require).with 'sandbox_development_tools'
-      core_repo.expects(:require).with 'sandbox_formulary'
-      core_repo.expects(:require).with 'sandbox_io_popen'
-      core_repo.expects(:require).with 'sandbox_macos'
+      core_repo.expects(:require).with 'sandbox/argv'
+      core_repo.expects(:require).with 'sandbox/backtick'
+      core_repo.expects(:require).with 'sandbox/coretap'
+      core_repo.expects(:require).with 'sandbox/development_tools'
+      core_repo.expects(:require).with 'sandbox/formulary'
+      core_repo.expects(:require).with 'sandbox/io_popen'
+      core_repo.expects(:require).with 'sandbox/macos'
     end
 
     it 'sets some global information on the repo path' do
