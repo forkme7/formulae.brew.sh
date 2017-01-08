@@ -63,8 +63,12 @@ div#alternatives {
   }
 
   div.repo {
-    color:     $sand;
-    font-size: 0.8em;
+    color:       $sand;
+    font-family: 'Neuton', serif;
+    font-size:   1.8em;
+    font-weight: bold;
+    padding:     0.1em 0.2em 0.3em 0.5em;
+    text-shadow: 1px 1px 1px $black;
 
     &.even {
       background: #47463b;
@@ -75,11 +79,7 @@ div#alternatives {
     }
 
     a {
-      color:       $orange;
-      font-family: 'Neuton', serif;
-      font-size:   1.8em;
-      font-weight: normal;
-      text-shadow: 1px 1px 1px $black;
+      color: $orange;
 
       &:hover {
         color: $beige;

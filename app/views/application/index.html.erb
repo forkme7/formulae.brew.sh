@@ -46,7 +46,12 @@
     <h2><%= icon 'code-fork' %> Alternative repositories:</h2>
     <div class="listing">
     <% @alt_repos.each do |repo| %>
-      <div class="repo"><%= link_to repo.name, letter_repository_formulae_path(repo, repo.first_letter) %></div>
+      <div class="repo">
+        <% if letter = repo.first_letter %>
+          <%= link_to repo.name, letter_repository_formulae_path(repo, letter) %>
+        <% else %>
+          <%= repo.name %>
+        <% end %></div>
     <% end %>
     </div>
   </div>

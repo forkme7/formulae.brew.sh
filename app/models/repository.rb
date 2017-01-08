@@ -44,7 +44,8 @@ class Repository
   end
 
   def first_letter
-    self.formulae.order_by(%i{name asc}).only(:name).limit(1).to_a.first.name[0]
+    first_formula = formulae.order_by(%i{name asc}).only(:name).limit(1).to_a.first
+    first_formula ? first_formula.name[0] : nil
   end
 
   def to_param
