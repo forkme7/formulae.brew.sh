@@ -83,7 +83,7 @@ describe FormulaeController do
       end
 
       it 'should raise an error' do
-        expect(-> { get :show, repository_id: 'Homebrew/homebrew-versions', id: 'git' }).
+        expect(-> { get :show, params: { repository_id: 'Homebrew/homebrew-versions', id: 'git' }}).
           to raise_error(Mongoid::Errors::DocumentNotFound)
       end
     end
