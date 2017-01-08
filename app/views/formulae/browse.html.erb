@@ -14,10 +14,10 @@
 <%= render partial: 'search', locals: { with_icon: true } %>
 
 <ul id="letters">
-  <% ('A'..'Z').each do |letter|
-    letter_url = @repository.core? ? letter_formulae_path(letter.downcase) : letter_repository_formulae_path(@repository.name, letter.downcase) %>
+  <% ('A'..'Z').each do |letter| %>
     <li>
       <% if @letters.include? letter
+        letter_url = @repository.core? ? letter_formulae_path(letter.downcase) : letter_repository_formulae_path(@repository.name, letter.downcase)
         letter_class = 'current' if letter == (params[:letter] || '').upcase %>
         <%= link_to_unless_current letter, letter_url, class: letter_class do %>
           <span class="current"><%= letter %></span>
