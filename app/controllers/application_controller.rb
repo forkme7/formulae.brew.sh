@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
       format.any { render nothing: true, status: :not_found }
     end
 
-    fresh_when etag: Repository.core.sha, public: true
+    fresh_when etag: @repository.sha, public: true
   end
 
   def error_page(status = :internal_server_error)
