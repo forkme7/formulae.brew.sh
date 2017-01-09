@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2016, Sebastian Staudt
+# Copyright (c) 2012-2017, Sebastian Staudt
 
 require 'text'
 
@@ -70,7 +70,7 @@ class FormulaeController < ApplicationController
 
   def show
     formula_id = "#{repository_id}/#{params[:id]}"
-    @formula = Formula.find formula_id
+    @formula = Formula.where(_id: formula_id).includes(:deps, :revdeps).first
     if @formula.nil?
       formula = @repository.formulae.all_in(aliases: [params[:id]]).first
       unless formula.nil?
@@ -85,7 +85,7 @@ class FormulaeController < ApplicationController
     end
     @title = @formula.name.dup
     @title << " – #{@repository.name}" unless @repository.core?
-    @revisions = @formula.revisions.without_bot.includes(:author).order_by %i{date desc}
+    @revisions = @formula.revisions.without_bot.includes(:author).order_by(%i{date desc}).to_a
 
     fresh_when etag: @revisions.first.sha, public: true
   end
@@ -109,7 +109,7 @@ class FormulaeController < ApplicationController
       return
     end
 
-    @repository = Repository.where(name: /^#{repository_id}$/i).
+    @repository = Repository.where(_id: /^#{repository_id}$/i).
             only(:_id, :name, :sha, :updated_at).first
     if @repository.nil?
       raise Mongoid::Errors::DocumentNotFound.new Repository, [], repository_id

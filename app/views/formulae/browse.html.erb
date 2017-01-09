@@ -45,9 +45,7 @@
   <%= pagination %>
 
   <div class="listing">
-    <% @formulae.each do |formula| %>
-      <%= render partial: 'formula', locals: { formula: formula } %>
-    <% end %>
+    <%= render partial: 'formula', collection: @formulae %>
   </div>
 
   <%= pagination %>

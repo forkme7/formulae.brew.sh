@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2016, Sebastian Staudt
+# Copyright (c) 2012-2017, Sebastian Staudt
 
 require 'rails_helper'
 
@@ -12,7 +12,7 @@ describe FormulaeController do
       repo = mock
       repo.expects(:name).returns 'Homebrew/homebrew-versions'
       criteria = mock
-      Repository.expects(:where).with(name: /^Homebrew\/homebrew-versions$/i).returns criteria
+      Repository.expects(:where).with(_id: /^Homebrew\/homebrew-versions$/i).returns criteria
       criteria.expects(:only).with(:_id, :name, :sha, :updated_at).returns [ repo ]
       controller.expects(:params).returns({ repository_id: 'Homebrew/homebrew-versions' })
 
@@ -34,7 +34,7 @@ describe FormulaeController do
       repo = mock
       repo.expects(:name).returns Repository::CORE
       criteria = mock
-      Repository.expects(:where).with(name: /^#{Repository::CORE}$/i).returns criteria
+      Repository.expects(:where).with(_id: /^#{Repository::CORE}$/i).returns criteria
       criteria.expects(:only).with(:_id, :name, :sha, :updated_at).returns [ repo ]
 
       controller.send :select_repository
@@ -50,7 +50,7 @@ describe FormulaeController do
       repo = mock
       repo.expects(:name).twice.returns 'Homebrew/homebrew-versions'
       criteria = mock
-      Repository.expects(:where).with(name: /^Homebrew\/Homebrew-versions$/i).returns criteria
+      Repository.expects(:where).with(_id: /^Homebrew\/Homebrew-versions$/i).returns criteria
       criteria.expects(:only).with(:_id, :name, :sha, :updated_at).returns [ repo ]
       controller.expects(:params).returns({ repository_id: 'Homebrew/Homebrew-versions' })
       controller.expects(:redirect_to).with 'http://braumeister.org/repos/Homebrew/homebrew-versions/browse'
@@ -60,7 +60,7 @@ describe FormulaeController do
 
     it 'raises Mongoid::Errors::DocumentNotFound if no repository is found' do
       criteria = mock
-      Repository.expects(:where).with(name: /^Homebrew\/unknown$/i).returns criteria
+      Repository.expects(:where).with(_id: /^Homebrew\/unknown$/i).returns criteria
       criteria.expects(:only).with(:_id, :name, :sha, :updated_at).returns []
       controller.expects(:params).returns({ repository_id: 'Homebrew/unknown' })
 
@@ -71,7 +71,7 @@ describe FormulaeController do
   describe '#show' do
     context 'when formula is not found' do
       before do
-        Formula.expects(:find).returns nil
+        Formula.expects(:where).returns mock(includes: [])
         formulae = mock
         formulae.expects(:all_in).returns []
         repo = mock
