@@ -15,7 +15,7 @@ class Repository
   field :date, type: Time
   field :full, type: Boolean, default: false
   field :name, type: String
-  field :outdated, type: Boolean, default: false
+  field :outdated, type: Boolean, default: true
   field :sha, type: String
   field :special_formula_regex, type: String
 
