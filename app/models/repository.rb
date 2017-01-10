@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2016, Sebastian Staudt
+# Copyright (c) 2012-2017, Sebastian Staudt
 
 class Repository
 
@@ -14,6 +14,7 @@ class Repository
   field :_id, type: String, overwrite: true, default: ->{ name }
   field :date, type: Time
   field :full, type: Boolean, default: false
+  field :letters, type: Array, default: []
   field :name, type: String
   field :outdated, type: Boolean, default: true
   field :sha, type: String

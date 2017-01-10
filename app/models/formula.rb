@@ -31,7 +31,7 @@ class Formula
   has_and_belongs_to_many :deps, class_name: self.to_s, inverse_of: :revdeps, validate: false, index: true
   has_and_belongs_to_many :revdeps, class_name: self.to_s, inverse_of: :deps, validate: false, index: true
 
-  scope :letter, ->(letter) { where(name: /^#{letter.downcase}/) }
+  scope :letter, ->(letter) { where(name: /^#{letter}/) }
 
   index( { repository_id: 1 }, { unique: false })
   index( { name: 1 }, { unique: false })

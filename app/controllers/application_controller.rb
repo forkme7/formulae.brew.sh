@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2016, Sebastian Staudt
+# Copyright (c) 2012-2017, Sebastian Staudt
 
 class ApplicationController < ActionController::Base
 
@@ -72,7 +72,7 @@ class ApplicationController < ActionController::Base
   private
 
   def main_page
-    @alt_repos = Repository.only(:_id, :date, :name, :sha, :updated_at).
+    @alt_repos = Repository.only(:_id, :date, :letters, :name, :sha, :updated_at).
             order_by([:name, :asc]).to_a
     @repository = @alt_repos.find { |repo| repo.name == Repository::CORE }
     @alt_repos -= [ @repository ]

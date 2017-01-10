@@ -8,7 +8,6 @@ require 'text'
 class FormulaeController < ApplicationController
 
   before_action :select_repository
-  before_action :letters, only: [ :browse, :search ]
 
   def browse
     letter = params[:letter]
@@ -92,12 +91,6 @@ class FormulaeController < ApplicationController
 
   private
 
-  def letters
-    @letters = ('A'..'Z').select do |letter|
-      @repository.formulae.letter(letter).where(removed: false).exists?
-    end
-  end
-
   def repository_id
     @repository_id ||= params[:repository_id] || Repository::CORE
   end
@@ -110,7 +103,7 @@ class FormulaeController < ApplicationController
     end
 
     @repository = Repository.where(_id: /^#{repository_id}$/i).
-            only(:_id, :name, :sha, :updated_at).first
+            only(:_id, :letters, :name, :sha, :updated_at).first
     if @repository.nil?
       raise Mongoid::Errors::DocumentNotFound.new Repository, [], repository_id
     end

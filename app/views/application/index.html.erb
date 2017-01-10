@@ -47,7 +47,7 @@
     <div class="listing">
     <% @alt_repos.each do |repo| %>
       <div class="repo">
-        <% if letter = repo.first_letter %>
+        <% if letter = repo.letters.first %>
           <%= link_to repo.name, letter_repository_formulae_path(repo, letter) %>
         <% else %>
           <%= repo.name %>

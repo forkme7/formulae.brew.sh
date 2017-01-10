@@ -330,6 +330,10 @@ module TapImport
 
     Rails.logger.info "#{added} formulae added, #{modified} formulae modified, #{removed} formulae removed."
 
+    self.letters = ('a'..'z').select do |letter|
+      self.formulae.letter(letter).where(removed: false).exists?
+    end
+
     last_sha
   end
 

@@ -13,7 +13,7 @@ describe FormulaeController do
       repo.expects(:name).returns 'Homebrew/homebrew-versions'
       criteria = mock
       Repository.expects(:where).with(_id: /^Homebrew\/homebrew-versions$/i).returns criteria
-      criteria.expects(:only).with(:_id, :name, :sha, :updated_at).returns [ repo ]
+      criteria.expects(:only).with(:_id, :letters, :name, :sha, :updated_at).returns [ repo ]
       controller.expects(:params).returns({ repository_id: 'Homebrew/homebrew-versions' })
 
       controller.send :select_repository
@@ -35,7 +35,7 @@ describe FormulaeController do
       repo.expects(:name).returns Repository::CORE
       criteria = mock
       Repository.expects(:where).with(_id: /^#{Repository::CORE}$/i).returns criteria
-      criteria.expects(:only).with(:_id, :name, :sha, :updated_at).returns [ repo ]
+      criteria.expects(:only).with(:_id, :letters, :name, :sha, :updated_at).returns [ repo ]
 
       controller.send :select_repository
 
@@ -51,7 +51,7 @@ describe FormulaeController do
       repo.expects(:name).twice.returns 'Homebrew/homebrew-versions'
       criteria = mock
       Repository.expects(:where).with(_id: /^Homebrew\/Homebrew-versions$/i).returns criteria
-      criteria.expects(:only).with(:_id, :name, :sha, :updated_at).returns [ repo ]
+      criteria.expects(:only).with(:_id, :letters, :name, :sha, :updated_at).returns [ repo ]
       controller.expects(:params).returns({ repository_id: 'Homebrew/Homebrew-versions' })
       controller.expects(:redirect_to).with 'http://braumeister.org/repos/Homebrew/homebrew-versions/browse'
 
@@ -61,7 +61,7 @@ describe FormulaeController do
     it 'raises Mongoid::Errors::DocumentNotFound if no repository is found' do
       criteria = mock
       Repository.expects(:where).with(_id: /^Homebrew\/unknown$/i).returns criteria
-      criteria.expects(:only).with(:_id, :name, :sha, :updated_at).returns []
+      criteria.expects(:only).with(:_id, :letters, :name, :sha, :updated_at).returns []
       controller.expects(:params).returns({ repository_id: 'Homebrew/unknown' })
 
       expect { controller.send :select_repository }.to raise_error(Mongoid::Errors::DocumentNotFound)
