@@ -3,12 +3,13 @@
 <head>
   <title><%= title %></title>
 
-  <%= auto_discovery_link_tag :atom, feed_path(format: :atom) %>
-  <%= javascript_include_tag '//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js', async: true %>
+  <%= stylesheet_link_tag 'application' %>
+  <%= javascript_include_tag '//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js' %>
+  <%= javascript_include_tag 'application' %>
   <%= javascript_include_tag 'https://apis.google.com/js/platform.js', defer: true %>
   <%= javascript_include_tag '//platform.twitter.com/widgets.js', defer: true %>
-  <%= javascript_include_tag 'application', defer: true %>
-  <%= stylesheet_link_tag 'application' %>
+
+  <%= auto_discovery_link_tag :atom, feed_path(format: :atom) %>
   <%= csrf_meta_tag %>
 
   <link rel="search" type="application/opensearchdescription+xml" title="braumeister.org" href="/opensearch.xml">
