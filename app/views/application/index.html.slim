@@ -1,0 +1,68 @@
+/ This code is free software; you can redistribute it and/or modify it under
+/ the terms of the new BSD License.
+/
+/ Copyright (c) 2012-2017, Sebastian Staudt
+
+div#home
+  strong> braumeister.org
+  | is an online package browser for
+  =< link_to 'Homebrew', 'http://brew.sh'
+  | – the macOS package manager.
+  br
+  | For more information on how to install and use Homebrew see its homepage.
+
+  = link_to 'Browse all formulae', letter_formulae_path('a'), class: 'center'
+
+  h2
+    => icon 'search'
+    | Search a formula:
+  =< render partial: 'formulae/search'
+
+div.recently-added
+  h3
+    => icon 'plus-square'
+    | Recently added formulae
+  .listing
+    - for formula in @added
+      = render partial: 'recent', locals: { formula: formula }
+
+- reset_cycle
+
+.recently-updated
+  h3
+    => icon 'pencil-square'
+    | Recently updated formulae
+  .listing
+    - for formula in @updated
+      = render partial: 'recent', locals: { formula: formula }
+
+.recently-removed
+  h5
+    => icon 'minus-square'
+    | Recently removed formulae
+  = @removed.map { |f| formula_link f }.join(', ').html_safe
+
+#timestamps
+  | The repository has been updated
+  =< timestamp @repository.updated_at
+  | .
+  br
+  | The last change happened
+  =< timestamp @repository.date
+  | .
+  br
+  | Current Git commit SHA:
+  =< link_to @repository.sha, "https://github.com/#{@repository.name}/tree/#{@repository.sha}"
+
+- unless @alt_repos.empty?
+  #alternatives
+    h2
+      = icon 'code-fork'
+      | Alternative repositories:
+    .listing
+      - for repo in @alt_repos
+        .repo
+          - if letter = repo.letters.first
+            = link_to repo.name, letter_repository_formulae_path(repo, letter)
+          - else
+            = repo.name

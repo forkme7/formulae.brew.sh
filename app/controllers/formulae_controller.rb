@@ -22,7 +22,9 @@ class FormulaeController < ApplicationController
   end
 
   def feed
-    @revisions = @repository.revisions.without_bot.order_by([:date, :desc]).limit 50
+    @revisions = @repository.revisions.without_bot.
+            includes(:author, :added_formulae, :updated_formulae, :removed_formulae).
+            order_by([:date, :desc]).limit 50
 
     respond_to do |format|
       format.atom

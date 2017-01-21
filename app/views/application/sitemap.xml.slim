@@ -1,0 +1,32 @@
+/ This code is free software; you can redistribute it and/or modify it under
+/ the terms of the new BSD License.
+/
+/ Copyright (c) 2012-2017, Sebastian Staudt
+
+doctype xml
+urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+
+  url
+    loc = root_url
+    lastmod = @repository.updated_at.iso8601
+    changefreq hourly
+    priority 1.0
+
+  - for letter in 'a'..'z'
+    url
+      loc = letter_formulae_url letter: letter
+      lastmod = @repository.updated_at.iso8601
+      changefreq hourly
+      priority 0.8
+
+  url
+    loc = feed_url format: :atom
+    lastmod = @repository.updated_at.iso8601
+    changefreq hourly
+    priority 0.6
+
+  - for formula in @repository.formulae.only :name, :updated_at
+    url
+      loc = polymorphic_url formula, only_path: false
+      lastmod = formula.updated_at.iso8601
+      changefreq hourly

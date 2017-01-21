@@ -1,0 +1,85 @@
+/ This code is free software; you can redistribute it and/or modify it under
+/ the terms of the new BSD License.
+/
+/ Copyright (c) 2012-2017, Sebastian Staudt
+
+h1 = @formula.name
+
+- unless @repository.core?
+  .subtitle
+  | in
+  =< link_to @repository.name, letter_repository_formulae_path(@repository, @repository.first_letter), class: 'repo'
+
+#basic
+  #description = @formula.description
+
+  - if @formula.removed?
+    h2.removed
+    | Formula was removed
+    br
+    | Last version was:
+  - else
+    h2
+      | Current version
+      - if @formula.version.size > 1
+      | s
+
+    .versions
+      - unless @formula.stable_version.nil?
+        strong.version.spec-stable = @formula.stable_version
+      - unless @formula.devel_version.nil?
+        strong.version.spec-devel = @formula.stable_version
+      - unless @formula.head_version.nil?
+        strong.version.spec-head = @formula.stable_version
+    - unless @formula.homepage.nil?
+      h2
+        | Homepage:
+        em = link_to @formula.homepage, @formula.homepage
+    - unless (@formula.aliases || []).empty?
+      | Also known as:
+      strong = safe_join @formula.aliases, '</strong>, <strong>'
+      br
+    - if @formula.keg_only?
+      strong
+      | This formula is
+      abbr title="A keg-only formula won‘t be symlinked automatically."
+      | .
+      br
+
+- deps = @formula.deps.reject { |formula| formula.removed? }
+- unless deps.empty?
+  #deps
+    h2 Dependencies
+    = t '.deps_html', name: @formula.name, count: deps.size
+    ul = render deps
+
+- reset_cycle
+
+- revdeps = @formula.revdeps.reject { |formula| formula.removed? }
+- unless revdeps.empty?
+  #revdeps
+    h2 Reverse dependencies
+    = t '.revdeps_html', name: @formula.name, count: revdeps.size
+    ul = render revdeps
+
+- unless @revisions.empty?
+  #history
+    h2 Formula history
+    table
+      - @revisions.each_with_index do |rev, i|
+        tr class=[(:current if i == 0), (:hidden if i > 9)]
+          td.author
+            = link_to '', "https://github.com/#{@repository.name}/commit/#{rev.sha}##{@formula.path}"
+            = rev.author.name
+          td.subject
+            = link_to '', "https://github.com/#{@repository.name}/commit/#{rev.sha}##{@formula.path}"
+            = rev.subject
+          td.date
+            = link_to '', "https://github.com/#{@repository.name}/commit/#{rev.sha}##{@formula.path}"
+            = timestamp rev.date
+        - if i == 9
+          tr.show-all
+            td colspan=3
+              = icon 'long-arrow-down'
+              | Show all revisions of this formula
+              = icon 'long-arrow-down'

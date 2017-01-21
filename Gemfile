@@ -8,6 +8,7 @@ gem 'kaminari-mongoid', '~> 0.1.2'
 gem 'mongoid', '~> 6.0.2'
 gem 'rails', '5.0.1'
 gem 'sass-rails', '~> 5.0'
+gem 'slim', '~> 3.0'
 gem 'text', '~> 1.3.0'
 gem 'uglifier', '~> 3.0'
 gem 'unicorn', '~> 5.2.0', platforms: :ruby

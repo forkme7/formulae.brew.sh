@@ -1,0 +1,53 @@
+/ This code is free software; you can redistribute it and/or modify it under
+/ the terms of the new BSD License.
+/
+/ Copyright (c) 2012-2017, Sebastian Staudt
+
+h1 Package listing
+
+- if @repository.core?
+  | This is a listing of all packages available via the Homebrew package
+    manager for macOS.
+- else
+  | This is a listing of all Homebrew packages available via the alternative
+  repository
+  =< link_to @repository.name, "https://github.com/#{@repository.name}"
+  | .
+
+= link_to icon('rss-square'), @repository.feed_link, class: 'feed-link',
+          title: t('.feed_title', name: @repository.name)
+
+= render partial: 'search', locals: { with_icon: true }
+
+ul#letters
+  - for letter in 'a'..'z'
+    li
+      - if @repository.letters.include? letter
+        ruby:
+          letter_url = @repository.core? ? letter_formulae_path(letter) : letter_repository_formulae_path(@repository.name, letter)
+
+        =<> link_to_unless_current letter.upcase, letter_url do
+          span.current
+            = letter.upcase
+      - else
+        =<> letter.upcase
+
+- if @formulae.total_count == 0
+  .error Sorry, no formulae are matching your search.
+- else
+  ruby:
+    page_params = { id: nil }
+    if params.key?(:search) && !params[:search].empty?
+      page_params[:use_route] = :search_formulae
+    end
+    pagination = paginate @formulae, params: page_params
+
+  - content_for :kaminari do
+    = rel_next_prev_link_tags @formulae
+
+  = pagination
+
+  .listing
+    = render @formulae
+
+  = pagination

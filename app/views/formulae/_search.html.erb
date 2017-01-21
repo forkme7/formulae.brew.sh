@@ -1,4 +1,0 @@
-<form action="<%= search_formulae_path %>" id="search-form">
-  <%= icon 'search', '', class: 'search-icon' if local_assigns[:with_icon] %>
-  <input id="search" name="search" type="text" placeholder="<%= params[:search] || 'search…'.html_safe %>" />
-</form>
