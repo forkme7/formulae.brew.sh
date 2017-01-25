@@ -106,7 +106,7 @@ GEM
       activemodel (~> 5.0)
       mongo (~> 2.3)
     multi_json (1.12.1)
-    newrelic_rpm (3.16.0.318)
+    newrelic_rpm (3.18.0.329)
     nio4r (1.2.1)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
