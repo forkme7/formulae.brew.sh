@@ -6,12 +6,12 @@ gem 'dalli', '~> 2.7.0'
 gem 'font-awesome-sass', '~> 4.3'
 gem 'kaminari-mongoid', '~> 0.1.2'
 gem 'mongoid', '~> 6.0.2'
+gem 'puma', '~> 3.6.2'
 gem 'rails', '5.0.1'
 gem 'sass-rails', '~> 5.0'
 gem 'slim', '~> 3.0'
 gem 'text', '~> 1.3.0'
 gem 'uglifier', '~> 3.0'
-gem 'unicorn', '~> 5.2.0', platforms: :ruby
 
 group :development do
   gem 'foreman', '~> 0.60'

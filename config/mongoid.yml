@@ -15,6 +15,7 @@ production:
       hosts:
         - <%= ENV['MONGOLAB_HOST'] %>
       options:
+        max_pool_size: <%= ENV['RAILS_MAX_THREADS'] || 5 %>
         user: <%= ENV['MONGOLAB_USERNAME'] %>
         password: <%= ENV['MONGOLAB_PASSWORD'] %>
 
