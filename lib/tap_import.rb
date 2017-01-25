@@ -334,6 +334,8 @@ module TapImport
       self.formulae.letter(letter).where(removed: false).exists?
     end
 
+    self.outdated = self.letters.empty?
+
     last_sha
   end
 
