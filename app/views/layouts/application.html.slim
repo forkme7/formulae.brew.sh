@@ -40,7 +40,7 @@ html itemscope=true itemtype="http://schema.org/WebPage" lang="en"
       #header
         #social
           .g-plusone data={ href: 'http://braumeister.org', size: :tall }
-
+          '
           a.twitter-share-button href='https://twitter.com/share' data={ \
               count: :vertical,
               text: 'See information about Mac packages available via Homebrew – ',
@@ -50,10 +50,10 @@ html itemscope=true itemtype="http://schema.org/WebPage" lang="en"
               dnt: true,
               'show-count': true }
             Tweet
-
+          '
           .fb-like data={ href: 'http://braumeister.org', with: 55, height: 62,
             layout: 'box_count', action: :like, 'show-faces': true }
-
+          '
           = render 'layouts/flattr'
 
         = link_to 'Braumeister', root_path
