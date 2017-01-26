@@ -5,72 +5,72 @@
 
 doctype html
 html itemscope=true itemtype="http://schema.org/WebPage" lang="en"
-head
-  title = title
+  head
+    title = title
 
-  = stylesheet_link_tag 'application'
-  = javascript_include_tag '//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'
-  = javascript_include_tag 'application'
-  = javascript_include_tag 'https://apis.google.com/js/platform.js', defer: true
-  = javascript_include_tag '//platform.twitter.com/widgets.js', defer: true
+    = stylesheet_link_tag 'application'
+    = javascript_include_tag '//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'
+    = javascript_include_tag 'application'
+    = javascript_include_tag 'https://apis.google.com/js/platform.js', defer: true
+    = javascript_include_tag '//platform.twitter.com/widgets.js', defer: true
 
-  = auto_discovery_link_tag :atom, feed_path(format: :atom)
-  = csrf_meta_tag
+    = auto_discovery_link_tag :atom, feed_path(format: :atom)
+    = csrf_meta_tag
 
-  link [rel="search" type="application/opensearchdescription+xml"
-       title="braumeister.org" href="/opensearch.xml"]
-  = favicon_link_tag 'data:image/x-icon;,', type: 'image/x-icon'
+    link [rel="search" type="application/opensearchdescription+xml"
+         title="braumeister.org" href="/opensearch.xml"]
+    = favicon_link_tag 'data:image/x-icon;,', type: 'image/x-icon'
 
-  == yield :kaminari
+    == yield :kaminari
 
-  meta [http-equiv="content-type" content="text/html;charset=UTF-8"]
-  meta [itemprop="name" content="braumeister.org"]
-  meta [itemprop="description"
-        content="An online package browser for Homebrew, the macOS package manager."]
-  meta [name="viewport" content="width=device-width, initial-scale=1"]
+    meta [http-equiv="content-type" content="text/html;charset=UTF-8"]
+    meta [itemprop="name" content="braumeister.org"]
+    meta [itemprop="description"
+          content="An online package browser for Homebrew, the macOS package manager."]
+    meta [name="viewport" content="width=device-width, initial-scale=1"]
 
-  - if Rails.env != 'production'
-    = render 'layouts/google_analytics', cached: true
+    - if Rails.env != 'production'
+      = render 'layouts/google_analytics', cached: true
 
-  body data={ repository: @repository.name }
-    #fb-root
-      = render 'layouts/facebook', cached: true
-    #header
-      #social
-        .g-plusone data={ href: 'http://braumeister.org', size: :tall }
+    body data={ repository: @repository.name }
+      #fb-root
+        = render 'layouts/facebook', cached: true
+      #header
+        #social
+          .g-plusone data={ href: 'http://braumeister.org', size: :tall }
 
-        a.twitter-share-button href='https://twitter.com/share' data={ \
-            count: :vertical,
-            text: 'See information about Mac packages available via Homebrew – ',
-            url: 'http://braumeister.org',
-            related: :braumeister_org,
-            lang: :en,
-            dnt: true,
-            'show-count': true }
-          Tweet
+          a.twitter-share-button href='https://twitter.com/share' data={ \
+              count: :vertical,
+              text: 'See information about Mac packages available via Homebrew – ',
+              url: 'http://braumeister.org',
+              related: :braumeister_org,
+              lang: :en,
+              dnt: true,
+              'show-count': true }
+            Tweet
 
-        .fb-like data={ href: 'http://braumeister.org', with: 55, height: 62,
-          layout: 'box_count', action: :like, 'show-faces': true }
+          .fb-like data={ href: 'http://braumeister.org', with: 55, height: 62,
+            layout: 'box_count', action: :like, 'show-faces': true }
 
-        = render 'layouts/flattr'
+          = render 'layouts/flattr'
 
-      = link_to 'Braumeister', root_path
+        = link_to 'Braumeister', root_path
 
-    #content
+      #content
 
-      == yield
+        == yield
 
-    #footer
-      | © 2012-2017 —
-      a< href="https://plus.google.com/109586181974940228820?rel=author"
-        | Sebastian Staudt
-      br
-      | View source code on
-      a< href="https://github.com/koraktor/braumeister.org"
-        i.fa.fa-github>
-        | GitHub
-      br
-      | Follow
-      a> href="https://twitter.com/braumeister_org"
-        | @braumeister_org
-      | on Twitter.
+      #footer
+        | © 2012-2017 —
+        a< href="https://plus.google.com/109586181974940228820?rel=author"
+          | Sebastian Staudt
+        br
+        | View source code on
+        a< href="https://github.com/koraktor/braumeister.org"
+          i.fa.fa-github>
+          | GitHub
+        br
+        | Follow
+        a> href="https://twitter.com/braumeister_org"
+          | @braumeister_org
+        | on Twitter.
