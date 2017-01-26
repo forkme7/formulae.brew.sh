@@ -20,6 +20,8 @@ html itemscope=true itemtype="http://schema.org/WebPage" lang="en"
     link [rel="search" type="application/opensearchdescription+xml"
          title="braumeister.org" href="/opensearch.xml"]
     = favicon_link_tag 'data:image/x-icon;,', type: 'image/x-icon'
+    = favicon_link_tag 'favicon.png', type: 'image/png'
+    = favicon_link_tag 'apple-touch-icon.png', rel: 'apple-touch-icon', type: 'image/png'
 
     == yield :kaminari
 
