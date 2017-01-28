@@ -28,9 +28,9 @@ h1 = @formula.name
       - unless @formula.stable_version.nil?
         strong.version.spec-stable = @formula.stable_version
       - unless @formula.devel_version.nil?
-        strong.version.spec-devel = @formula.stable_version
+        strong.version.spec-devel = @formula.devel_version
       - unless @formula.head_version.nil?
-        strong.version.spec-head = @formula.stable_version
+        strong.version.spec-head = @formula.head_version
     - unless @formula.homepage.nil?
       h2
         | Homepage:
