@@ -218,7 +218,7 @@ DEPENDENCIES
   mocha (~> 1.1.0)
   mongoid (~> 6.1.0)
   newrelic_rpm (~> 3.14)
-  puma (~> 3.6.2)
+  puma (~> 3.7)
   rails (= 5.0.1)
   rails_12factor (~> 0.0.2)
   rspec-rails (~> 3.2)
@@ -231,4 +231,4 @@ RUBY VERSION
    ruby 2.3.3p222
 
 BUNDLED WITH
-   1.13.6
+   1.14.3
