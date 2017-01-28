@@ -8,14 +8,14 @@ feed [ xml:lang="en-US"
        xmlns="http://www.w3.org/2005/Atom"
        xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" ]
 
-  id tag:braumeister.org,2012:
-    = @repository.name}
+  id tag:braumeister.org,2012:#{@repository.name}
   title
     | braumeister.org – Recent changes in
     =< @repository.name
 
-  link rel="search" href='/opensearch.xml' title="braumeister.org – Search" type="application/opensearchdescription+xml"
-  link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"
+  link [rel="search" type="application/opensearchdescription+xml"
+        title="braumeister.org – Search" href="/opensearch.xml"]
+  = favicon_link_tag 'favicon.png', type: 'image/png'
 
   - for revision in @revisions
     = render partial: 'formula', collection: revision.added_formulae,
