@@ -5,29 +5,21 @@
 
 class Formulary
 
-  class << self
-    alias_method :original_factory, :factory
-  end
-
-  def self.core_path(name)
-    formula = core_repo.find_formula(name) || ''
-    Pathname.new formula
-  end
+  @@cache = {}
 
   def self.factory(ref)
+    return @@cache[ref] if @@cache.key? ref
+
     path = nil
-    repo = @repositories.detect do |repo|
-      path = repo.find_formula ref
+    @repositories.each do |repo|
+      formula = repo.find_formula(ref)
+      unless formula.nil?
+        path = File.join repo.path, formula
+        break
+      end
     end
-    original_factory(path.nil? ? ref : File.join(repo.path, path))
-  end
-
-  class << self
-    alias_method :get_formula, :factory
-  end
-
-  def self.core_repo
-    @core_repo ||= Repository.core.extend(TapImport)
+    contents = File.read path
+    @@cache[ref] = from_contents ref, Pathname(path), contents
   end
 
   def self.repositories=(repositories)

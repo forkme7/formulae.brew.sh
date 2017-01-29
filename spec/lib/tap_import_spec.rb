@@ -21,6 +21,7 @@ describe TapImport do
 
   before do
     Repository.stubs(:main).returns main_repo
+    core_repo.stubs(:repo).returns core_repo
   end
 
   describe '#clone_or_pull' do
@@ -39,6 +40,7 @@ describe TapImport do
   describe '#formulae_info' do
 
     before do
+      module Homebrew; end
       class FormulaSpecificationError; end
       class FormulaUnavailableError; end
       class FormulaValidationError; end
@@ -56,46 +58,45 @@ describe TapImport do
       Process.expects(:wait).with 1234
 
       Object.stubs(:remove_const).with :Formula
-      core_repo.expects(:require).with 'Library/Homebrew/formula'
-      core_repo.expects(:require).with 'Library/Homebrew/global'
-      core_repo.expects(:require).with 'Library/Homebrew/os/mac'
-      core_repo.expects(:require).with 'sandbox/argv'
-      core_repo.expects(:require).with 'sandbox/backtick'
+      core_repo.expects(:require).with 'global'
+      core_repo.expects(:require).with 'formula'
+      core_repo.expects(:require).with 'os/mac'
       core_repo.expects(:require).with 'sandbox/coretap'
-      core_repo.expects(:require).with 'sandbox/development_tools'
       core_repo.expects(:require).with 'sandbox/formulary'
-      core_repo.expects(:require).with 'sandbox/io_popen'
-      core_repo.expects(:require).with 'sandbox/macos'
+      Homebrew.expects(:raise_deprecation_exceptions=).with false
     end
 
     it 'sets some global information on the repo path' do
-      main_repo.expects(:path).returns 'path'
-      $LOAD_PATH.expects(:unshift).with File.join('path')
-      $LOAD_PATH.expects(:unshift).with File.join('path', 'Library', 'Homebrew')
+      main_repo.expects(:path).returns 'main_path'
+      core_repo.expects(:path).returns 'core_path'
+      $LOAD_PATH.expects(:unshift).with File.join('main_path', 'Library', 'Homebrew')
 
       core_repo.send :formulae_info, []
 
-      expect($homebrew_path).to eq('path')
+      expect($homebrew_path).to eq('main_path')
+      expect($core_formula_path).to eq('core_path')
     end
 
     it 'uses a forked process to load formula information' do
-      git = mock deps: [], desc: 'Distributed revision control system', homepage: 'http://git-scm.com', keg_only?: false, name: 'git', stable: mock(version: '1.7.9'), devel: nil, head: mock(version: 'HEAD')
-      memcached = mock deps: %w(libevent), desc: 'High performance, distributed memory object caching system', homepage: 'http://memcached.org/', keg_only?: false, name: 'memcached', stable: mock(version: '1.4.11'), devel: mock(version: '2.0.0.dev') , head: nil
+      git_info = { mock_info_for: 'git' }
+      git_formula = mock to_hash: git_info
+      memcached_info = {mock_info_for: 'memcached'}
+      memcached_formula = mock to_hash: memcached_info
 
-      Formula.expects(:class_s).with('git').returns :Git
-      Formulary.expects(:factory).with('git').returns git
-      Formula.expects(:class_s).with('memcached').returns :Memcached
-      Formulary.expects(:factory).with('memcached').returns memcached
+      File.expects(:read).with('git').returns 'git_formula'
+      Formulary.expects(:from_contents).with('git', Pathname('git'), 'git_formula').returns git_formula
+      File.expects(:read).with('memcached').returns 'memcached_formula'
+      Formulary.expects(:from_contents).with('memcached', Pathname('memcached'), 'memcached_formula').returns memcached_formula
 
       formulae_info = core_repo.send :formulae_info, %w{git memcached}
       expect(formulae_info).to eq({
-        'git' => { deps: [], description: 'Distributed revision control system', homepage: 'http://git-scm.com', keg_only: false, stable_version: '1.7.9', devel_version: nil, head_version:'HEAD' },
-        'memcached' => { deps: %w(libevent), description: 'High performance, distributed memory object caching system', homepage: 'http://memcached.org/', keg_only: false, stable_version: '1.4.11', devel_version: '2.0.0.dev', head_version: nil }
+        'git' => git_info,
+        'memcached' => memcached_info
       })
     end
 
     it 'reraises errors caused by the subprocess' do
-      Formula.expects(:class_s).with('git').raises StandardError.new('subprocess failed')
+      core_repo.expects(:file_contents_for_sha).with('git', nil).raises StandardError.new('subprocess failed')
 
       expect(-> { core_repo.send :formulae_info, %w{git} }).to raise_error(StandardError, 'subprocess failed')
     end

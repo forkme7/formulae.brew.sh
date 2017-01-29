@@ -67,6 +67,12 @@ module TapImport
     Repository.core.extend RepositoryImport
   end
 
+  def file_contents_for_sha(path, sha)
+    return File.read path if sha.nil?
+
+    git "cat-file blob #{sha}:#{path}"
+  end
+
   def find_formula(file)
     file = file.to_s
     file.gsub! /(?<=[^\\])\+/, '\\\\+'
@@ -74,74 +80,46 @@ module TapImport
     git("ls-files | grep -E '(^|/)#{file}'").lines.first.strip rescue nil
   end
 
-  def formulae_info(formulae, backward_compat = false)
+  def formulae_info(formulae, sha = nil)
     tmp_file = Tempfile.new 'braumeister-import'
 
     repositories = ([ Repository.core, self ] + Repository.all).uniq
 
     pid = fork do
       begin
-        require 'sandbox/backtick'
-        require 'sandbox/io_popen'
+        Object.send(:remove_const, :Formula) if Object.const_defined? :Formula
 
         $homebrew_path = main_repo.path
-        $LOAD_PATH.unshift $homebrew_path
+        $core_formula_path = repo.path
         $LOAD_PATH.unshift File.join($homebrew_path, 'Library', 'Homebrew')
         ENV['HOMEBREW_BREW_FILE'] = File.join $homebrew_path, 'bin', 'brew'
         ENV['HOMEBREW_CACHE'] = File.join $homebrew_path, 'Cache'
         ENV['HOMEBREW_CELLAR'] = File.join $homebrew_path, 'Cellar'
         ENV['HOMEBREW_LIBRARY'] = File.join $homebrew_path, 'Library'
-        ENV['HOMEBREW_OSX_VERSION'] = '10.11'
+        ENV['HOMEBREW_MACOS_VERSION'] = '10.12'
         ENV['HOMEBREW_PREFIX'] = $homebrew_path
         ENV['HOMEBREW_REPOSITORY'] = File.join $homebrew_path, '.git'
 
-        Object.send(:remove_const, :Formula) if Object.const_defined? :Formula
+        require 'global'
+        require 'formula'
+        require 'os/mac'
 
-        require 'backward_compat' if backward_compat
+        Homebrew.raise_deprecation_exceptions = false
 
-        require 'Library/Homebrew/global'
-        require 'Library/Homebrew/formula'
-        require 'Library/Homebrew/os/mac'
-
-        require 'sandbox/argv'
         require 'sandbox/coretap'
-        require 'sandbox/development_tools'
         require 'sandbox/formulary'
-        require 'sandbox/macos'
+        require 'sandbox/utils' unless sha.nil?
 
         Formulary.repositories = repositories
 
         formulae_info = {}
-        formulae.each do |name|
+        formulae.each do |path|
           begin
-            formula_name = File.basename name, '.rb'
-            formula_class = Formula.class_s(formula_name).to_sym
-            if Object.const_defined? formula_class
-              Object.send :remove_const, formula_class
-              $LOADED_FEATURES.reject! { |p| p =~ /\/#{formula_name}.rb/ }
-            end
+            name = File.basename path, '.rb'
+            contents = file_contents_for_sha path, sha
 
-            if backward_compat
-              formula = Formula.factory name
-            else
-              formula = Formulary.factory name
-            end
-
-            current_formula_info = formulae_info[formula.name] = {
-              description: formula.desc,
-              deps: formula.deps.map(&:to_s),
-              homepage: formula.homepage,
-              keg_only: !!formula.keg_only?,
-              stable_version: formula.stable.try(:version).try(:to_s),
-              devel_version: formula.devel.try(:version).try(:to_s),
-              head_version: formula.head.try(:version).try(:to_s)
-            }
-
-            if current_formula_info[:stable_version].nil? &&
-                current_formula_info[:devel_version].nil? &&
-                current_formula_info[:head_version].nil?
-                current_formula_info[:stable_version] = formula.version.to_s
-            end
+            formula = Formulary.from_contents name, Pathname(path), contents
+            formulae_info[name] = formula.to_hash
           rescue FormulaSpecificationError, FormulaUnavailableError,
                  FormulaValidationError, NoMethodError, RuntimeError,
                  SyntaxError, TypeError
@@ -222,29 +200,19 @@ module TapImport
       sha, *files = commit.lines
       sha.strip!
 
-      formulae = files.map do |path|
-        next unless path =~ formula_regex
-        name = File.basename $1, '.rb'
-        $1 if name != '__template' && !self.formulae.where(name: name).exists?
-      end.compact
-      formulae.compact!
+      files = files.map(&:strip).select { |path| path =~ formula_regex }
+      next if files.empty?
 
-      next if formulae.empty?
-
-      Rails.logger.debug "Trying to recover the following formulae: #{formulae.join ', '}"
+      Rails.logger.debug "Trying to recover the following formulae: #{files.join ', '}"
       begin
         sha << '^'
-        reset_head sha
 
         Rails.logger.debug "Trying to import missing formulae from commit #{sha}…"
 
-        formulae_info = formulae_info formulae, true
-        formulae.each do |name|
-          formula_name = File.basename name, '.rb'
-          formula = self.formulae.find_or_initialize_by name: formula_name
-          formula_info = formulae_info.delete formula.name
+        formulae_info(files, sha).each_value do |formula_info|
+          formula = self.formulae.find_or_initialize_by name: formula_info['name']
           next if formula_info.nil?
-          formula.deps = formula_info[:deps].map do |dep|
+          formula.deps = formula_info['dependencies'].map do |dep|
             self.formulae.where(name: dep).first ||
               Repository.core.formulae.where(name: dep).first
           end
@@ -276,9 +244,9 @@ module TapImport
       return last_sha
     end
 
-    formulae_info = formulae_info formulae.map { |type, fpath|
-      fpath.match(formula_regex)[1] unless type == 'D'
-    }.compact
+    formulae_info = formulae_info formulae.
+            reject { |type, _| type == 'D' }.
+            map { |_, path| File.join self.path, path }
 
     added = modified = removed = 0
     formulae.each do |type, fpath|
@@ -300,7 +268,7 @@ module TapImport
         end
         formula_info = formulae_info.delete formula.name
         next if formula_info.nil?
-        formula.deps = formula_info[:deps].map do |dep|
+        formula.deps = formula_info['dependencies'].map do |dep|
           self.formulae.where(name: dep).first ||
             Repository.core.formulae.where(name: dep).first
         end

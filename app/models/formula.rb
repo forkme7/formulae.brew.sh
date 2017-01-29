@@ -67,12 +67,12 @@ class Formula
   end
 
   def update_metadata(formula_info)
-    self.description = formula_info[:description]
-    self.homepage = formula_info[:homepage]
-    self.keg_only = formula_info[:keg_only]
-    self.stable_version = formula_info[:stable_version]
-    self.devel_version = formula_info[:devel_version]
-    self.head_version = formula_info[:head_version]
+    self.description = formula_info['desc']
+    self.homepage = formula_info['homepage']
+    self.keg_only = formula_info['keg_only']
+    self.stable_version = formula_info['versions']['stable']
+    self.devel_version = formula_info['versions']['devel']
+    self.head_version = formula_info['versions']['head']
   end
 
   def version
