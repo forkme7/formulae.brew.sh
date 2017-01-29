@@ -59,6 +59,9 @@ html itemscope=true itemtype="http://schema.org/WebPage" lang="en"
 
       #content
 
+        - if flash[:error]
+          #flash-error = flash[:error]
+
         == yield
 
       #footer
