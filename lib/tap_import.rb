@@ -129,8 +129,8 @@ module TapImport
               $!.backtrace.each { |line| error_msg << "  #{line}\n" }
             end
             Rails.logger.warn error_msg
-            if defined? Airbrake
-              Airbrake.notify $!, { error_message: error_msg }
+            if defined? Rollbar
+              Rollbar.error $!, { error_message: error_msg }
             end
           end
         end

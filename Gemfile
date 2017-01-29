@@ -24,7 +24,7 @@ group :development, :test do
 end
 
 group :production do
-  gem 'airbrake', '~> 5.2'
+  gem 'rollbar', '~> 2.14'
   gem 'newrelic_rpm', '~> 3.14'
   gem 'rails_12factor', '~> 0.0.2'
 end

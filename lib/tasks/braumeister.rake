@@ -25,16 +25,16 @@ else
   end
 end
 
-if defined? Airbrake
-  def airbrake_rescued(&action)
+if defined? Rollbar
+  def rollbar_rescued(&action)
     begin
       action.call
     rescue
-      Airbrake.notify $!
+      Rollbar.error $!
     end
   end
 else
-  def airbrake_rescued(&action)
+  def rollbar_rescued(&action)
     action.call
   end
 end
@@ -66,7 +66,7 @@ namespace :braumeister do
   desc 'Pulls the latest changes from one or all repositories'
   task_with_tracing :update, [:repo] => :select_repos do
     @repos.each do |repo|
-      airbrake_rescued do
+      rollbar_rescued do
         last_sha = repo.refresh
         repo.generate_history last_sha
       end
@@ -75,7 +75,7 @@ namespace :braumeister do
 
   desc 'Pulls the latest changes from the main repository'
   task_with_tracing :update_main => :environment do
-    airbrake_rescued do
+    rollbar_rescued do
       repo = Repository.main.extend MainImport
       repo.update_status
       repo.create_missing_taps

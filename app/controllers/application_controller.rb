@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
   end
 
   def error_page(status = :internal_server_error)
-    Airbrake.notify $! if defined? Airbrake
+    Rollbar.error $! if defined? Rollbar
 
     view = 'application/%d' % [ Rack::Utils::SYMBOL_TO_STATUS_CODE[status] ]
 

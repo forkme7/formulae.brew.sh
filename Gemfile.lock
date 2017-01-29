@@ -38,9 +38,6 @@ GEM
       i18n (~> 0.7)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    airbrake (5.7.0)
-      airbrake-ruby (~> 1.7)
-    airbrake-ruby (1.7.0)
     arel (7.1.4)
     bson (4.2.1)
     builder (3.2.2)
@@ -148,6 +145,8 @@ GEM
     rb-fsevent (0.9.8)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
+    rollbar (2.14.0)
+      multi_json
     rspec-core (3.5.2)
       rspec-support (~> 3.5.0)
     rspec-expectations (3.5.0)
@@ -207,7 +206,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airbrake (~> 5.2)
   compass-rails (~> 3.0.2)
   coveralls (~> 0.8)
   dalli (~> 2.7.0)
@@ -221,6 +219,7 @@ DEPENDENCIES
   puma (~> 3.7)
   rails (= 5.0.1)
   rails_12factor (~> 0.0.2)
+  rollbar (~> 2.14)
   rspec-rails (~> 3.2)
   sass-rails (~> 5.0)
   slim (~> 3.0)
