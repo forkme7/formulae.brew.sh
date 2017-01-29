@@ -92,6 +92,8 @@ module TapImport
         $homebrew_path = main_repo.path
         $core_formula_path = repo.path
         $LOAD_PATH.unshift File.join($homebrew_path, 'Library', 'Homebrew')
+        $LOADED_FEATURES.reject! { |path| path =~ /\/formula\.rb$/ }
+
         ENV['HOMEBREW_BREW_FILE'] = File.join $homebrew_path, 'bin', 'brew'
         ENV['HOMEBREW_CACHE'] = File.join $homebrew_path, 'Cache'
         ENV['HOMEBREW_CELLAR'] = File.join $homebrew_path, 'Cellar'
