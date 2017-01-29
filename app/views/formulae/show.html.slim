@@ -11,18 +11,16 @@ h1 = @formula.name
   =< link_to @repository.name, letter_repository_formulae_path(@repository, @repository.first_letter), class: 'repo'
 
 #basic
-  #description = @formula.description
+  - unless @formula.description.nil?
+    #description = @formula.description
 
-  - if @formula.removed?
-    h2.removed
-    | Formula was removed
-    br
-    | Last version was:
-  - else
-    h2
-      | Current version
-      - if @formula.version.size > 1
-      | s
+  h2 class=('removed' if @formula.removed?)
+    - if @formula.removed?
+      | Formula was removed
+      br
+
+    = t ".versions#{'.removed' if @formula.removed? }", count: @formula.versions.size
+    | :
 
     .versions
       - unless @formula.stable_version.nil?
@@ -31,20 +29,20 @@ h1 = @formula.name
         strong.version.spec-devel = @formula.devel_version
       - unless @formula.head_version.nil?
         strong.version.spec-head = @formula.head_version
-    - unless @formula.homepage.nil?
-      h2
-        | Homepage:
-        em = link_to @formula.homepage, @formula.homepage
-    - unless (@formula.aliases || []).empty?
-      | Also known as:
-      strong = safe_join @formula.aliases, '</strong>, <strong>'
-      br
-    - if @formula.keg_only?
-      strong
+  - unless @formula.homepage.nil?
+    h2
+      | Homepage:
+      em = link_to @formula.homepage, @formula.homepage
+  - unless (@formula.aliases || []).empty?
+    | Also known as:
+    strong = safe_join @formula.aliases, '</strong>, <strong>'
+    br
+  - if @formula.keg_only?
+    strong
       | This formula is
-      abbr title="A keg-only formula won‘t be symlinked automatically."
-      | .
-      br
+      abbr< title="A keg-only formula won‘t be symlinked automatically." keg-only
+      ' .
+    br
 
 - deps = @formula.deps.reject { |formula| formula.removed? }
 - unless deps.empty?
@@ -77,7 +75,7 @@ h1 = @formula.name
           td.date
             = link_to '', "https://github.com/#{@repository.name}/commit/#{rev.sha}##{@formula.path}"
             = timestamp rev.date
-        - if i == 9
+        - if i == 9 && @revisions.size > 10
           tr.show-all
             td colspan=3
               = icon 'long-arrow-down'

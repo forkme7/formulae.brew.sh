@@ -7,8 +7,9 @@ entry [ id="tag:braumeister.org,2012:#{@repository.name}/#{formula.name}-#{revis
         published=revision.date.iso8601 updated=revision.date.iso8601
         url=(formula.in_core? ? polymorphic_path(formula) : polymorphic_path([@repository, formula])) ]
 
-  title = formula.name
-    |> has been #{status}"
+  title
+    = formula.name
+    | has been #{status}
   summary = revision.subject
 
   author

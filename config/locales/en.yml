@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2014, Sebastian Staudt
+# Copyright (c) 2012-2017, Sebastian Staudt
 
 en:
   formulae:
@@ -14,3 +14,9 @@ en:
       revdeps_html:
         one:   "The following formula requires <em>%{name}</em> to be installed:"
         other: "The following formulae require <em>%{name}</em> to be installed:"
+      versions:
+        one:   "Current version"
+        other: "Current versions"
+        removed:
+          one:   "Last version was"
+          other: "Last versions were"

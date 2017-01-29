@@ -19,8 +19,8 @@ feed [ xml:lang="en-US"
 
   - for revision in @revisions
     = render partial: 'formula', collection: revision.added_formulae,
-             locals: { revision: revision, status: "added" }
+             locals: { revision: revision, status: 'added' }
     = render partial: 'formula', collection: revision.updated_formulae,
-             locals: { revision: revision, status: "updated" }
+             locals: { revision: revision, status: 'updated' }
     = render partial: 'formula', collection: revision.removed_formulae,
-             locals: { revision: revision, status: "removed" }
+             locals: { revision: revision, status: 'removed' }
