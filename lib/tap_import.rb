@@ -108,6 +108,7 @@ module TapImport
 
         Homebrew.raise_deprecation_exceptions = false
 
+        require 'sandbox/argv'
         require 'sandbox/coretap'
         require 'sandbox/formulary'
         require 'sandbox/utils' unless sha.nil?
