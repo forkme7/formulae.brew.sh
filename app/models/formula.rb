@@ -53,7 +53,7 @@ class Formula
   end
 
   def path
-    path = repository.full? ? File.join('Library', 'Formula') : self[:path]
+    path = repository.core? ? 'Formula' : self[:path]
     (path.nil? ? name : File.join(path, name)) + '.rb'
   end
 
