@@ -27,8 +27,6 @@ class ApplicationController < ActionController::Base
   end
 
   def error_page(status = :internal_server_error)
-    Rollbar.error $! if defined? Rollbar
-
     view = 'application/%d' % [ Rack::Utils::SYMBOL_TO_STATUS_CODE[status] ]
 
     respond_to do |format|
