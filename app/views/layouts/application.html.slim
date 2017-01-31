@@ -33,7 +33,7 @@ html itemscope=true itemtype="http://schema.org/WebPage" lang="en"
     - if Rails.env != 'production'
       = render 'layouts/google_analytics', cached: true
 
-    body data={ repository: @repository.name }
+    body data={ repository: (@repository.name rescue nil) }
       #fb-root
         = render 'layouts/facebook', cached: true
       #header
