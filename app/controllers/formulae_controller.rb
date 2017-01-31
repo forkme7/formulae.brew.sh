@@ -9,6 +9,8 @@ class FormulaeController < ApplicationController
 
   before_action :select_repository
 
+  CORE_REPO_URL = "/repos/#{Repository::CORE}/".freeze
+
   def browse
     letter = params[:letter]
     @title = "Browse formulae – #{letter.upcase}"
@@ -98,9 +100,8 @@ class FormulaeController < ApplicationController
   end
 
   def select_repository
-    core_repo_url = "/repos/#{Repository::CORE}/"
-    if request.url.match core_repo_url
-      redirect_to '/' + request.url.split(core_repo_url, 2)[1]
+    if request.url.match CORE_REPO_URL
+      redirect_to '/' + request.url.split(CORE_REPO_URL, 2)[1]
       return
     end
 
