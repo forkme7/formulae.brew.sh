@@ -82,4 +82,13 @@ namespace :braumeister do
     end
   end
 
+  desc 'Updates metadata from one or all tap repositories'
+  task_with_tracing :update_metadata => :select_repos do
+    @repos.each do |repo|
+      rollbar_rescued do
+        repo.update_metadata
+      end
+    end
+  end
+
 end
