@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2014, Sebastian Staudt
+# Copyright (c) 2012-2017, Sebastian Staudt
 
 class Author
 
@@ -11,7 +11,7 @@ class Author
   field :email, type: String
   field :name, type: String
 
-  has_and_belongs_to_many :repository, validate: false
+  has_and_belongs_to_many :repositories, validate: false
   has_many :revisions, validate: false
 
 end
