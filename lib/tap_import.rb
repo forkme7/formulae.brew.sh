@@ -173,7 +173,6 @@ module TapImport
     self.formulae.each { |f| f.revisions.nullify }
     self.revisions.destroy
     self.revisions.clear
-    self.authors.destroy
     self.authors.clear
 
     generate_history
