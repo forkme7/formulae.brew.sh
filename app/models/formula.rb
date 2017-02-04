@@ -1,7 +1,7 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2016, Sebastian Staudt
+# Copyright (c) 2012-2017, Sebastian Staudt
 
 class Formula
 
@@ -82,8 +82,6 @@ class Formula
   def versions
     [ stable_version, devel_version, head_version ].compact
   end
-
-  private
 
   def set_id
     self._id = "#{repository.name}/#{name}"

@@ -18,9 +18,10 @@ module TapImport
     commits = git(log_cmd).split /\n\n/
     commit_progress = 0
     commit_count = commits.size
+    renames = {}
     commits.each_slice(100) do |commit_batch|
       commit_batch.each do |commit|
-        info, *formulae = commit.lines
+        info, *files = commit.lines
         sha, timestamp, email, name, subject = info.strip.split "\x00"
         rev = Revision.find_or_initialize_by sha: sha
         self.revisions << rev
@@ -30,22 +31,46 @@ module TapImport
         rev.author.save!
         rev.date = timestamp.to_i
         rev.subject = subject
-        formulae.each do |formula|
-          status, name = formula.split
-          next unless name =~ formula_regex
-          name = File.basename $~[1], '.rb'
-          formula = self.formulae.where(name: name).first
-          next if formula.nil?
-          formula.revisions << rev
-          formula.date = rev.date if formula.date.nil? || rev.date > formula.date
-          formula.save!
-          if status == 'M' || status =~ /R\d\d\d/
-            rev.updated_formulae << formula
-          elsif status == 'A'
+        files.each do |file_status|
+          status, name, new_name = file_status.split
+
+          if status =~ /R\d\d\d/
+            Rails.logger.info "Formula #{name} has been renamed to #{new_name} in repository."
+            old_name = File.basename name, '.rb'
+            name = renames[name] = renames[new_name] || File.basename(new_name, '.rb')
+            formula = self.formulae.find_by name: name
+            if formula.nil?
+              Rails.logger.info "  Renaming formula #{old_name} to #{name}…"
+              formula = self.formulae.find_by name: old_name
+              unless formula.nil?
+                formula.destroy!
+                formula = formula.dup
+                formula.name = name
+                formula.set_id
+                formula.save!
+              end
+            end
+          else
+            name = renames[name] || File.basename(name, '.rb')
+            formula = self.formulae.find_by name: name
+          end
+
+          if formula.nil?
+            Rails.logger.warn "Could not find a formula named #{name}."
+            next
+          end
+
+          if status == 'A'
             rev.added_formulae << formula
           elsif status == 'D'
             rev.removed_formulae << formula
+          else
+            rev.updated_formulae << formula
           end
+
+          formula.date = rev.date if formula.date.nil? || rev.date > formula.date
+          formula.revisions << rev
+          formula.save!
         end
         rev.save!
       end
