@@ -240,8 +240,8 @@ module TapImport
           formula = self.formulae.find_or_initialize_by name: formula_info['name']
           next if formula_info.nil?
           formula.deps = formula_info['dependencies'].map do |dep|
-            self.formulae.where(name: dep).first ||
-              Repository.core.formulae.where(name: dep).first
+            self.formulae.find_by(name: dep) ||
+              Repository.core.formulae.find_by(name: dep)
           end
           formula.removed = true
           formula.update_metadata formula_info
@@ -296,8 +296,8 @@ module TapImport
         formula_info = formulae_info.delete formula.name
         next if formula_info.nil?
         formula.deps = formula_info['dependencies'].map do |dep|
-          self.formulae.where(name: dep).first ||
-            Repository.core.formulae.where(name: dep).first
+          self.formulae.find_by(name: dep) ||
+            Repository.core.formulae.find_by(name: dep)
         end
         formula.update_metadata formula_info
         formula.removed = false
@@ -308,14 +308,14 @@ module TapImport
     aliases.each do |type, apath|
       name = apath.match(ALIAS_REGEX)[1]
       if type == 'D'
-        formula = self.formulae.where(aliases: name).first
+        formula = self.formulae.find_by aliases: name
         next if formula.nil?
         formula.aliases.delete name
       else
         alias_path = File.join path, apath
         next unless FileTest.symlink? alias_path
         formula_name  = File.basename File.readlink(alias_path), '.rb'
-        formula = self.formulae.where(name: formula_name).first
+        formula = self.formulae.find_by name: formula_name
         next if formula.nil?
         formula.aliases ||= []
         formula.aliases << name

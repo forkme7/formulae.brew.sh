@@ -71,7 +71,7 @@ describe FormulaeController do
   describe '#show' do
     context 'when formula is not found' do
       before do
-        Formula.expects(:where).returns mock(includes: [])
+        Formula.expects(:includes).returns mock(find: nil)
         formulae = mock
         formulae.expects(:all_in).returns []
         repo = mock

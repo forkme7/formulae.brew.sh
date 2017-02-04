@@ -73,7 +73,7 @@ class FormulaeController < ApplicationController
 
   def show
     formula_id = "#{repository_id}/#{params[:id]}"
-    @formula = Formula.where(_id: formula_id).includes(:deps, :revdeps).first
+    @formula = Formula.includes(:deps, :revdeps).find formula_id
     if @formula.nil?
       formula = @repository.formulae.all_in(aliases: [params[:id]]).first
       unless formula.nil?
