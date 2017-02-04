@@ -1,14 +1,14 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2014, Sebastian Staudt
+# Copyright (c) 2012-2017, Sebastian Staudt
 
 require 'rails_helper'
 
 describe Formula do
 
   let :formula do
-    repo = Repository.new name: Repository::MAIN, full: true
+    repo = Repository.new name: Repository::CORE, full: true
     Formula.new name: 'git', repository: repo
   end
 
@@ -25,24 +25,28 @@ describe Formula do
 
   describe '#set_id' do
     it 'should update the formula’s id' do
-      formula.send :set_id
+      formula.set_id
 
-      expect(formula.id).to eq "#{Repository::MAIN}/git"
+      expect(formula.id).to eq "#{Repository::CORE}/git"
     end
   end
 
   describe '#update_metadata' do
     it 'updates the metadata of the formula' do
       formula_info = {
-        homepage: 'http://example.com',
-        keg_only: true,
-        stable_version: '1.0.0',
-        devel_version:  '1.1.0.beta',
-        head_version: 'HEAD'
+        'desc' => 'Example description',
+        'homepage' => 'http://example.com',
+        'keg_only' => true,
+        'versions' => {
+          'stable' => '1.0.0',
+          'devel' =>  '1.1.0.beta',
+          'head' => 'HEAD'
+        }
       }
 
       formula.update_metadata formula_info
 
+      expect(formula.description).to eq 'Example description'
       expect(formula.homepage).to eq 'http://example.com'
       expect(formula.keg_only).to be_truthy
       expect(formula.stable_version).to eq '1.0.0'
@@ -74,17 +78,17 @@ describe Formula do
     end
   end
 
-  context 'for a formula in a full repository' do
+  context 'for a formula in the core repository' do
 
     describe '#path' do
       it 'returns the relative path' do
-        expect(formula.path).to eq('Library/Formula/git.rb')
+        expect(formula.path).to eq('Formula/git.rb')
       end
     end
 
     describe '#raw_url' do
       it 'returns the GitHub URL of the raw formula file' do
-        expect(formula.raw_url).to eq("https://raw.github.com/#{Repository::MAIN}/HEAD/Library/Formula/git.rb")
+        expect(formula.raw_url).to eq("https://raw.github.com/#{Repository::CORE}/HEAD/Formula/git.rb")
       end
     end
 
