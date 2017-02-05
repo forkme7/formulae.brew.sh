@@ -18,6 +18,7 @@ module TapImport
     commits = git(log_cmd).split /\n\n/
     commit_progress = 0
     commit_count = commits.size
+    missing_formulae = []
     renames = {}
     commits.each_slice(100) do |commit_batch|
       commit_batch.each do |commit|
@@ -38,6 +39,7 @@ module TapImport
             Rails.logger.info "Formula #{name} has been renamed to #{new_name} in repository."
             old_name = File.basename name, '.rb'
             name = renames[name] = renames[new_name] || File.basename(new_name, '.rb')
+            next if missing_formulae.include? name
             formula = self.formulae.find_by name: name
             if formula.nil?
               Rails.logger.info "  Renaming formula #{old_name} to #{name}…"
@@ -52,11 +54,13 @@ module TapImport
             end
           else
             name = renames[name] || File.basename(name, '.rb')
+            next if missing_formulae.include? name
             formula = self.formulae.find_by name: name
           end
 
           if formula.nil?
             Rails.logger.warn "Could not find a formula named #{name}."
+            missing_formulae << name
             next
           end
 
