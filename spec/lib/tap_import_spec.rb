@@ -163,6 +163,8 @@ describe TapImport do
               returns "Formula/bazaar.rb\nFormula/git.rb\nFormula/mercurial.rb"
       core_repo.expects(:git).with('ls-files -- Aliases/').
               returns "Aliases/bzr\nAliases/hg"
+      File.expects(:exists?).with(File.join core_repo.path, 'Formula').
+                      returns true
 
       formulae, aliases, last_sha = core_repo.update_status
 
@@ -176,6 +178,7 @@ describe TapImport do
       repo.name = 'Homebrew/homebrew-science'
       repo.expects(:git).with('ls-files -- Formula/*.rb').
               returns "bazaar.rb\ngit.rb\nmercurial.rb"
+      File.expects(:exists?).with(File.join repo.path, 'Formula').returns true
 
       formulae, aliases, last_sha = repo.update_status
 
@@ -190,6 +193,8 @@ describe TapImport do
               returns "D\tFormula/bazaar.rb\nM\tFormula/git.rb\nA\tFormula/mercurial.rb"
       core_repo.expects(:git).with('diff --name-status 01234567..HEAD -- Aliases/').
               returns "D\tAliases/bzr\nA\tAliases/hg"
+      File.expects(:exists?).with(File.join core_repo.path, 'Formula').
+                      returns true
       Rails.logger.expects(:info).with "Updated #{Repository::CORE} from 01234567 to deadbeef:"
 
       formulae, aliases, last_sha = core_repo.update_status
