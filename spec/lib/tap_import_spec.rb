@@ -61,6 +61,7 @@ describe TapImport do
       core_repo.expects(:require).with 'os/mac'
       core_repo.expects(:require).with 'sandbox/argv'
       core_repo.expects(:require).with 'sandbox/coretap'
+      core_repo.expects(:require).with 'sandbox/formula'
       core_repo.expects(:require).with 'sandbox/formulary'
       Homebrew.expects(:raise_deprecation_exceptions=).with false
     end
