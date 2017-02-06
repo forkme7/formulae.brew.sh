@@ -8,8 +8,7 @@ require 'main_import'
 describe MainImport do
 
   let(:repo) do
-    repo = Repository.new name: Repository::MAIN, full: true,
-                          special_formula_regex: nil
+    repo = Repository.new name: Repository::MAIN, full: true
     repo.extend subject
   end
 

@@ -8,15 +8,8 @@ require 'repository_import'
 describe RepositoryImport do
 
   let(:repo) do
-    repo = Repository.new name: Repository::MAIN, full: false,
-                          special_formula_regex: nil
+    repo = Repository.new name: Repository::MAIN, full: false
     repo.extend subject
-  end
-
-  before do
-    #Repository.stubs(:find).with(Repository::CORE).returns core_repo
-    #Repository.stubs(:find).with(Repository::MAIN).returns main_repo
-    #Repository.stubs(:main).returns repo
   end
 
   describe '#path' do

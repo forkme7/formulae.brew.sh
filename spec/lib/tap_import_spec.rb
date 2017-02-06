@@ -8,14 +8,12 @@ require 'tap_import'
 describe TapImport do
 
   let(:core_repo) do
-    repo = Repository.new name: Repository::CORE, full: false,
-                          special_formula_regex: nil
+    repo = Repository.new name: Repository::CORE, full: false
     repo.extend subject
   end
 
   let(:main_repo) do
-    repo = Repository.new name: Repository::MAIN, full: true,
-                          special_formula_regex: nil
+    repo = Repository.new name: Repository::MAIN, full: true
     repo.extend subject
   end
 
@@ -104,24 +102,20 @@ describe TapImport do
 
   end
 
-  describe '#formula_regex' do
+  describe '#formula_pathspec' do
 
-    let :repo do
-      repo = Repository.new
-      repo.extend subject
+    it 'returns a pathspec to Formula/ if it exists' do
+      File.expects(:exists?).with(File.join core_repo.path, 'Formula').
+              returns true
+
+      expect(core_repo.formula_pathspec).to eq('Formula/*.rb')
     end
 
-    it 'returns a specific regex for the core repo' do
-      expect(core_repo.formula_regex).to eq(/^(?:Library\/)?Formula\/(.+?)\.rb$/)
-    end
+    it 'returns a generic pathspec if Formula/ does not exist' do
+      File.expects(:exists?).with(File.join core_repo.path, 'Formula').
+              returns false
 
-    it 'returns a generic regex for other repos' do
-      expect(repo.formula_regex).to eq(/^(.+?\.rb)$/)
-    end
-
-    it 'returns the special regex if one is defined' do
-      repo.special_formula_regex = '.*'
-      expect(repo.formula_regex).to eq(/.*/)
+      expect(core_repo.formula_pathspec).to eq('*.rb')
     end
 
   end
@@ -145,54 +139,6 @@ describe TapImport do
     end
   end
 
-  describe '#update_status' do
-
-    before do
-      core_repo.expects :clone_or_pull
-      core_repo.expects(:git).with('log -1 --format=format:"%H %ct" HEAD').
-              returns 'deadbeef 1325844635'
-    end
-
-    it 'can get the current status of a new full repository' do
-      core_repo.expects(:git).with('ls-tree --name-only HEAD Formula/').
-              returns "Formula/bazaar.rb\nFormula/git.rb\nFormula/mercurial.rb"
-      core_repo.expects(:git).with('ls-tree --name-only HEAD Aliases/').
-              returns "Aliases/bzr\nAliases/hg"
-
-      formulae, aliases, last_sha = core_repo.update_status
-
-      expect(formulae).to eq([%w{A Formula/bazaar.rb}, %w{A Formula/git.rb}, %w{A Formula/mercurial.rb}])
-      expect(aliases).to eq([%w{A Aliases/bzr}, %w{A Aliases/hg}])
-      expect(last_sha).to be_nil
-    end
-
-    it 'can get the current status of a new tap repository' do
-      repo = core_repo
-      repo.name = 'Homebrew/homebrew-science'
-      repo.expects(:git).with('ls-tree --name-only -r HEAD').
-              returns "bazaar.rb\ngit.rb\nmercurial.rb"
-
-      formulae, aliases, last_sha = repo.update_status
-
-      expect(formulae).to eq([%w{A bazaar.rb}, %w{A git.rb}, %w{A mercurial.rb}])
-      expect(aliases).to eq([])
-      expect(last_sha).to be_nil
-    end
-
-    it 'can update the current status of a repository' do
-      core_repo.sha = '01234567'
-      core_repo.expects(:git).with('diff --name-status 01234567..HEAD').
-              returns "D\tAliases/bzr\nA\tAliases/hg\nD\tFormula/bazaar.rb\nM\tFormula/git.rb\nA\tFormula/mercurial.rb"
-
-      formulae, aliases, last_sha = core_repo.update_status
-
-      expect(formulae).to eq([%w{D Formula/bazaar.rb}, %w{M Formula/git.rb}, %w{A Formula/mercurial.rb}])
-      expect(aliases).to eq([%w{D Aliases/bzr}, %w{A Aliases/hg}])
-      expect(last_sha).to eq('01234567')
-    end
-
-  end
-
   describe '#refresh' do
     it 'does nothing when nothing has changed' do
       core_repo.expects(:update_status).returns [[], [], 'deadbeef']
@@ -213,9 +159,9 @@ describe TapImport do
     end
 
     it 'can get the current status of a new full repository' do
-      core_repo.expects(:git).with('ls-tree --name-only HEAD Formula/').
+      core_repo.expects(:git).with('ls-files -- Formula/*.rb').
               returns "Formula/bazaar.rb\nFormula/git.rb\nFormula/mercurial.rb"
-      core_repo.expects(:git).with('ls-tree --name-only HEAD Aliases/').
+      core_repo.expects(:git).with('ls-files -- Aliases/').
               returns "Aliases/bzr\nAliases/hg"
 
       formulae, aliases, last_sha = core_repo.update_status
@@ -228,7 +174,7 @@ describe TapImport do
     it 'can get the current status of a new tap repository' do
       repo = core_repo
       repo.name = 'Homebrew/homebrew-science'
-      repo.expects(:git).with('ls-tree --name-only -r HEAD').
+      repo.expects(:git).with('ls-files -- Formula/*.rb').
               returns "bazaar.rb\ngit.rb\nmercurial.rb"
 
       formulae, aliases, last_sha = repo.update_status
@@ -240,8 +186,10 @@ describe TapImport do
 
     it 'can update the current status of a repository' do
       core_repo.sha = '01234567'
-      core_repo.expects(:git).with('diff --name-status 01234567..HEAD').
-              returns "D\tAliases/bzr\nA\tAliases/hg\nD\tFormula/bazaar.rb\nM\tFormula/git.rb\nA\tFormula/mercurial.rb"
+      core_repo.expects(:git).with('diff --name-status 01234567..HEAD -- Formula/*.rb').
+              returns "D\tFormula/bazaar.rb\nM\tFormula/git.rb\nA\tFormula/mercurial.rb"
+      core_repo.expects(:git).with('diff --name-status 01234567..HEAD -- Aliases/').
+              returns "D\tAliases/bzr\nA\tAliases/hg"
       Rails.logger.expects(:info).with "Updated #{Repository::CORE} from 01234567 to deadbeef:"
 
       formulae, aliases, last_sha = core_repo.update_status

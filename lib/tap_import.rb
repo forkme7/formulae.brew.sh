@@ -183,10 +183,8 @@ module TapImport
     formulae_info
   end
 
-  def formula_regex
-    return Regexp.new(special_formula_regex) unless special_formula_regex.nil?
-
-    core? ? /^(?:Library\/)?Formula\/(.+?)\.rb$/ : /^(.+?\.rb)$/
+  def formula_pathspec
+    File.exists?(File.join path, 'Formula') ? 'Formula/*.rb' : '*.rb'
   end
 
   def generate_formula_history(formula)
@@ -214,10 +212,7 @@ module TapImport
 
     Rails.logger.info "Regenerating history for #{ref}..."
 
-    log_cmd = ref
-    log_cmd << " -- 'Formula'" if core?
-
-    analyze_commits log_cmd
+    analyze_commits "#{ref} -- #{formula_pathspec}"
   end
 
   def recover_deleted_formulae
@@ -225,13 +220,13 @@ module TapImport
     reset_head
 
     log_cmd = "log --format=format:'%H' --diff-filter=D -M --name-only"
-    log_cmd << " -- 'Formula'" if core?
+    log_cmd << " -- #{formula_pathspec}"
 
     git(log_cmd).split(/\n\n/).each do |commit|
       sha, *files = commit.lines
       sha.strip!
 
-      files = files.map(&:strip).select { |path| path =~ formula_regex }
+      files = files.map(&:strip)
       next if files.empty?
 
       Rails.logger.debug "Trying to recover the following formulae: #{files.join ', '}"
@@ -281,7 +276,7 @@ module TapImport
 
     added = modified = removed = 0
     formulae.each do |type, fpath|
-      path, name = File.split fpath.match(formula_regex)[1]
+      path, name = File.split fpath
       name = File.basename name, '.rb'
       formula = self.formulae.find_or_initialize_by name: name
       formula.path = (core? || path == '.' ? nil : path)
@@ -379,25 +374,25 @@ module TapImport
     return [], [], sha if sha == last_sha
 
     if last_sha.nil?
-      if core?
-        formulae = git 'ls-tree --name-only HEAD Formula/'
-        formulae = formulae.lines.map { |file| ['A', file.strip] }
+      formulae = git "ls-files -- #{formula_pathspec}"
+      formulae = formulae.lines.map { |file| ['A', file.strip] }
 
-        aliases = git 'ls-tree --name-only HEAD Aliases/'
+      if core?
+        aliases = git 'ls-files -- Aliases/'
         aliases = aliases.lines.map { |file| ['A', file.strip] }
       else
-        formulae = git 'ls-tree --name-only -r HEAD'
-        formulae = formulae.lines.select { |file| file.match formula_regex }.
-          map { |file| ['A', file.strip] }
-
         aliases = []
       end
     else
-      diff = git "diff --name-status #{last_sha}..HEAD"
-      diff = diff.lines.map { |file| file.split }
+      formulae = git "diff --name-status #{last_sha}..HEAD -- #{formula_pathspec}"
+      formulae = formulae.lines.map { |file| file.split }
 
-      formulae = diff.select { |file| file[1] =~ formula_regex }
-      aliases = core? ? diff.select { |file| file[1] =~ ALIAS_REGEX } : []
+      if core?
+        aliases = git "diff --name-status #{last_sha}..HEAD -- Aliases/"
+        aliases = aliases.lines.map { |file| file.split }
+      else
+        aliases = []
+      end
     end
 
     unless core?
