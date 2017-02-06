@@ -163,7 +163,10 @@ module TapImport
             end
             Rails.logger.warn error_msg
             if defined? Rollbar
-              Rollbar.error $!, { error_message: error_msg }
+              Rollbar.warning $!, error_msg, {
+                :formula: name,
+                :repository: self.name
+              }
             end
           end
         end
