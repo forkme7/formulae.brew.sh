@@ -139,6 +139,7 @@ module TapImport
 
         require 'sandbox/argv'
         require 'sandbox/coretap'
+        require 'sandbox/formula'
         require 'sandbox/formulary'
         require 'sandbox/utils' unless sha.nil?
 
