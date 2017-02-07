@@ -276,7 +276,7 @@ module TapImport
 
     formulae_info = formulae_info formulae.
             reject { |type, _| type == 'D' }.
-            map { |_, path| File.join self.path, path }
+            map { |_, path, new_path| File.join self.path, (new_path || path) }
 
     added = modified = removed = 0
     formulae.each do |type, fpath|
