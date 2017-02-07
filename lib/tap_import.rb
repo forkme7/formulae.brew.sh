@@ -20,7 +20,8 @@ module TapImport
     commit_count = commits.size
     missing_formulae = []
     renames = {}
-    commits.each_slice(100) do |commit_batch|
+    until commits.empty? do
+      commit_batch = commits.slice! 0, 100
       commit_batch.each do |commit|
         info, *files = commit.lines
         sha, timestamp, email, name, subject = info.strip.split "\x00"
