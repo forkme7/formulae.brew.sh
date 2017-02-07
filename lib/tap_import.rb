@@ -13,7 +13,7 @@ module TapImport
 
   def analyze_commits(log_params)
     reset_head
-    log_cmd = "log --format=format:'%H%x00%ct%x00%aE%x00%aN%x00%s' --name-status --no-merges #{log_params}"
+    log_cmd = "log --format=format:'%H%x00%ct%x00%aE%x00%aN%x00%s' --name-status --no-merges --find-copies=100% #{log_params}"
 
     commits = git(log_cmd).split /\n\n/
     commit_progress = 0
