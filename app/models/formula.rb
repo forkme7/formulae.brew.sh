@@ -18,7 +18,6 @@ class Formula
   field :removed, type: Boolean, default: false
   field :name, type: String
   field :homepage, type: String
-  field :path, type: String
   field :stable_version, type: String
 
   after_build :set_id
@@ -53,8 +52,7 @@ class Formula
   end
 
   def path
-    path = repository.core? ? 'Formula' : self[:path]
-    (path.nil? ? name : File.join(path, name)) + '.rb'
+    (repository.path.nil? ? name : File.join(repository.path, name)) + '.rb'
   end
 
   def raw_url

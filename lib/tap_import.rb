@@ -284,7 +284,6 @@ module TapImport
       path, name = File.split fpath
       name = File.basename name, '.rb'
       formula = self.formulae.find_or_initialize_by name: name
-      formula.path = (core? || path == '.' ? nil : path)
       if type == 'D'
         removed += 1
         formula.removed = true
@@ -328,6 +327,8 @@ module TapImport
     end
 
     Rails.logger.info "#{added} formulae added, #{modified} formulae modified, #{removed} formulae removed."
+
+    self.formula_path = File.exists?(File.join path, 'Formula') ? 'Formula' : nil
 
     self.letters = ('a'..'z').select do |letter|
       self.formulae.letter(letter).where(removed: false).exists?
