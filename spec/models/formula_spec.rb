@@ -8,7 +8,7 @@ require 'rails_helper'
 describe Formula do
 
   let :formula do
-    repo = Repository.new name: Repository::CORE, full: true
+    repo = Repository.new name: Repository::CORE, full: true, formula_path: 'Formula'
     Formula.new name: 'git', repository: repo
   end
 
@@ -98,18 +98,18 @@ describe Formula do
 
     let :formula do
       repo = Repository.new name: 'adamv/homebrew-alt', full: false
-      Formula.new name: 'php', path: 'duplicates', repository: repo
+      Formula.new name: 'php', repository: repo
     end
 
     describe '#path' do
       it 'returns the relative path' do
-        expect(formula.path).to eq('duplicates/php.rb')
+        expect(formula.path).to eq('php.rb')
       end
     end
 
     describe '#raw_url' do
       it 'returns the GitHub URL of the raw formula file' do
-        expect(formula.raw_url).to eq('https://raw.github.com/adamv/homebrew-alt/HEAD/duplicates/php.rb')
+        expect(formula.raw_url).to eq('https://raw.github.com/adamv/homebrew-alt/HEAD/php.rb')
       end
     end
 
