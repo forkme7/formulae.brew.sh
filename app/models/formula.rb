@@ -52,7 +52,7 @@ class Formula
   end
 
   def path
-    (repository.path.nil? ? name : File.join(repository.path, name)) + '.rb'
+    (repository.formula_path.nil? ? name : File.join(repository.formula_path, name)) + '.rb'
   end
 
   def raw_url
