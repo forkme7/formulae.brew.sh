@@ -3,9 +3,11 @@
 /
 / Copyright (c) 2017, Sebastian Staudt
 
-entry [ id="tag:braumeister.org,2012:#{@repository.name}/#{formula.name}-#{revision.sha}"
-        published=revision.date.iso8601 updated=revision.date.iso8601
-        url=(formula.in_core? ? polymorphic_url(formula) : polymorphic_url([@repository, formula])) ]
+entry
+
+  id = "tag:braumeister.org,2012:#{@repository.name}/#{formula.name}-#{revision.sha}"
+  updated = revision.date.iso8601
+  link [ href=(formula.in_core? ? polymorphic_url(formula) : polymorphic_url([@repository, formula])) ]
 
   title
     | #{formula.name} has been #{status}
