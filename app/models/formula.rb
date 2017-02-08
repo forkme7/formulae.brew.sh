@@ -18,6 +18,7 @@ class Formula
   field :removed, type: Boolean, default: false
   field :name, type: String
   field :homepage, type: String
+  field :revision, type: Integer
   field :stable_version, type: String
 
   after_build :set_id
@@ -71,6 +72,7 @@ class Formula
     self.stable_version = formula_info['versions']['stable']
     self.devel_version = formula_info['versions']['devel']
     self.head_version = formula_info['versions']['head']
+    self.revision = formula_info['revision']
   end
 
   def version

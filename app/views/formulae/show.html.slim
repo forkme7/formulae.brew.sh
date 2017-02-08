@@ -29,6 +29,10 @@ h1 = @formula.name
         strong.version.spec-devel = @formula.devel_version
       - unless @formula.head_version.nil?
         strong.version.spec-head = @formula.head_version
+  - if @formula.revision > 0
+    h2
+      | Revision:
+      =< @formula.revision
   - unless @formula.homepage.nil?
     h2
       | Homepage:

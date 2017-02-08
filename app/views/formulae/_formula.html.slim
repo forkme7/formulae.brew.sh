@@ -9,4 +9,7 @@ div class=[:formula, cycle(:even, :odd), (:removed if formula.removed?)]
   = formula.description
   br
   | Current Version:
-  strong< class=[:version, :"spec-#{ formula.best_spec }"] = formula.version
+  strong< class=[:version, :"spec-#{ formula.best_spec }"]
+    | #{formula.version}
+    - if formula.revision > 0
+      | _#{formula.revision}
