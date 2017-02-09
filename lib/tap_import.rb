@@ -13,10 +13,11 @@ module TapImport
 
   def analyze_commits(log_params)
     reset_head
-    log_cmd = "log --format=format:'%H%x00%ct%x00%aE%x00%aN%x00%s' --name-status --no-merges --find-copies=100% #{log_params}"
+    log_params = "--no-merges --find-copies=100% #{log_params}"
+    log_cmd = "log --format=format:'%H%x00%ct%x00%aE%x00%aN%x00%s' --name-status #{log_params}"
 
     commit_progress = 0
-    commit_count = git "rev-list --count #{log_params}"
+    commit_count = git("rev-list --count #{log_params}").to_i
     missing_formulae = []
     renames = {}
     git_popen log_cmd do |io|
