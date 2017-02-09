@@ -367,6 +367,9 @@ module TapImport
     formulae = self.formulae.where(removed: false).
             map { |f| File.join path, f.path }.
             select { |p| File.exist? p }
+
+    Rails.logger.info "Updating metadata of #{formulae.size} formulae…"
+
     formulae_info(formulae).each do |name, formula_info|
       formula = self.formulae.find_by name: name
       formula.update_metadata formula_info
