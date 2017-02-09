@@ -7,6 +7,12 @@ class Formulary
 
   @@cache = {}
 
+  def self.sandboxed_formula_from_contents(name, path, contents)
+    formula = from_contents name, Pathname(path), contents
+    formula.define_singleton_method(:caveats) { nil }
+    @@cache[name] = formula
+  end
+
   def self.factory(ref)
     return @@cache[ref] if @@cache.key? ref
 
@@ -18,8 +24,8 @@ class Formulary
         break
       end
     end
-    contents = File.read path
-    @@cache[ref] = from_contents ref, Pathname(path), contents
+
+    sandboxed_formula_from_contents ref, path, File.read(path)
   end
 
   def self.repositories=(repositories)

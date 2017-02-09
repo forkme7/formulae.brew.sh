@@ -140,7 +140,6 @@ module TapImport
 
         require 'sandbox/argv'
         require 'sandbox/coretap'
-        require 'sandbox/formula'
         require 'sandbox/formulary'
         require 'sandbox/utils' unless sha.nil?
 
@@ -152,7 +151,7 @@ module TapImport
             name = File.basename path, '.rb'
             contents = file_contents_for_sha path, sha
 
-            formula = Formulary.from_contents name, Pathname(path), contents
+            formula = Formulary.sandboxed_formula_from_contents name, path, contents
             formulae_info[name] = formula.to_hash
           rescue FormulaSpecificationError, FormulaUnavailableError,
                  FormulaValidationError, NoMethodError, RuntimeError,

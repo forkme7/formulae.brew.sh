@@ -61,7 +61,6 @@ describe TapImport do
       core_repo.expects(:require).with 'os/mac'
       core_repo.expects(:require).with 'sandbox/argv'
       core_repo.expects(:require).with 'sandbox/coretap'
-      core_repo.expects(:require).with 'sandbox/formula'
       core_repo.expects(:require).with 'sandbox/formulary'
       Homebrew.expects(:raise_deprecation_exceptions=).with false
     end
@@ -84,9 +83,9 @@ describe TapImport do
       memcached_formula = mock to_hash: memcached_info
 
       File.expects(:read).with('git').returns 'git_formula'
-      Formulary.expects(:from_contents).with('git', Pathname('git'), 'git_formula').returns git_formula
+      Formulary.expects(:sandboxed_formula_from_contents).with('git', 'git', 'git_formula').returns git_formula
       File.expects(:read).with('memcached').returns 'memcached_formula'
-      Formulary.expects(:from_contents).with('memcached', Pathname('memcached'), 'memcached_formula').returns memcached_formula
+      Formulary.expects(:sandboxed_formula_from_contents).with('memcached', 'memcached', 'memcached_formula').returns memcached_formula
 
       formulae_info = core_repo.send :formulae_info, %w{git memcached}
       expect(formulae_info).to eq({
