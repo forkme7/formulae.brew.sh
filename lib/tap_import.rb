@@ -15,15 +15,13 @@ module TapImport
     reset_head
     log_cmd = "log --format=format:'%H%x00%ct%x00%aE%x00%aN%x00%s' --name-status --no-merges --find-copies=100% #{log_params}"
 
-    commits = git(log_cmd).split /\n\n/
     commit_progress = 0
-    commit_count = commits.size
+    commit_count = git "rev-list --count #{log_params}"
     missing_formulae = []
     renames = {}
-    until commits.empty? do
-      commit_batch = commits.slice! 0, 100
-      commit_batch.each do |commit|
-        info, *files = commit.lines
+    git_popen log_cmd do |io|
+      io.each_line "\n\n" do |commit|
+        info, *files = commit.strip.lines
         sha, timestamp, email, name, subject = info.strip.split "\x00"
         rev = Revision.find_or_initialize_by sha: sha
         self.revisions << rev
@@ -78,13 +76,15 @@ module TapImport
           formula.save!
         end
         rev.save!
+        commit_progress += 1
+
+        if commit_progress % 100 == 0 || commit_progress == commit_count
+          Rails.logger.debug "Analyzed #{commit_progress} of #{commit_count} revisions."
+        end
       end
-
-      save!
-
-      commit_progress += commit_batch.size
-      Rails.logger.debug "Analyzed #{commit_progress} of #{commit_count} revisions."
     end
+
+    save!
   end
 
   def clone_or_pull(reset = true)
@@ -217,6 +217,15 @@ module TapImport
     Rails.logger.info "Regenerating history for #{ref}..."
 
     analyze_commits "#{ref} -- #{formula_pathspec}"
+  end
+
+  def git_popen(command, &block)
+    command = "git --git-dir #{path}/.git #{command}"
+    Rails.logger.debug "Executing `#{command}`"
+
+    IO.popen command, &block
+
+    raise "Execution of `#{command}` failed." unless $?.success?
   end
 
   def recover_deleted_formulae
