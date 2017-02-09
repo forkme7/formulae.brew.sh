@@ -412,13 +412,6 @@ module TapImport
       end
     end
 
-    unless core?
-      formulae_path = File.join repo.path, 'Formula'
-      Dir.glob File.join(path, '*.rb') do |formula|
-        system('ln', '-s', formula, formulae_path, err: '/dev/null')
-      end
-    end
-
     return formulae, aliases, last_sha
   end
 
