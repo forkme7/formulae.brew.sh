@@ -104,18 +104,14 @@ describe TapImport do
 
   describe '#formula_pathspec' do
 
-    it 'returns a pathspec to Formula/ if it exists' do
-      File.expects(:exists?).with(File.join core_repo.path, 'Formula').
-              returns true
+    it 'returns a pathspec to a given formula path' do
+      core_repo.formula_path = 'Formula'
 
       expect(core_repo.formula_pathspec).to eq('Formula/*.rb')
     end
 
-    it 'returns a generic pathspec if Formula/ does not exist' do
-      File.expects(:exists?).with(File.join core_repo.path, 'Formula').
-              returns false
-
-      expect(core_repo.formula_pathspec).to eq('*.rb')
+    it 'returns a pathspec for the root directory if no formula path is given' do
+      expect(core_repo.formula_pathspec).to eq('*.rb :!*/*.rb')
     end
 
   end

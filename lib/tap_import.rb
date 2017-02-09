@@ -188,7 +188,7 @@ module TapImport
   end
 
   def formula_pathspec
-    File.exists?(File.join path, 'Formula') ? 'Formula/*.rb' : '*.rb'
+    formula_path.nil? ? '*.rb :!*/*.rb' : "#{formula_path}/*.rb"
   end
 
   def generate_formula_history(formula)
@@ -336,8 +336,6 @@ module TapImport
 
     Rails.logger.info "#{added} formulae added, #{modified} formulae modified, #{removed} formulae removed."
 
-    self.formula_path = File.exists?(File.join path, 'Formula') ? 'Formula' : nil
-
     self.letters = ('a'..'z').select do |letter|
       self.formulae.letter(letter).where(removed: false).exists?
     end
@@ -389,6 +387,8 @@ module TapImport
     last_sha = super
 
     return [], [], sha if sha == last_sha
+
+    self.formula_path = File.exists?(File.join path, 'Formula') ? 'Formula' : nil
 
     if last_sha.nil?
       formulae = git "ls-files -- #{formula_pathspec}"
