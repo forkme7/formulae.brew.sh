@@ -13,7 +13,7 @@ module TapImport
 
   def analyze_commits(log_params)
     reset_head
-    log_params = "--no-merges --find-copies=100% #{log_params}"
+    log_params = "--no-merges --find-copies=100% --find-renames #{log_params}"
     log_cmd = "log --format=format:'%H%x00%ct%x00%aE%x00%aN%x00%s' --name-status #{log_params}"
     log_params.sub! '--follow', 'HEAD'
 
