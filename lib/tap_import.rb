@@ -15,6 +15,7 @@ module TapImport
     reset_head
     log_params = "--no-merges --find-copies=100% #{log_params}"
     log_cmd = "log --format=format:'%H%x00%ct%x00%aE%x00%aN%x00%s' --name-status #{log_params}"
+    log_params.sub! '--follow', 'HEAD'
 
     commit_progress = 0
     commit_count = git("rev-list --count #{log_params}").to_i
