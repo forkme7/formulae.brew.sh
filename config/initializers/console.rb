@@ -6,7 +6,7 @@
 module Braumeister::Console
 
   def core
-    @core ||= Repository.core.extend MainImport
+    @core ||= Repository.core.extend TapImport
   end
 
   def main
