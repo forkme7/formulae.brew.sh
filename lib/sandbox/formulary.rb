@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2014-2017, Sebastian Staudt
 
-class Formulary
+module Formulary
 
   @@cache = {}
 
