@@ -30,53 +30,53 @@ html itemscope=true itemtype="http://schema.org/WebPage" lang="en"
           content="An online package browser for Homebrew, the macOS package manager."]
     meta [name="viewport" content="width=device-width, initial-scale=1"]
 
+    = render 'layouts/structured_data'
+
     - if Rails.env == 'production'
       = render 'layouts/google_analytics', cached: true
 
-    body data={ repository: (@repository.name rescue nil) }
-      #fb-root
-        = render 'layouts/facebook', cached: true
-      #header
-        #social
-          .g-plusone data={ href: 'http://braumeister.org', size: :tall }
-          '
-          a.twitter-share-button href='https://twitter.com/share' data={ \
-              count: :vertical,
-              text: 'See information about Mac packages available via Homebrew – ',
-              url: 'http://braumeister.org',
-              related: :braumeister_org,
-              lang: :en,
-              dnt: true,
-              'show-count': true }
-            Tweet
-          '
-          .fb-like data={ href: 'http://braumeister.org', with: 55, height: 62,
-            layout: 'box_count', action: :like, 'show-faces': true }
-          '
-          = render 'layouts/flattr'
+  body data={ repository: (@repository.name rescue nil) }
+    #fb-root
+      = render 'layouts/facebook', cached: true
+    #header
+      #social
+        .g-plusone data={ href: 'http://braumeister.org', size: :tall }
+        '
+        a.twitter-share-button href='https://twitter.com/share' data={ \
+            count: :vertical,
+            text: 'See information about Mac packages available via Homebrew – ',
+            url: 'http://braumeister.org',
+            related: :braumeister_org,
+            lang: :en,
+            dnt: true,
+            'show-count': true }
+          Tweet
+        '
+        .fb-like data={ href: 'http://braumeister.org', with: 55, height: 62,
+          layout: 'box_count', action: :like, 'show-faces': true }
+        '
+        = render 'layouts/flattr'
 
-        = link_to 'Braumeister', root_path
+      = link_to 'Braumeister', root_path
 
-      #content
+    #content
 
-        - if flash[:error]
-          #flash-error = flash[:error]
+      - if flash[:error]
+        #flash-error = flash[:error]
 
-        == yield
+      == yield
 
-      #footer
-        | © 2012-2017 —
-        a< href="https://plus.google.com/109586181974940228820?rel=author"
-          | Sebastian Staudt
-        br
-        | View source code on
-        a< href="https://github.com/koraktor/braumeister.org"
-          i.fa.fa-github>
+    #footer
+      | © 2012-2017 —
+      a< href="https://plus.google.com/109586181974940228820?rel=author"
+        | Sebastian Staudt
+      br
+      | View source code on
+      a< href="https://github.com/koraktor/braumeister.org"
+        i.fa.fa-github
           | GitHub
-        br
-        | Follow
-        a> href="https://twitter.com/braumeister_org"
-          | @braumeister_org
-        | on Twitter.
-
-      = render 'layouts/structured_data'
+      br
+      | Follow
+      a<> href="https://twitter.com/braumeister_org"
+        |@braumeister_org
+      | on Twitter.
