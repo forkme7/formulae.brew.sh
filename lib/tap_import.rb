@@ -291,8 +291,7 @@ module TapImport
 
     added = modified = removed = 0
     formulae.each do |type, fpath|
-      path, name = File.split fpath
-      name = File.basename name, '.rb'
+      name = File.basename fpath, '.rb'
       formula = self.formulae.find_or_initialize_by name: name
       if type == 'D'
         removed += 1
