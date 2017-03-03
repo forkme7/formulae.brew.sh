@@ -20,7 +20,7 @@ $(function() {
   });
 
   var showAll = $('tr.show-all');
-  showAll.click(function() {
+  showAll.click(function() {
     $('tr.hidden').slideToggle();
     showAll.remove();
   });
