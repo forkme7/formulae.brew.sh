@@ -28,7 +28,7 @@ class ApiController < FormulaeController
             stable: @formula.stable_version,
             devel: @formula.devel_version,
             head: @formula.head_version
-          }.to_json
+          }
         end
       end
     end
