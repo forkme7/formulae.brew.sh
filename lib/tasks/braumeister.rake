@@ -48,7 +48,7 @@ namespace :braumeister do
       repos = Repository.all - [ Repository.main ]
     else
       repos = [ Repository.unscoped.find(args[:repo]) ]
-   end
+    end
 
     @repos = repos.each { |repo| repo.extend TapImport }
   end
