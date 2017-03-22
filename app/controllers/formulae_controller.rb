@@ -36,7 +36,7 @@ class FormulaeController < ApplicationController
   end
 
   def search
-    return not_found if params[:search].nil? || params[:search].empty?
+    return not_found if params[:search].nil?
 
     term = params[:search].force_encoding 'UTF-8'
     @title = "Search for: #{term}"
@@ -50,14 +50,14 @@ class FormulaeController < ApplicationController
 
     if @formulae.size == 1 && term == @formulae.first.name
       if @repository.core?
-        redirect_to formula_path(@formulae.first)
+        redirect_to @formulae.first
       else
         redirect_to repository_formula_path(@repository.name, @formulae.first)
       end
       return
     end
 
-    @formulae = @formulae.sort_by do |formula|
+    @formulae = @formulae.sort_by! do |formula|
       Text::Levenshtein.distance(formula.name, term) +
       Text::Levenshtein.distance(formula.name[0..term.size - 1], term)
     end
