@@ -1,7 +1,13 @@
 braumeister.org
 ===============
 
-[![Build Status](https://secure.travis-ci.org/koraktor/braumeister.org.svg)](http://travis-ci.org/koraktor/braumeister.org) [![Dependency Status](https://gemnasium.com/koraktor/braumeister.org.svg)](https://gemnasium.com/koraktor/braumeister.org) [![Code Climate](https://codeclimate.com/github/koraktor/braumeister.org.svg)](https://codeclimate.com/github/koraktor/braumeister.org) [![Coverage Status](https://img.shields.io/coveralls/koraktor/braumeister.org.svg)](https://coveralls.io/r/koraktor/braumeister.org)
+[![Build Status](https://secure.travis-ci.org/koraktor/braumeister.org.svg)](http://travis-ci.org/koraktor/braumeister.org)
+[![Dependency Status](https://gemnasium.com/koraktor/braumeister.org.svg)](https://gemnasium.com/koraktor/braumeister.org)
+[![Code Climate](https://codeclimate.com/github/koraktor/braumeister.org.svg)](https://codeclimate.com/github/koraktor/braumeister.org)
+[![Coverage Status](https://img.shields.io/coveralls/koraktor/braumeister.org.svg)](https://coveralls.io/r/koraktor/braumeister.org)
+
+[![Gratipay](https://img.shields.io/gratipay/team/Braumeister.svg)](https://gratipay.org/Braumeister)
+[![Beerpay](https://img.shields.io/beerpay/koraktor/braumeister.org.svg)](https://beerpay.io/koraktor/braumeister.org)
 
 braumeister.org is a Rails application that gathers package information from
 Homebrew, the MacOS X package manager.
