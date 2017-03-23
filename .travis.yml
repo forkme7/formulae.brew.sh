@@ -15,7 +15,7 @@ branches:
 cache: bundler
 
 rvm:
- - 2.3.3
+ - 2.4.1
  - jruby-head
  - ruby-head
 
