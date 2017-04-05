@@ -38,7 +38,7 @@ a working local copy. You’ll need to create a local MongoDB database first:
 ```bash
 $ mongo
 > use braumeister
-> db.addUser("braumeister", "braumeister")
+> db.createUser({ user: "braumeister", pwd: "braumeister", roles: ["readWrite", "dbAdmin"] }) 
 ```
 
 After that you can run the following commands to run the application locally:
