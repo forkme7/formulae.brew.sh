@@ -5,10 +5,10 @@
 
 h1 = @formula.name
 
-- unless @repository.core?
+- unless all?
   .subtitle
   | in
-  =< link_to @repository.name, letter_repository_formulae_path(@repository, @repository.first_letter), class: 'repo'
+  =< link_to name, letter_repository_formulae_path(@repository, @repository.first_letter), class: 'repo'
 
 #basic
   - unless @formula.description.nil?
@@ -71,13 +71,13 @@ h1 = @formula.name
       - @revisions.each_with_index do |rev, i|
         tr class=[(:current if i == 0), (:hidden if i > 9)]
           td.author
-            = link_to '', "https://github.com/#{@repository.name}/commit/#{rev.sha}##{@formula.path}"
+            = link_to '', "https://github.com/#{name}/commit/#{rev.sha}##{@formula.path}"
             = rev.author.name
           td.subject
-            = link_to '', "https://github.com/#{@repository.name}/commit/#{rev.sha}##{@formula.path}"
+            = link_to '', "https://github.com/#{name}/commit/#{rev.sha}##{@formula.path}"
             = rev.subject
           td.date
-            = link_to '', "https://github.com/#{@repository.name}/commit/#{rev.sha}##{@formula.path}"
+            = link_to '', "https://github.com/#{name}/commit/#{rev.sha}##{@formula.path}"
             = timestamp rev.date
         - if i == 9 && @revisions.size > 10
           tr.show-all

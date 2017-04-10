@@ -38,12 +38,6 @@ class Repository
     name == CORE
   end
 
-  def feed_link
-    feed_link = '/feed.atom'
-    feed_link = "/repos/#{name}" + feed_link unless core?
-    feed_link
-  end
-
   def first_letter
     first_formula = formulae.order_by(%i{name asc}).only(:name).limit(1).to_a.first
     first_formula ? first_formula.name[0] : nil

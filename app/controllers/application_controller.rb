@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
       format.any { render nothing: true, status: :not_found }
     end
 
-    fresh_when etag: @repository.sha, public: true
+    fresh_when etag: Repository.core.sha, public: true
   end
 
   def error_page(status = :internal_server_error)
@@ -70,25 +70,22 @@ class ApplicationController < ActionController::Base
   private
 
   def main_page
-    @alt_repos = Repository.only(:_id, :date, :letters, :name, :sha, :updated_at).
+    @taps = Repository.only(:_id, :date, :letters, :name, :sha, :updated_at).
             order_by([:name, :asc]).to_a
-    @repository = @alt_repos.find { |repo| repo.name == Repository::CORE }
-    @alt_repos -= [ @repository ]
+    @taps = ([ Repository.core ] + @taps).uniq
 
-    raise RepositoryUnavailable if @repository.nil?
-
-    @added = @repository.formulae.with_size(revision_ids: 1).
+    @added = Formula.with_size(revision_ids: 1).
             order_by(%i{date desc}).
             only(:_id, :devel_version, :head_version, :name, :repository_id, :stable_version).
             limit 5
 
-    @updated = @repository.formulae.where(removed: false).
+    @updated = Formula.where(removed: false).
             not.with_size(revision_ids: 1).
             order_by(%i{date desc}).
             only(:_id, :devel_version, :head_version, :name, :repository_id, :stable_version).
             limit 5
 
-    @removed = @repository.formulae.where(removed: true).
+    @removed = Formula.where(removed: true).
             order_by(%i{date desc}).
             only(:_id, :name, :repository_id).
             limit 5

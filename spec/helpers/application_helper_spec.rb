@@ -1,14 +1,14 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2014-2016, Sebastian Staudt
+# Copyright (c) 2014-2017, Sebastian Staudt
 
 require 'rails_helper'
 
 describe ApplicationHelper do
 
   describe '#formulae_link' do
-    it 'provides links to formulae in the main repository' do
+    it 'provides links to unique formulae' do
       repo = Repository.core
       formula = repo.formulae.find_or_create_by name: 'git'
       formula.repository = repo
@@ -16,10 +16,11 @@ describe ApplicationHelper do
       expect(helper.formula_link(formula)).to eq('<a class="formula" href="/formula/git">git</a>')
     end
 
-    it 'provides links to formulae in a tap repository' do
+    it 'provides links to duplicate formulae in a specific repository' do
       repo = Repository.unscoped.find_or_create_by name: 'Homebrew/homebrew-science'
       formula = repo.formulae.find_or_create_by name: 'gromacs'
       formula.repository = repo
+      formula.expects(:dupe?).returns true
 
       expect(helper.formula_link(formula)).to eq('<a class="formula" href="/repos/Homebrew/homebrew-science/formula/gromacs">gromacs</a>')
     end

@@ -9,18 +9,16 @@ class FormulaeController < ApplicationController
 
   before_action :select_repository
 
-  CORE_REPO_URL = "/repos/#{Repository::CORE}/".freeze
-
   def browse
     letter = params[:letter]
     @title = "Browse formulae – #{letter.upcase}"
-    @title << " – #{@repository.name}" unless @repository.core?
+    @title << " – #{helpers.name}" unless all?
 
-    @formulae = @repository.formulae.letter(letter).
+    @formulae = formulae.letter(letter).
             where(removed: false).order_by([:name, :asc]).
             page(params[:page]).per 30
 
-    fresh_when etag: @repository.sha, public: true
+    fresh_when etag: etag, public: true
   end
 
   def feed
@@ -32,7 +30,7 @@ class FormulaeController < ApplicationController
       format.atom
     end
 
-    fresh_when etag: @repository.sha, public: true
+    fresh_when etag: etag, public: true
   end
 
   def search
@@ -40,20 +38,16 @@ class FormulaeController < ApplicationController
 
     term = params[:search].force_encoding 'UTF-8'
     @title = "Search for: #{term}"
-    @title << " in #{@repository.name}" unless @repository.core?
+    @title << " in #{helpers.name}" unless all?
     search_term = /#{Regexp.escape term}/i
-    @formulae = @repository.formulae.and(removed: false, :$or => [
+    @formulae = formulae.and(removed: false, :$or => [
             { aliases: search_term },
             { description: search_term },
             { name: search_term }
     ])
 
     if @formulae.size == 1 && term == @formulae.first.name
-      if @repository.core?
-        redirect_to @formulae.first
-      else
-        redirect_to repository_formula_path(@repository.name, @formulae.first)
-      end
+      redirect_to @formulae.first
       return
     end
 
@@ -68,42 +62,53 @@ class FormulaeController < ApplicationController
       format.html { render 'formulae/browse' }
     end
 
-    fresh_when etag: @repository.sha, public: true
+    fresh_when etag: etag, public: true
   end
 
   def show
-    formula_id = "#{repository_id}/#{params[:id]}"
-    @formula = Formula.includes(:deps, :revdeps).find formula_id
-    if @formula.nil?
-      formula = @repository.formulae.all_in(aliases: [params[:id]]).first
+    @formulae = formulae.includes(:deps, :revdeps).where(name: params[:id]).to_a
+    if @formulae.empty?
+      formula = formulae.all_in(aliases: [params[:id]]).first
       unless formula.nil?
-        if @repository.core?
-          redirect_to formula
-        else
-          redirect_to repository_formula_path(@repository.name, formula)
-        end
+        redirect_to formula
         return
       end
       raise Mongoid::Errors::DocumentNotFound.new(Formula, [], params[:id])
+    elsif @formulae.size > 1
+      @formulae = Kaminari.paginate_array @formulae, limit: formulae.size, offset: 0
+
+      respond_to do |format|
+        format.html { render 'formulae/browse' }
+      end
+
+      return
     end
+    @formula = @formulae.first
     @title = @formula.name.dup
-    @title << " – #{@repository.name}" unless @repository.core?
+    @title << " – #{helpers.name}" unless all?
     @revisions = @formula.revisions.without_bot.includes(:author).order_by(%i{date desc}).to_a
 
-    fresh_when etag: @revisions.first.sha, public: true
+    fresh_when etag: etag, public: true
   end
 
   private
 
-  def repository_id
-    @repository_id ||= params[:repository_id] || Repository::CORE
+  def all?
+    @repository.nil?
+  end
+  helper_method :all?
+
+  def etag
+    all? ? Revision.last.sha : @repository.sha
+  end
+
+  def formulae
+    all? ? Formula : @repository.formulae
   end
 
   def select_repository
-    if request.url.match CORE_REPO_URL
-      redirect_to '/' + request.url.split(CORE_REPO_URL, 2)[1]
-      return
-    end
+    repository_id = params[:repository_id]
+    return if repository_id.nil?
 
     @repository = Repository.where(_id: /^#{repository_id}$/i).
             only(:_id, :letters, :name, :sha, :updated_at).first

@@ -48,8 +48,8 @@ class Formula
     end
   end
 
-  def in_core?
-    self.repository_id == Repository::CORE
+  def dupe?
+    self.class.where(name: name).size > 1
   end
 
   def path

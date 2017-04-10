@@ -37,17 +37,6 @@ describe Repository do
     end
   end
 
-  describe '#feed_link' do
-    it 'returns the short feed link for the main repositiory' do
-      expect(repo.feed_link).to eq('/feed.atom')
-    end
-
-    it 'returns the full feed link for other repositiories' do
-      repo.name = 'Homebrew/homebrew-games'
-      expect(repo.feed_link).to eq('/repos/Homebrew/homebrew-games/feed.atom')
-    end
-  end
-
   describe '#to_param' do
     it 'returns the name of the repository' do
       expect(repo.to_param).to eq(Repository::CORE)
