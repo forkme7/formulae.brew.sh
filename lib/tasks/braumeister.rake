@@ -45,7 +45,7 @@ namespace :braumeister do
 
   task :select_repos, [:repo] => :update_main do |_, args|
     if args[:repo].nil?
-      repos = Repository.all - [ Repository.main ]
+      repos = Repository.current_taps
     else
       repos = [ Repository.unscoped.find(args[:repo]) ]
     end
