@@ -75,7 +75,7 @@ class FormulaeController < ApplicationController
       end
       raise Mongoid::Errors::DocumentNotFound.new(Formula, [], params[:id])
     elsif @formulae.size > 1
-      @formulae = Kaminari.paginate_array @formulae, limit: formulae.size, offset: 0
+      @formulae = Kaminari.paginate_array @formulae, limit: @formulae.size, offset: 0
 
       respond_to do |format|
         format.html { render 'formulae/browse' }
