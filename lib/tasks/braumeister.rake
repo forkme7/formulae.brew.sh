@@ -47,10 +47,10 @@ namespace :braumeister do
     if args[:repo].nil?
       repos = Repository.current_taps
     else
-      repos = [ Repository.unscoped.find(args[:repo]) ]
+      repos = [ Repository.find(args[:repo]) ]
     end
 
-    @repos = repos.each { |repo| repo.extend TapImport }
+    @repos = repos.map { |repo| repo.extend TapImport }
   end
 
   desc 'Completely regenerates one or all repositories and their formulae'
