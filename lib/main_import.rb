@@ -13,7 +13,7 @@ module MainImport
     official_taps.each do |tap|
       tap_name = "Homebrew/homebrew-#{tap}"
 
-      repo = Repository.unscoped.find tap_name
+      repo = Repository.find tap_name
       if repo.nil?
         Repository.create name: tap_name, outdated: false
 

@@ -71,7 +71,7 @@ class ApplicationController < ActionController::Base
 
   def main_page
     @taps = Repository.only(:_id, :date, :letters, :name, :sha, :updated_at).
-            order_by([:name, :asc]).to_a
+            current_taps.order_by([:name, :asc]).to_a
     @taps = ([ Repository.core ] + @taps).uniq
 
     @added = Formula.with_size(revision_ids: 1).

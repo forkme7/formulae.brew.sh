@@ -19,10 +19,8 @@ describe MainImport do
     end
 
     it 'should create a repository for missing taps' do
-      unscoped = mock
-      Repository.expects(:unscoped).twice.returns unscoped
-      unscoped.expects(:find).with('Homebrew/homebrew-apache').returns mock(outdated?: false)
-      unscoped.expects(:find).with('Homebrew/homebrew-php').returns nil
+      Repository.expects(:find).with('Homebrew/homebrew-apache').returns mock(outdated?: false)
+      Repository.expects(:find).with('Homebrew/homebrew-php').returns nil
 
       Repository.expects(:create).with name: 'Homebrew/homebrew-php', outdated: false
       Rails.logger.expects(:info).with 'Created tap repository for Homebrew/homebrew-php.'
@@ -31,10 +29,8 @@ describe MainImport do
     end
 
     it 'should do nothing with existing taps' do
-      unscoped = mock
-      Repository.expects(:unscoped).twice.returns unscoped
-      unscoped.expects(:find).with('Homebrew/homebrew-apache').returns mock(outdated?: false)
-      unscoped.expects(:find).with('Homebrew/homebrew-php').returns mock(outdated?: false)
+      Repository.expects(:find).with('Homebrew/homebrew-apache').returns mock(outdated?: false)
+      Repository.expects(:find).with('Homebrew/homebrew-php').returns mock(outdated?: false)
 
       Repository.expects(:create).never
       Rails.logger.expects(:info).never

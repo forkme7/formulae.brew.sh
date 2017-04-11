@@ -24,14 +24,14 @@ class Repository
   has_many :formulae, dependent: :destroy, validate: false
   has_many :revisions, dependent: :destroy, validate: false
 
-  default_scope -> { where :_id.ne => MAIN, :outdated => false }
+  scope :current_taps, -> { where :_id.ne => MAIN, :outdated => false }
 
   def self.core
     find CORE
   end
 
   def self.main
-    unscoped.find MAIN
+    find MAIN
   end
 
   def core?

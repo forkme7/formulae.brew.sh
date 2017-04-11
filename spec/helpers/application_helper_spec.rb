@@ -17,7 +17,7 @@ describe ApplicationHelper do
     end
 
     it 'provides links to duplicate formulae in a specific repository' do
-      repo = Repository.unscoped.find_or_create_by name: 'Homebrew/homebrew-science'
+      repo = Repository.find_or_create_by name: 'Homebrew/homebrew-science'
       formula = repo.formulae.find_or_create_by name: 'gromacs'
       formula.repository = repo
       formula.expects(:dupe?).returns true
