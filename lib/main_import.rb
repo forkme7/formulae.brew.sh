@@ -37,8 +37,8 @@ module MainImport
 
   def update_status
     last_sha = super
-    return last_sha if last_sha == sha
-    save!
+
+    save! if last_sha != sha
 
     last_sha
   end
