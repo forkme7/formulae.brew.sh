@@ -74,7 +74,8 @@ class ApplicationController < ActionController::Base
             current_taps.order_by([:name, :asc]).to_a
     @taps = ([ Repository.core ] + @taps).uniq
 
-    @added = Formula.with_size(revision_ids: 1).
+    @added = Formula.where(removed: false).
+            with_size(revision_ids: 1).
             order_by(%i{date desc}).
             only(:_id, :devel_version, :head_version, :name, :repository_id, :stable_version).
             limit 5
