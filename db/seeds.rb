@@ -6,7 +6,7 @@
 require 'main_import'
 require 'tap_import'
 
-main = Repository.find_or_initialize_by name: Repository::MAIN
+main = Repository.unscoped.find_or_initialize_by name: Repository::MAIN
 main.extend MainImport
 main.update_status
 main.create_missing_taps
