@@ -33,18 +33,10 @@ several hundred formulae.
 ## Local setup
 
 If you clone the repository from GitHub it’s pretty easy to get started with
-a working local copy. You’ll need to create a local MongoDB database first:
+a working local copy. Run the following commands to run the application locally:
 
 ```bash
-$ mongo
-> use braumeister
-> db.createUser({ user: "braumeister", pwd: "braumeister", roles: ["readWrite", "dbAdmin"] }) 
-```
-
-After that you can run the following commands to run the application locally:
-
-```bash
-$ bundle install
+$ ./script/bootstrap
 $ rake db:seed
 $ foreman start
 ```

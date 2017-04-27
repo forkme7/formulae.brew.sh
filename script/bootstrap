@@ -1,0 +1,17 @@
+#!/bin/bash
+set -e
+
+cd "$(dirname "$0")/.."
+
+if [ "$(uname -s)" = "Darwin" ]; then
+  brew bundle check &>/dev/null || brew bundle
+  /usr/local/opt/mongodb@3.2/bin/mongo braumeister db/mongodb_setup.js --quiet
+fi
+
+rbenv version-name &>/dev/null || {
+  rbenv install --skip-existing "$(rbenv version-name)"
+  rbenv exec gem install bundler
+  rbenv rehash
+}
+
+bundle check &>/dev/null || bundle install
