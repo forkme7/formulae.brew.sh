@@ -53,8 +53,8 @@ class FormulaeController < ApplicationController
     end
 
     @formulae = @formulae.sort_by! do |formula|
-      Text::Levenshtein.distance(formula.name, term) +
-      Text::Levenshtein.distance(formula.name[0..term.size - 1], term)
+      Text::Levenshtein.distance(formula.name[0..term.size - 1], term) * 10 +
+      Text::Levenshtein.distance(formula.name, term)
     end
     @formulae = Kaminari.paginate_array(@formulae).
             page(params[:page]).per 30
