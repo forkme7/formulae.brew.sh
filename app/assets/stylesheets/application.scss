@@ -47,7 +47,7 @@ a {
   }
 }
 
-div#alternatives {
+div#taps {
   border-top: 1px solid #a15f11;
 
   h2 {
@@ -56,10 +56,6 @@ div#alternatives {
     color:       $orange;
     text-align:  center;
     text-shadow: 1px 1px 1px $black;
-  }
-
-  div#repos {
-
   }
 
   div.repo {

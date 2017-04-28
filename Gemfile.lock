@@ -78,7 +78,7 @@ GEM
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     i18n (0.8.1)
-    json (2.0.3)
+    json (2.0.4)
     kaminari-actionview (1.0.1)
       actionview
       kaminari-core (= 1.0.1)
@@ -196,7 +196,7 @@ GEM
     tins (1.13.2)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uglifier (3.1.9)
+    uglifier (3.2.0)
       execjs (>= 0.3.0, < 3)
     websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)

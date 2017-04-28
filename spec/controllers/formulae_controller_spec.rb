@@ -21,31 +21,16 @@ describe FormulaeController do
       expect(controller.instance_variable_get(:@repository)).to eq(repo)
     end
 
-    it 'redirects to the short url for Repository::CORE' do
-      request = mock
-      request.expects(:url).twice.returns "http://braumeister.org/repos/#{Repository::CORE}/browse"
-      controller.expects(:request).twice.returns request
-      controller.expects(:redirect_to).with '/browse'
-
-      controller.send :select_repository
-    end
-
-    it 'the repository defaults to Repository::CORE' do
-      repo = mock
-      repo.expects(:name).returns Repository::CORE
-      criteria = mock
-      Repository.expects(:where).with(_id: /^#{Repository::CORE}$/i).returns criteria
-      criteria.expects(:only).with(:_id, :letters, :name, :sha, :updated_at).returns [ repo ]
-
+    it 'the repository defaults to nil' do
       controller.send :select_repository
 
-      expect(controller.instance_variable_get(:@repository)).to eq(repo)
+      expect(controller.instance_variable_get(:@repository)).to be_nil
     end
 
     it 'redirects to the correct repository if capitalization is incorrect' do
       request = mock
-      request.expects(:url).twice.returns 'http://braumeister.org/repos/Homebrew/Homebrew-versions/browse'
-      controller.expects(:request).twice.returns request
+      request.expects(:url).returns 'http://braumeister.org/repos/Homebrew/Homebrew-versions/browse'
+      controller.expects(:request).returns request
 
       repo = mock
       repo.expects(:name).twice.returns 'Homebrew/homebrew-versions'
@@ -71,11 +56,11 @@ describe FormulaeController do
   describe '#show' do
     context 'when formula is not found' do
       before do
-        Formula.expects(:includes).returns mock(find: nil)
         formulae = mock
         formulae.expects(:all_in).returns []
+        formulae.expects(:includes).returns mock(where: [])
         repo = mock
-        repo.expects(:formulae).returns formulae
+        repo.expects(:formulae).twice.returns formulae
 
         controller.stubs :select_repository
         controller.instance_variable_set :@repository, repo

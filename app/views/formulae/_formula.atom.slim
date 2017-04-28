@@ -5,9 +5,9 @@
 
 entry
 
-  id = "tag:braumeister.org,2012:#{@repository.name}/#{formula.name}-#{revision.sha}"
+  id = "tag:braumeister.org,2012:#{formula.repository.name}/#{formula.name}-#{revision.sha}"
   updated = revision.date.iso8601
-  link [ href=(formula.in_core? ? polymorphic_url(formula) : polymorphic_url([@repository, formula])) ]
+  link [ href=(formula.dupe? ? polymorphic_url([formula.repository, formula]) : polymorphic_url(formula)) ]
 
   title
     | #{formula.name} has been #{status}

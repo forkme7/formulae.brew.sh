@@ -8,10 +8,12 @@ feed [ xml:lang="en-US"
        xmlns="http://www.w3.org/2005/Atom"
        xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" ]
 
-  id tag:braumeister.org,2012:#{@repository.name}
+  id tag:braumeister.org,2012:#{all? ? 'all' : @repository.name}
   title
-    | braumeister.org – Recent changes in
-    =< @repository.name
+    | Formulae updates
+    - unless @repository.nil?
+      |  in #{@repository.name}
+    |  – braumeister.org
 
   link [rel="search" type="application/opensearchdescription+xml"
         title="braumeister.org – Search" href="/opensearch.xml"]

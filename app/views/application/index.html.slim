@@ -44,25 +44,24 @@ div.recently-added
 
 #timestamps
   | The repository has been updated
-  =< timestamp @repository.updated_at
+  =< timestamp Repository.core.updated_at
   | .
   br
   | The last change happened
-  =< timestamp @repository.date
+  =< timestamp Repository.core.date
   | .
   br
   | Current Git commit SHA:
-  =< link_to @repository.sha, "https://github.com/#{@repository.name}/tree/#{@repository.sha}"
+  =< link_to Repository.core.sha, "https://github.com/#{Repository.core.name}/tree/#{Repository.core.sha}"
 
-- unless @alt_repos.empty?
-  #alternatives
-    h2
-      = icon 'code-fork'
-      | Alternative repositories:
-    .listing
-      - for repo in @alt_repos
-        .repo
-          - if letter = repo.letters.first
-            = link_to repo.name, letter_repository_formulae_path(repo, letter)
-          - else
-            = repo.name
+#taps
+  h2
+    = icon 'code-fork'
+    | Browse specific taps:
+  .listing
+    - for repo in @taps
+      .repo [class=cycle(:even, :odd)]
+        - if letter = repo.letters.first
+          = link_to repo.name, letter_repository_formulae_path(repo, letter)
+        - else
+          = repo.name

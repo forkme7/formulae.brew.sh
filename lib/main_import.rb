@@ -13,7 +13,7 @@ module MainImport
     official_taps.each do |tap|
       tap_name = "Homebrew/homebrew-#{tap}"
 
-      repo = Repository.unscoped.find tap_name
+      repo = Repository.find tap_name
       if repo.nil?
         Repository.create name: tap_name, outdated: false
 
@@ -37,8 +37,8 @@ module MainImport
 
   def update_status
     last_sha = super
-    return last_sha if last_sha == sha
-    save!
+
+    save! if last_sha != sha
 
     last_sha
   end
