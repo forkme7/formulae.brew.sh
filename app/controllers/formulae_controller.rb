@@ -37,7 +37,7 @@ class FormulaeController < ApplicationController
   def search
     return not_found if params[:search].nil?
 
-    term = params[:search].force_encoding 'UTF-8'
+    term = params[:search].force_encoding('UTF-8').gsub "\u0000", ''
     @title = "Search for: #{term}"
     @title << " in #{helpers.name}" unless all?
     search_term = /#{Regexp.escape term}/i

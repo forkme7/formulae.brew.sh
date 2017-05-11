@@ -9,7 +9,7 @@ $(function() {
     if (!searchTerm) {
       return false;
     }
-    var searchUrl = '/search/' + searchTerm;
+    var searchUrl = '/search/' + encodeURI(searchTerm);
     var repositoryName = $('div#content h1:first-child').data('repository');
     if (typeof(repositoryName) !== 'undefined') {
       searchUrl = '/repos/' + repositoryName + searchUrl;
