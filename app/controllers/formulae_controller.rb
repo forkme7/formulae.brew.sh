@@ -92,7 +92,7 @@ class FormulaeController < ApplicationController
     fresh_when etag: etag, public: true
   end
 
-  private
+  protected
 
   def all?
     @repository.nil?
