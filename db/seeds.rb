@@ -12,6 +12,7 @@ main.update_status
 main.create_missing_taps
 
 core = Repository.find_or_initialize_by name: Repository::CORE
+core.save!
 
 ([ core ] + Repository.all - [ main ]).uniq.each do |repo|
   repo.extend TapImport
