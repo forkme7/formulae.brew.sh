@@ -17,6 +17,7 @@ core.save!
 ([ core ] + Repository.all - [ main ]).uniq.each do |repo|
   repo.extend TapImport
   repo.refresh
+  repo.generate_history
   repo.recover_deleted_formulae
   repo.save!
 end
