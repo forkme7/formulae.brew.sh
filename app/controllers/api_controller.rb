@@ -5,6 +5,9 @@
 
 class ApiController < FormulaeController
 
+  before_action :ensure_json
+  skip_before_action :ensure_html
+
   def version
     @formula = self.formulae.where(name: params[:formula_id]).first
     if @formula.nil?
@@ -27,6 +30,12 @@ class ApiController < FormulaeController
         end
       end
     end
+  end
+
+  private
+
+  def ensure_json
+    head 406 unless request.format == :json
   end
 
 end

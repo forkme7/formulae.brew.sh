@@ -15,6 +15,8 @@ class ApplicationController < ActionController::Base
     error_page :service_unavailable
   end
 
+  before_action :ensure_html
+
   def index
     main_page
 
@@ -65,6 +67,12 @@ class ApplicationController < ActionController::Base
     end
 
     fresh_when etag: @repository.sha, public: true
+  end
+
+  protected
+
+  def ensure_html
+    head 406 unless request.format == :html
   end
 
   private
