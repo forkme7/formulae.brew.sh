@@ -7,6 +7,9 @@ before_install:
 before_script:
   - mongo braumeister-test --eval 'db.addUser("braumeister", "braumeister");'
 
+after_success:
+  - bundle exec codeclimate-test-reporter
+
 branches:
   except:
     - production

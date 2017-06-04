@@ -1,10 +1,10 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2014, Sebastian Staudt
+# Copyright (c) 2014-2017, Sebastian Staudt
 
-require 'coveralls'
-Coveralls.wear! 'rails'
+require 'simplecov'
+SimpleCov.start
 
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
