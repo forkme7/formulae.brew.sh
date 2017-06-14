@@ -8,12 +8,12 @@ require 'tap_import'
 describe TapImport do
 
   let(:core_repo) do
-    repo = Repository.new name: Repository::CORE, full: false
+    repo = Repository.new name: Repository::CORE
     repo.extend subject
   end
 
   let(:main_repo) do
-    repo = Repository.new name: Repository::MAIN, full: true
+    repo = Repository.new name: Repository::MAIN
     repo.extend subject
   end
 

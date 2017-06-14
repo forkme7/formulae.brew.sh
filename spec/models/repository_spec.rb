@@ -1,14 +1,14 @@
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
-# Copyright (c) 2012-2016, Sebastian Staudt
+# Copyright (c) 2012-2017, Sebastian Staudt
 
 require 'rails_helper'
 
 describe Repository do
 
-  let(:repo) { Repository.new name: Repository::CORE, full: false }
-  let(:main_repo) { Repository.new name: Repository::MAIN, full: true }
+  let(:repo) { Repository.new name: Repository::CORE }
+  let(:main_repo) { Repository.new name: Repository::MAIN }
 
   before do
     Repository.stubs(:find).with(Repository::CORE).returns repo

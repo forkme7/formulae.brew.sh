@@ -8,7 +8,7 @@ require 'repository_import'
 describe RepositoryImport do
 
   let(:repo) do
-    repo = Repository.new name: Repository::MAIN, full: false
+    repo = Repository.new name: Repository::MAIN
     repo.extend subject
   end
 

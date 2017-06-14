@@ -8,7 +8,7 @@ require 'rails_helper'
 describe Formula do
 
   let :formula do
-    repo = Repository.new name: Repository::CORE, full: true, formula_path: 'Formula'
+    repo = Repository.new name: Repository::CORE, formula_path: 'Formula'
     Formula.new name: 'git', repository: repo
   end
 
@@ -35,6 +35,7 @@ describe Formula do
     it 'updates the metadata of the formula' do
       formula_info = {
         'desc' => 'Example description',
+        'dependencies' => [ 'dep1', 'dep2' ],
         'homepage' => 'http://example.com',
         'keg_only' => true,
         'versions' => {
@@ -43,6 +44,11 @@ describe Formula do
           'head' => 'HEAD'
         }
       }
+      dep1 = mock
+      formula.repository.formulae.stubs(:find_by).with(name: 'dep1').returns dep1
+      dep2 = mock
+      formula.repository.formulae.stubs(:find_by).with(name: 'dep2').returns dep2
+      formula.expects(:deps=).with [ dep1, dep2]
 
       formula.update_metadata formula_info
 
@@ -94,10 +100,10 @@ describe Formula do
 
   end
 
-  context 'for a formula in an alternative repository' do
+  context 'for a formula in a tap repository' do
 
     let :formula do
-      repo = Repository.new name: 'adamv/homebrew-alt', full: false
+      repo = Repository.new name: 'Homebrew/homebrew-php'
       Formula.new name: 'php', repository: repo
     end
 
@@ -109,7 +115,7 @@ describe Formula do
 
     describe '#raw_url' do
       it 'returns the GitHub URL of the raw formula file' do
-        expect(formula.raw_url).to eq('https://raw.github.com/adamv/homebrew-alt/HEAD/php.rb')
+        expect(formula.raw_url).to eq('https://raw.github.com/Homebrew/homebrew-php/HEAD/php.rb')
       end
     end
 

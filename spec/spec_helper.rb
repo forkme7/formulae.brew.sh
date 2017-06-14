@@ -15,7 +15,7 @@ RSpec.configure do |config|
   config.before(:context) do
     Mongoid.default_client.collections.each &:drop
 
-    Repository.create name: Repository::CORE, full: false
-    Repository.create name: Repository::MAIN, full: true
+    Repository.create name: Repository::CORE
+    Repository.create name: Repository::MAIN
   end
 end
