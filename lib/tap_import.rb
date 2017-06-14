@@ -90,7 +90,7 @@ module TapImport
   end
 
   def clone_or_pull(reset = true)
-    main_repo.clone_or_pull unless full?
+    main_repo.clone_or_pull
 
     super
   end

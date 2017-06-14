@@ -13,7 +13,6 @@ class Repository
 
   field :_id, type: String, overwrite: true, default: ->{ name }
   field :date, type: Time
-  field :full, type: Boolean, default: false
   field :formula_path, type: String
   field :letters, type: Array, default: []
   field :name, type: String
