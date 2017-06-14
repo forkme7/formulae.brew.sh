@@ -252,10 +252,6 @@ module TapImport
 
         formulae_info(files, sha).each_value do |formula_info|
           formula = self.formulae.find_or_initialize_by name: formula_info['name']
-          formula.deps = formula_info['dependencies'].map do |dep|
-            self.formulae.find_by(name: dep) ||
-              Repository.core.formulae.find_by(name: dep)
-          end
           formula.removed = true
           formula.update_metadata formula_info
           formula.save
@@ -306,10 +302,6 @@ module TapImport
         end
         formula_info = formulae_info.delete formula.name
         next if formula_info.nil?
-        formula.deps = formula_info['dependencies'].map do |dep|
-          self.formulae.find_by(name: dep) ||
-            Repository.core.formulae.find_by(name: dep)
-        end
         formula.update_metadata formula_info
         formula.removed = false
       end

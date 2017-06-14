@@ -73,6 +73,10 @@ class Formula
     self.devel_version = formula_info['versions']['devel']
     self.head_version = formula_info['versions']['head']
     self.revision = formula_info['revision']
+
+    self.deps = formula_info['dependencies'].map do |dep|
+      repository.formulae.find_by(name: dep) || Repository.core.formulae.find_by(name: dep)
+    end
   end
 
   def version
