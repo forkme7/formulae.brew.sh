@@ -71,13 +71,13 @@ h1 = @formula.name
       - @revisions.each_with_index do |rev, i|
         tr class=[(:current if i == 0), (:hidden if i > 9)]
           td.author
-            = link_to '', "https://github.com/#{name}/commit/#{rev.sha}##{@formula.path}"
+            = formula_diff_link @formula, rev
             = rev.author.name
           td.subject
-            = link_to '', "https://github.com/#{name}/commit/#{rev.sha}##{@formula.path}"
+            = formula_diff_link @formula, rev
             = rev.subject
           td.date
-            = link_to '', "https://github.com/#{name}/commit/#{rev.sha}##{@formula.path}"
+            = formula_diff_link @formula, rev
             = timestamp rev.date
         - if i == 9 && @revisions.size > 10
           tr.show-all

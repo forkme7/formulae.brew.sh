@@ -3,7 +3,14 @@
 #
 # Copyright (c) 2017, Sebastian Staudt
 
+require 'digest'
+
 module FormulaeHelper
+
+  def formula_diff_link(formula, rev)
+    diff_md5 = Digest::MD5.hexdigest formula.path
+    link_to '', "https://github.com/#{formula.repository.name}/commit/#{rev.sha}#diff-#{diff_md5}"
+  end
 
   def feed_link
     feed_link = '/feed.atom'
