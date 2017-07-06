@@ -7,6 +7,7 @@ require 'text'
 
 class FormulaeController < ApplicationController
 
+  before_action :ensure_html, except: :feed
   before_action :select_repository
 
   def browse
