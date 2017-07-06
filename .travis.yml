@@ -19,12 +19,10 @@ cache: bundler
 
 rvm:
  - 2.4.1
- - jruby-head
  - ruby-head
 
 matrix:
   allow_failures:
-    - rvm: jruby-head
     - rvm: ruby-head
 
 notifications:
