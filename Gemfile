@@ -10,7 +10,6 @@ gem 'mongoid', '~> 6.2.0'
 gem 'puma', '~> 3.7'
 gem 'rails', '5.1.3'
 gem 'sass-rails', '~> 5.0'
-gem 'slim', '~> 3.0'
 gem 'text', '~> 1.3.0'
 gem 'uglifier', '~> 3.0'
 

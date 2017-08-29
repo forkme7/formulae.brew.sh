@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="en">
+<head>
+  <title><%= title %></title>
+
+  <%= stylesheet_link_tag 'application' %>
+  <%= javascript_include_tag '//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js' %>
+  <%= javascript_include_tag 'application' %>
+  <%= javascript_include_tag 'https://apis.google.com/js/platform.js', defer: true %>
+  <%= javascript_include_tag '//platform.twitter.com/widgets.js', defer: true %>
+
+  <%= auto_discovery_link_tag :atom, feed_path(format: :atom) %>
+  <%= csrf_meta_tag %>
+
+  <link rel="search" type="application/opensearchdescription+xml" title="braumeister.org" href="/opensearch.xml">
+  <%= favicon_link_tag 'data:image/x-icon;,', type: 'image/x-icon' %>
+  <%= yield :kaminari %>
+
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <meta itemprop="name" content="braumeister.org">
+  <meta itemprop="description" content="An online package browser for Homebrew, the MacOS package manager.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <%= render 'layouts/google_analytics' if Rails.env == 'production' %>
+  <%= render 'layouts/structured_data' %>
+</head>
+<body<% unless @repository.nil? || @repository.core? %> data-repository="<%= @repository.name %>"<% end %>>
+    <div id="fb-root"></div>
+    <%= render 'layouts/facebook' %>
+    <div id="header">
+        <div id="social">
+            <div class="g-plusone"
+                 data-href="http://braumeister.org"
+                 data-size="tall"></div>
+            <a href="https://twitter.com/share"
+               class="twitter-share-button"
+               data-count="vertical"
+               data-text="See information about Mac packages available via Homebrew – "
+               data-url="http://braumeister.org"
+               data-related="braumeister_org"
+               data-lang="en"
+               data-dnt="true"
+               data-show-count="true">Tweet</a>
+            <div class="fb-like" data-href="http://braumeister.org" data-width="55" data-height="62" data-layout="box_count" data-action="like" data-show-faces="true"></div>
+        </div>
+        <%= link_to 'Braumeister', root_path %>
+    </div>
+    <div id="content">
+        <% if flash[:error] %>
+            <div id="flash-error"><%= flash[:error].html_safe %></div>
+        <% end %>
+        <% if flash[:notice] %>
+            <div id="flash-notice"><%= flash[:notice].html_safe %></div>
+        <% end %>
+        <%= yield %>
+    </div>
+    <div id="footer">
+        © 2012-2017 —
+        <a href="https://plus.google.com/109586181974940228820?rel=author">
+        Sebastian Staudt</a><br>
+        View source code on <a href="https://github.com/koraktor/braumeister.org"><i class="fa fa-github"></i> GitHub</a><br>
+        Follow <a href="https://twitter.com/braumeister_org">@braumeister_org</a>
+        on Twitter.
+    </div>
+</body>
+</html>

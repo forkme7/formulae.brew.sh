@@ -1,0 +1,96 @@
+<h1><%= @formula.name %></h1>
+<% unless all? %>
+  <div class="subtitle">in <%= link_to name, letter_repository_formulae_path(@repository, @repository.first_letter), class: 'repo' %></div>
+<% end %>
+
+<div id="basic">
+  <% unless @formula.description.nil? %>
+    <div id="description"><%= @formula.description %></div>
+  <% end %>
+
+  <h2<% if @formula.removed? %>class="removed"<% end %>>
+    <% if @formula.removed? %>
+      Formula was removed<br>
+    <% end %>
+    <%= t ".versions#{'.removed' if @formula.removed? }", count: @formula.versions.size %>
+    <div class="versions">
+      <% unless @formula.stable_version.nil? %>
+        <strong class="version spec-stable"><%= @formula.stable_version %></strong>
+      <% end %>
+      <% unless @formula.devel_version.nil? %>
+       <strong class="version spec-devel"><%= @formula.devel_version %></strong>
+      <% end %>
+      <% unless @formula.head_version.nil? %>
+        <strong class="version spec-head"><%= @formula.head_version %></strong>
+      <% end %>
+    </div>
+  </h2>
+  <% if @formula.revision > 0 %>
+    <h2>Revision: <%= @formula.revision %></h2>
+  <% end %>
+  <% unless @formula.homepage.nil? %>
+    <h2>Homepage: <em><%= link_to @formula.homepage, @formula.homepage %></em></h2>
+  <% end %>
+  <% unless (@formula.aliases || []).empty? %>
+    Also known as: <strong><%= safe_join @formula.aliases, '</strong>, <strong>'.html_safe %></strong><br>
+  <% end %>
+  <% if @formula.keg_only? %>
+    <strong>This formula is <abbr title="A keg-only formula won't be symlinked automatically.">keg-only</abbr>.</strong><br>
+  <% end %>
+</div>
+
+<% deps = @formula.deps.reject { |formula| formula.removed? } %>
+<% unless deps.empty? %>
+  <div id="deps">
+    <h2>Dependencies</h2>
+      <%= t '.deps_html', name: @formula.name, count: @formula.deps.size %>
+    <ul>
+      <%= render partial: 'formula', collection: deps %>
+    </ul>
+  </div>
+<% end %>
+
+<% reset_cycle %>
+
+<% revdeps = @formula.revdeps.reject { |formula| formula.removed? } %>
+<% unless revdeps.empty? %>
+  <div id="revdeps">
+    <h2>Reverse dependencies</h2>
+    <%= t '.revdeps_html', name: @formula.name, count: @formula.revdeps.size %>
+    <ul>
+      <%= render partial: 'formula', collection: revdeps %>
+    </ul>
+  </div>
+<% end %>
+
+<% unless @revisions.empty? %>
+<div id="history">
+  <h2>Formula history</h2>
+  <table>
+  <% @revisions.each_with_index do |rev, i| %>
+    <tr<% if i == 0 %> class="current"<% elsif i > 9 %> class="hidden"<% end %>>
+      <td class="author">
+        <%= formula_diff_link @formula, rev %>
+        <%= rev.author.name %></td>
+      <td class="subject">
+        <%= formula_diff_link @formula, rev %>
+        <%= rev.subject %>
+      </td>
+      <td class="date">
+        <%= formula_diff_link @formula, rev %>
+        <%= timestamp rev.date %>
+      </td>
+    </tr>
+    <% if i == 9 %>
+    <tr class="show-all">
+      <td colspan="3">
+        <%= icon 'long-arrow-down' %>
+        Show all revisions of this formula
+        <%= icon 'long-arrow-down' %>
+      </td>
+    </tr>
+    <% end %>
+  <% end %>
+  </table>
+</div>
+<% end %>

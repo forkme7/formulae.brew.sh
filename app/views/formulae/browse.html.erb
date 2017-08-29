@@ -1,0 +1,51 @@
+<h1>Package listing</h1>
+
+<% if all? %>
+  This is a listing of all packages available via the Homebrew package manager
+  for macOS.
+<% else %>
+  This is a listing of all Homebrew packages available in the tap repository
+  <%= link_to name, "https://github.com/#{name}" %>.
+<% end %>
+
+<%= link_to icon('rss-square'), feed_link, class: 'feed-link', title: t('.feed_title', name: name) %>
+
+<%= render partial: 'search', locals: { with_icon: true } %>
+
+<ul id="letters">
+  <% ('a'..'z').each do |letter| %>
+    <li>
+      <% if letters.include? letter
+        letter_url = all? ? letter_formulae_path(letter) : letter_repository_formulae_path(name, letter)
+        letter_class = 'current' if letter == (params[:letter] || '').downcase %>
+        <%= link_to_unless_current letter.upcase, letter_url, class: letter_class do %>
+          <span class="current"><%= letter.upcase %></span>
+        <% end %>
+      <% else %>
+        <%= letter.upcase %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+<% if @formulae.total_count == 0 %>
+  <div class="error">Sorry, no formulae are matching your search.</div>
+<% else
+  page_params = { id: nil }
+  if params.key?(:search) && !params[:search].empty?
+    page_params[:use_route] = :search_formulae
+  end
+  pagination = paginate @formulae, params: page_params %>
+
+  <% content_for :kaminari do %>
+    <%= rel_next_prev_link_tags @formulae %>
+  <% end %>
+
+  <%= pagination %>
+
+  <div class="listing">
+    <%= render partial: 'formula', collection: @formulae %>
+  </div>
+
+  <%= pagination %>
+<% end %>

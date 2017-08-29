@@ -22,4 +22,19 @@ describe FormulaeHelper do
     end
   end
 
+  describe '#name' do
+    it 'returns nil for all repositories' do
+      helper.stubs(:all?).returns true
+
+      expect(helper.name).to be_nil
+    end
+
+    it 'returns the name for a single repository' do
+      helper.stubs(:all?).returns false
+      helper.instance_variable_set :@repository, mock(name: 'Homebrew/homebrew-games')
+
+      expect(helper.name).to eq('Homebrew/homebrew-games')
+    end
+  end
+
 end
