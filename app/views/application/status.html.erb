@@ -1,0 +1,20 @@
+<div id="status" class="border-bottom">
+  <strong>braumeister.org</strong> is an online package browser for
+  <%= link_to 'Homebrew', 'https://brew.sh' %> – the macOS package manager.<br>
+  For more information on how to install and use Homebrew see its homepage.
+
+  <%= link_to 'Browse all formulae', letter_formulae_path('a'), class: 'center' %>
+
+  <h2>🔎</h2>
+  <%= render partial: 'formulae/search' %>
+</div>
+
+<div class="border-top"></div>
+
+<h1>Status</h1>
+
+<div id="timestamps">
+  The repository has been updated <%= timestamp Repository.core.updated_at %>.<br>
+  The last change happened <%= timestamp Repository.core.date %>.<br>
+  Current Git commit SHA: <%= link_to Repository.core.sha, "https://github.com/#{Repository.core.name}/tree/#{Repository.core.sha}" %>
+</div>

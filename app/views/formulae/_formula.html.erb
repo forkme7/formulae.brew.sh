@@ -1,7 +1,10 @@
-<div class="formula <%= cycle 'even', 'odd' %><%= ' removed' if formula.removed? %>">
-  <%= formula_link formula %><br>
-  <%= formula.description %><br>
-  Current version: <strong class="version spec-<%= formula.best_spec %>">
-    <%= formula.version %><%= "_#{formula.revision}" if formula.revision > 0 %>
-  </strong>
-</div>
+<tr class="formula <%= cycle 'even', 'odd' %><%= ' removed' if formula.removed? %>">
+  <td><%= formula_link formula %></td>
+  <td><span class="spec-<%= formula.best_spec %>"></td>
+  <td>
+    <strong class="version">
+      <%= formula.version %><%= "_#{formula.revision}" if formula.revision > 0 %>
+    </strong>
+  </td>
+  <td class="desc"><%= formula.description %></td>
+</tr>

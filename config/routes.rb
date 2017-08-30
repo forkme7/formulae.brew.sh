@@ -63,6 +63,7 @@ Rails.application.routes.draw do
   end
 
   root to: 'application#index'
+  get '/status', to: 'application#status'
 
   get '*url', to: 'application#not_found', format: false
 

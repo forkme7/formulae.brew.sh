@@ -1,6 +1,5 @@
-<div class="formula <%= cycle 'even', 'odd' %>">
-  <%= formula_link formula %>
-  <strong class="version spec-<%= formula.best_spec %>">
-    <%= formula.version %>
-  </strong>
-</div>
+<tr class="formula <%= cycle 'even', 'odd' %>">
+  <td><%= formula_link formula %></td>
+  <td><span class="spec-<%= formula.best_spec %>"></td>
+  <td><strong class="version"><%= formula.version %></strong></td>
+</tr>

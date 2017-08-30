@@ -28,6 +28,15 @@ class ApplicationController < ActionController::Base
     fresh_when etag: Repository.core.sha, public: true
   end
 
+  def status
+    respond_to do |format|
+      format.html { render 'application/status' }
+      format.any { render nothing: true, status: :not_found }
+    end
+
+    fresh_when etag: Repository.core.sha, public: true
+  end
+
   def error_page(status = :internal_server_error)
     view = 'application/%d' % [ Rack::Utils::SYMBOL_TO_STATUS_CODE[status] ]
 
