@@ -1,12 +1,13 @@
 <h1>Package listing</h1>
-
-<% if all? %>
-  This is a listing of all packages available via the Homebrew package manager
-  for macOS.
-<% else %>
-  This is a listing of all Homebrew packages available in the tap repository
-  <%= link_to name, "https://github.com/#{name}" %>.
-<% end %>
+<p class="listing-header">
+  <% if all? %>
+    This is a listing of all packages available via the Homebrew package manager
+    for macOS.
+  <% else %>
+    This is a listing of all Homebrew packages available in the tap repository
+    <%= link_to name, "https://github.com/#{name}" %>.
+  <% end %>
+</p>
 
 <%= link_to icon('rss-square'), feed_link, class: 'feed-link', title: t('.feed_title', name: name) %>
 
@@ -29,6 +30,8 @@
 </ul>
 
 <% if @formulae.total_count == 0 %>
+  <div class="border-bottom"></div>
+  <div class="border-top"></div>
   <div class="error">Sorry, no formulae are matching your search.</div>
 <% else
   page_params = { id: nil }
@@ -43,8 +46,13 @@
 
   <%= pagination %>
 
-  <div class="listing">
-    <%= render partial: 'formula', collection: @formulae %>
+  <div class="border-bottom"></div>
+  <div class="border-top"></div>
+
+  <div class="listing browse">
+    <table>
+      <%= render partial: 'formula', collection: @formulae %>
+    </table>
   </div>
 
   <%= pagination %>

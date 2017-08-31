@@ -1,54 +1,56 @@
-<div id="home">
+<div id="home" class="border-bottom">
   <strong>braumeister.org</strong> is an online package browser for
   <%= link_to 'Homebrew', 'https://brew.sh' %> – the macOS package manager.<br>
   For more information on how to install and use Homebrew see its homepage.
 
   <%= link_to 'Browse all formulae', letter_formulae_path('a'), class: 'center' %>
 
-  <h2><%= icon 'search' %> Search a formula:</h2>
+  <h2>🔎</h2>
   <%= render partial: 'formulae/search' %>
 </div>
 
+<div class="border-top" ></div>
+
 <div class="recently-added">
-  <h3><%= icon 'plus-square' %> Recently added formulae</h3>
+  <h3>🆕 Recently added formulae</h3>
   <div class="listing">
-    <% @added.each do |formula| %>
-      <%= render partial: 'recent', locals: { formula: formula } %>
-    <% end %>
+    <table>
+      <% @added.each do |formula| %>
+        <%= render partial: 'recent', locals: { formula: formula } %>
+      <% end %>
+    </table>
   </div>
 </div>
 
 <% reset_cycle %>
 
 <div class="recently-updated">
-  <h3><%= icon 'pencil-square' %> Recently updated formulae</h3>
+  <h3>📝 Recently updated formulae</h3>
   <div class="listing">
-    <% @updated.each do |formula| %>
-      <%= render partial: 'recent', locals: { formula: formula } %>
-    <% end %>
+    <table>
+      <% @updated.each do |formula| %>
+        <%= render partial: 'recent', locals: { formula: formula } %>
+      <% end %>
+    </table>
   </div>
 </div>
 
 <div class="recently-removed">
-  <h5><%= icon 'minus-square' %> Recently removed formulae</h5>
+  <h3>🚫 Recently removed formulae</h3>
   <%= @removed.map { |f| formula_link f }.join(', ').html_safe %>
 </div>
 
-<div id="timestamps">
-  The repository has been updated <%= timestamp Repository.core.updated_at %>.<br>
-  The last change happened <%= timestamp Repository.core.date %>.<br>
-  Current Git commit SHA: <%= link_to Repository.core.sha, "https://github.com/#{Repository.core.name}/tree/#{Repository.core.sha}" %>
-</div>
+<div class="border-bottom" ></div>
 
-<div id="alternatives">
-  <h2><%= icon 'code-fork' %> Browse specific taps:</h2>
+<div id="taps" class="border-top">
+  <h2>🚰 Browse specific taps</h2>
   <div class="listing">
   <% @taps.each do |repo| %>
     <div class="repo">
       <% if letter = repo.letters.first %>
-        <%= link_to repo.name, letter_repository_formulae_path(repo, letter) %>
+        <%= link_to repo.short_name, letter_repository_formulae_path(repo, letter) %>
       <% else %>
-        <%= repo.name %>
+        <%= repo.short_name %>
       <% end %></div>
   <% end %>
   </div>

@@ -101,11 +101,19 @@ class FormulaeController < ApplicationController
   helper_method :all?
 
   def etag
-    all? ? Revision.last.sha : @repository.sha
+    if all? && Revision.last
+      Revision.last.sha
+    elsif @repository
+      @repository.sha
+    end
   end
 
   def formulae
-    all? ? Formula : @repository.formulae
+    if all?
+      Formula
+    elsif @repository
+      @repository.formulae
+    end
   end
 
   def select_repository

@@ -46,6 +46,10 @@ class Repository
     name
   end
 
+  def short_name
+    name.gsub("/homebrew-", "/")
+  end
+
   def url
     "git://github.com/#{name}.git"
   end

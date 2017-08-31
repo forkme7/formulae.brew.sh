@@ -9,11 +9,11 @@ en:
       feed_title: "Stay up-to-date – subscribe to %{name}'s feed."
     show:
       deps_html:
-        one:   "<em>%{name}</em> requires the following formula to be installed:"
-        other: "<em>%{name}</em> requires the following formulae to be installed:"
+        one:   "%{name} requires the following formula to be installed:"
+        other: "%{name} requires the following formulae to be installed:"
       revdeps_html:
-        one:   "The following formula requires <em>%{name}</em> to be installed:"
-        other: "The following formulae require <em>%{name}</em> to be installed:"
+        one:   "The following formula requires %{name} to be installed:"
+        other: "The following formulae require %{name} to be installed:"
       versions:
         one:   "Current version"
         other: "Current versions"
