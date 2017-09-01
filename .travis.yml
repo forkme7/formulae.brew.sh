@@ -5,7 +5,7 @@ before_install:
   - sed -i '2d' Gemfile
 
 before_script:
-  - mongo braumeister-test script/mongodb_setup.js
+  - mongo braumeister-test db/mongodb_setup.js
 
 after_success:
   - bundle exec codeclimate-test-reporter
