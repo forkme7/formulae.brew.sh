@@ -6,7 +6,7 @@ if (!user) {
     user: "braumeister",
     pwd: "braumeister",
     roles: [{
-      db: "braumeister",
+      db: db.getName(),
       role: "readWrite"
     }]
   });
