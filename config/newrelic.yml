@@ -1,6 +1,6 @@
 ---
 common: &default_settings
-  app_name: <%= ENV["NEW_RELIC_APPNAME"] || 'braumeister.org' %>
+  app_name: <%= ENV["NEW_RELIC_APPNAME"] || 'formulae.brew.sh' %>
   license_key: <%= ENV["NEW_RELIC_LICENSE_KEY"] %>
   monitor_mode: false
   ssl: true

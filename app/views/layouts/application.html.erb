@@ -12,12 +12,12 @@
   <%= auto_discovery_link_tag :atom, feed_path(format: :atom) %>
   <%= csrf_meta_tag %>
 
-  <link rel="search" type="application/opensearchdescription+xml" title="braumeister.org" href="/opensearch.xml">
+  <link rel="search" type="application/opensearchdescription+xml" title="formulae.brew.sh" href="/opensearch.xml">
   <%= favicon_link_tag 'data:image/x-icon;,', type: 'image/x-icon' %>
   <%= yield :kaminari %>
 
   <meta http-equiv="content-type" content="text/html;charset=UTF-8">
-  <meta itemprop="name" content="braumeister.org">
+  <meta itemprop="name" content="formulae.brew.sh">
   <meta itemprop="description" content="An online package browser for Homebrew, the MacOS package manager.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -26,7 +26,7 @@
 </head>
 <body<% unless @repository.nil? || @repository.core? %> data-repository="<%= @repository.name %>"<% end %>>
     <div id="header">
-        <%= link_to 'Braumeister', root_path %>
+        <%= link_to 'Formulae', root_path %>
     </div>
     <div id="content" class="border-bottom">
         <% if flash[:error] %>
@@ -39,9 +39,9 @@
     </div>
     <div id="footer" class="border-top">
       <p>
-        Braumeister was created by <a href="https://plus.google.com/109586181974940228820?rel=author">
+        formulae.brew.sh was created by <a href="https://plus.google.com/109586181974940228820?rel=author">
         Sebastian Staudt</a>.
-        View source code on <a href="https://github.com/koraktor/braumeister.org"><i class="fa fa-github"></i> GitHub</a>.
+        View source code on <a href="https://github.com/Homebrew/formulae.brew.sh"><i class="fa fa-github"></i> GitHub</a>.
         Follow <a href="https://twitter.com/braumeister_org">@braumeister_org</a>
         on Twitter.
       </p>

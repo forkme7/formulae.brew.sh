@@ -35,12 +35,12 @@ describe ApplicationHelper do
 
   describe '#title' do
     it 'provides a default title' do
-      expect(helper.title).to eq('braumeister.org')
+      expect(helper.title).to eq('Homebrew Formulae')
     end
 
     it 'provides customized titles' do
       assign :title, 'Custom Title'
-      expect(helper.title).to eq('Custom Title – braumeister.org')
+      expect(helper.title).to eq('Custom Title – Homebrew Formulae')
     end
   end
 
