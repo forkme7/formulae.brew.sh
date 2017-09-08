@@ -20,7 +20,7 @@ module ApplicationHelper
   end
 
   def title
-    title = 'braumeister.org'
+    title = 'Homebrew Formulae'
     title = "#@title – #{title}" unless @title.nil?
     title
   end

@@ -1,15 +1,15 @@
-braumeister.org
+formulae.brew.sh
 ===============
 
-[![Build Status](https://secure.travis-ci.org/koraktor/braumeister.org.svg)](http://travis-ci.org/koraktor/braumeister.org)
-[![Dependency Status](https://gemnasium.com/koraktor/braumeister.org.svg)](https://gemnasium.com/koraktor/braumeister.org)
-[![Code Climate](https://codeclimate.com/github/koraktor/braumeister.org/badges/gpa.svg)](https://codeclimate.com/github/koraktor/braumeister.org)
-[![Test Coverage](https://codeclimate.com/github/koraktor/braumeister.org/badges/coverage.svg)](https://codeclimate.com/github/koraktor/braumeister.org/coverage)
+[![Build Status](https://secure.travis-ci.org/Homebrew/formulae.brew.sh.svg)](http://travis-ci.org/Homebrew/formulae.brew.sh)
+[![Dependency Status](https://gemnasium.com/Homebrew/formulae.brew.sh.svg)](https://gemnasium.com/Homebrew/formulae.brew.sh)
+[![Code Climate](https://codeclimate.com/github/Homebrew/formulae.brew.sh/badges/gpa.svg)](https://codeclimate.com/github/Homebrew/formulae.brew.sh)
+[![Test Coverage](https://codeclimate.com/github/Homebrew/formulae.brew.sh/badges/coverage.svg)](https://codeclimate.com/github/Homebrew/formulae.brew.sh/coverage)
 
 [![Gratipay](https://img.shields.io/gratipay/team/Braumeister.svg)](https://gratipay.org/Braumeister)
-[![Beerpay](https://img.shields.io/beerpay/koraktor/braumeister.org.svg)](https://beerpay.io/koraktor/braumeister.org)
+[![Beerpay](https://img.shields.io/beerpay/Homebrew/formulae.brew.sh.svg)](https://beerpay.io/Homebrew/formulae.brew.sh)
 
-braumeister.org is a Rails application that gathers package information from
+formulae.brew.sh is a Rails application that gathers package information from
 Homebrew, the macOS package manager.
 
 ## Internals
@@ -43,8 +43,8 @@ $ foreman start
 
 ## Contribute
 
-braumeister.org is an open-source project. Therefore you are free to help
-improving it. There are several ways of contributing to braumeister.org’s
+formulae.brew.sh is an open-source project. Therefore you are free to help
+improving it. There are several ways of contributing to formulae.brew.sh’s
 development:
 
  * Use it and spread the word to existing and new Homebrew users
@@ -53,7 +53,7 @@ development:
  * Create a fork on [GitHub][1] and start hacking. Extra points for using
    feature branches and GitHub’s pull requests.
 
-## About the name
+## About the internal naming
 
 “Braumeister” – [ˈbʁaʊmʌɪstəʀ] – is the German word for “master brewer” or
 “brewmaster”, the person in charge of beer production.
@@ -79,11 +79,11 @@ LICENSE file.
  * [Continuous Integration at Travis CI][5]
  * [Dependency status at Gemnasium][4]
 
-Follow braumeister.org on Twitter
+Follow formulae.brew.sh on Twitter
 [@braumeister_org](http://twitter.com/braumeister_org).
 
- [1]: https://github.com/koraktor/braumeister.org
- [2]: https://github.com/koraktor/braumeister.org/issues
+ [1]: https://github.com/Homebrew/formulae.brew.sh
+ [2]: https://github.com/Homebrew/formulae.brew.sh/issues
  [3]: https://brew.sh
- [4]: https://gemnasium.com/koraktor/braumeister.org
- [5]: https://travis-ci.org/koraktor/braumeister.org
+ [4]: https://gemnasium.com/Homebrew/formulae.brew.sh
+ [5]: https://travis-ci.org/Homebrew/formulae.brew.sh

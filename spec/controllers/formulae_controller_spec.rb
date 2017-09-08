@@ -29,7 +29,7 @@ describe FormulaeController do
 
     it 'redirects to the correct repository if capitalization is incorrect' do
       request = mock
-      request.expects(:url).returns 'http://braumeister.org/repos/Homebrew/Homebrew-versions/browse'
+      request.expects(:url).returns 'http://formulae.brew.sh/repos/Homebrew/Homebrew-versions/browse'
       controller.expects(:request).returns request
 
       repo = mock
@@ -38,7 +38,7 @@ describe FormulaeController do
       Repository.expects(:where).with(_id: /^Homebrew\/Homebrew-versions$/i).returns criteria
       criteria.expects(:only).with(:_id, :letters, :name, :sha, :updated_at).returns [ repo ]
       controller.expects(:params).returns({ repository_id: 'Homebrew/Homebrew-versions' })
-      controller.expects(:redirect_to).with 'http://braumeister.org/repos/Homebrew/homebrew-versions/browse'
+      controller.expects(:redirect_to).with 'http://formulae.brew.sh/repos/Homebrew/homebrew-versions/browse'
 
       controller.send :select_repository
     end

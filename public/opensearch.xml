@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
   <AdultContent>false</AdultContent>
-  <Description>Search Homebrew formulae on braumeister.org</Description>
+  <Description>Search Homebrew formulae</Description>
   <InputEncoding>UTF-8</InputEncoding>
   <OutputEncoding>UTF-8</OutputEncoding>
-  <ShortName>braumeister.org</ShortName>
-  <Url type="text/html" rel="results" method="GET" template="http://braumeister.org/search/{searchTerms}" />
-  <Url type="application/opensearchdescription+xml" rel="self" method="GET" template="http://braumeister.org/opensearch.xml" />
+  <ShortName>formulae.brew.sh</ShortName>
+  <Url type="text/html" rel="results" method="GET" template="http://formulae.brew.sh/search/{searchTerms}" />
+  <Url type="application/opensearchdescription+xml" rel="self" method="GET" template="http://formulae.brew.sh/opensearch.xml" />
 </OpenSearchDescription>
