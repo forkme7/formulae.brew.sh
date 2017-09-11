@@ -7,7 +7,7 @@ formulae.brew.sh
 [![Test Coverage](https://codeclimate.com/github/Homebrew/formulae.brew.sh/badges/coverage.svg)](https://codeclimate.com/github/Homebrew/formulae.brew.sh/coverage)
 
 [![Gratipay](https://img.shields.io/gratipay/team/Braumeister.svg)](https://gratipay.org/Braumeister)
-[![Beerpay](https://img.shields.io/beerpay/Homebrew/formulae.brew.sh.svg)](https://beerpay.io/Homebrew/formulae.brew.sh)
+[![Beerpay](https://img.shields.io/beerpay/koraktor/formulae.brew.sh.svg)](https://beerpay.io/Homebrew/formulae.brew.sh)
 
 formulae.brew.sh is a Rails application that gathers package information from
 Homebrew, the macOS package manager.
