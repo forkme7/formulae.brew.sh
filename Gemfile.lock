@@ -141,7 +141,7 @@ GEM
     rb-fsevent (0.9.8)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
-    rollbar (2.15.0)
+    rollbar (2.15.2)
       multi_json
     rspec-core (3.5.4)
       rspec-support (~> 3.5.0)
