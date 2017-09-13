@@ -13,7 +13,8 @@
   <%= csrf_meta_tag %>
 
   <link rel="search" type="application/opensearchdescription+xml" title="formulae.brew.sh" href="/opensearch.xml">
-  <%= favicon_link_tag 'data:image/x-icon;,', type: 'image/x-icon' %>
+  <%= favicon_link_tag %>
+  <%= favicon_link_tag 'apple-touch-icon.png', rel: 'apple-touch-icon', type: 'image/png' %>
   <%= yield :kaminari %>
 
   <meta http-equiv="content-type" content="text/html;charset=UTF-8">
