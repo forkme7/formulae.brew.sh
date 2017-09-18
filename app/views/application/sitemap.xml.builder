@@ -4,7 +4,7 @@
 # Copyright (c) 2012-2014, Sebastian Staudt
 
 xml.instruct!
-xml.urlset xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9' do
+xml.urlset xmlns: 'https://www.sitemaps.org/schemas/sitemap/0.9' do
   xml.url do
     xml.loc root_url
     xml.lastmod @repository.updated_at.iso8601
