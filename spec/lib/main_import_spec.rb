@@ -40,6 +40,19 @@ describe MainImport do
 
   end
 
+  describe '#deprecated_official_taps' do
+
+    it 'should return DEPRECATED_OFFICIAL_TAPS from brew' do
+      repo.expects(:path).returns '/repo'
+      file_contents = 'DEPRECATED_OFFICIAL_TAPS = %w{apache php}'
+      File.expects(:read).with('/repo/Library/Homebrew/official_taps.rb').
+              returns file_contents
+
+      expect(repo.deprecated_official_taps).to eq(%w{apache php})
+    end
+
+  end
+
   describe '#official_taps' do
 
     it 'should return OFFICIAL_TAPS from brew' do
@@ -49,6 +62,24 @@ describe MainImport do
               returns file_contents
 
       expect(repo.official_taps).to eq(%w{apache php})
+    end
+
+  end
+
+  describe '#update_deprecated_taps' do
+
+    it 'should mark deprecated taps' do
+      apache = Repository.new
+      php = Repository.new
+
+      repo.expects(:deprecated_official_taps).returns %w{apache php}
+      Repository.expects(:find).with('Homebrew/homebrew-apache').returns apache
+      Repository.expects(:find).with('Homebrew/homebrew-php').returns php
+
+      repo.update_deprecated_taps
+
+      expect(apache).to be_outdated
+      expect(php).to be_outdated
     end
 
   end
@@ -64,7 +95,7 @@ describe MainImport do
       end
     end
 
-    it 'should saving if the commit ID did change' do
+    it 'should save if the commit ID did change' do
       repo.sha = '01234567'
       repo.expects(:save!)
 
