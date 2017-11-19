@@ -19,7 +19,7 @@ end
 
 group :development, :test do
   gem 'codeclimate-test-reporter', '~> 1.0'
-  gem 'rspec-rails', '~> 3.2'
+  gem 'rspec-rails', '~> 3.7'
 end
 
 group :production do
