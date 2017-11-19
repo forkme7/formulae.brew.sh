@@ -24,7 +24,7 @@ end
 
 group :production do
   gem 'rollbar', '~> 2.14'
-  gem 'newrelic_rpm', '~> 4.1'
+  gem 'newrelic_rpm', '~> 4.6'
   gem 'rails_12factor', '~> 0.0.2'
 end
 
