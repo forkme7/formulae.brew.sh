@@ -23,7 +23,7 @@ group :development, :test do
 end
 
 group :production do
-  gem 'rollbar', '~> 2.14'
+  gem 'rollbar', '~> 2.15'
   gem 'newrelic_rpm', '~> 4.6'
   gem 'rails_12factor', '~> 0.0.2'
 end
