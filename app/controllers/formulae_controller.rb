@@ -88,7 +88,7 @@ class FormulaeController < ApplicationController
     @formula = @formulae.first
     @title = @formula.name.dup
     @title << " – #{helpers.name}" unless all?
-    @revisions = @formula.revisions.without_bot.includes(:author).order_by(%i{date desc}).to_a
+    @revisions = @formula.revisions.limit(5).without_bot.includes(:author).order_by(%i{date desc}).to_a
 
     fresh_when etag: etag, public: true
   end

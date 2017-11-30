@@ -78,10 +78,10 @@
 
   <% unless @revisions.empty? %>
   <div id="history">
-    <h2>Formula history</h2>
+    <h2>Recent formula history</h2>
     <table>
     <% @revisions.each_with_index do |rev, i| %>
-      <tr<% if i == 0 %> class="current"<% elsif i > 9 %> class="hidden"<% end %>>
+      <tr<% if i == 0 %> class="current"<% end %>>
         <td class="author">
           <%= formula_diff_link @formula, rev %>
           <%= rev.author.name %></td>
@@ -94,15 +94,17 @@
           <%= timestamp rev.date %>
         </td>
       </tr>
-      <% if i == 9 %>
-      <tr class="show-all">
-        <td colspan="3">
-          Show all revisions of this formula
-        </td>
-      </tr>
-      <% end %>
     <% end %>
+    <tr class="history-link">
+      <td colspan="3">
+        <%= history_link @formula %>
+      </td>
+    </tr>
     </table>
   </div>
   <% end %>
+
+  <br>
+
+  <%= code_link @formula, @revisions.first %> at GitHub
 </div>

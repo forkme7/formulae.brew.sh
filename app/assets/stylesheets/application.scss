@@ -237,10 +237,12 @@ div#history {
       display: none;
     }
 
-    &.show-all {
-      cursor: pointer;
-      font-weight: bold;
+    &.history-link {
       text-align:  center;
+
+      a {
+        position: inherit;
+      }
     }
   }
 }
