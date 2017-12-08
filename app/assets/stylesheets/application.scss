@@ -131,7 +131,7 @@ div#content {
   }
 }
 
-div#deps, div#revdeps {
+div#deps, div#optdeps, div#revdeps {
   margin-top: 1.5em;
 
   h2 {
@@ -317,7 +317,7 @@ div.listing.browse {
   padding: 0 0.5em;
 }
 
-#deps, #revdeps {
+#deps, #optdeps, #revdeps {
   td {
     vertical-align: baseline;
     padding-right: 0.5em;

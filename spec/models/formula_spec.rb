@@ -34,10 +34,11 @@ describe Formula do
   describe '#update_metadata' do
     it 'updates the metadata of the formula' do
       formula_info = {
+        'build_dependencies' => [ 'dep1', 'dep2' ],
         'desc' => 'Example description',
-        'dependencies' => [ 'dep1', 'dep2' ],
         'homepage' => 'http://example.com',
         'keg_only' => true,
+        'optional_dependencies' => [ 'dep3' ],
         'versions' => {
           'stable' => '1.0.0',
           'devel' =>  '1.1.0.beta',
@@ -49,6 +50,9 @@ describe Formula do
       dep2 = mock
       formula.repository.formulae.stubs(:find_by).with(name: 'dep2').returns dep2
       formula.expects(:deps=).with [ dep1, dep2]
+      dep3 = mock
+      formula.repository.formulae.stubs(:find_by).with(name: 'dep3').returns dep3
+      formula.expects(:optdeps=).with [ dep3 ]
 
       formula.update_metadata formula_info
 

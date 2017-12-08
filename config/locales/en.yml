@@ -11,6 +11,9 @@ en:
       deps_html:
         one:   "%{name} requires the following formula to be installed:"
         other: "%{name} requires the following formulae to be installed:"
+      optdeps_html:
+        one:   "%{name} provides optional features if the following formula is installed:"
+        other: "%{name} provides optional features if the following formulae are installed:"
       revdeps_html:
         one:   "The following formula requires %{name} to be installed:"
         other: "The following formulae require %{name} to be installed:"

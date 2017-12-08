@@ -29,6 +29,7 @@ class Formula
   has_and_belongs_to_many :revisions, inverse_of: nil, validate: false, index: true
 
   has_and_belongs_to_many :deps, class_name: self.to_s, inverse_of: :revdeps, validate: false, index: true
+  has_and_belongs_to_many :optdeps, class_name: self.to_s, validate: false, index: true
   has_and_belongs_to_many :revdeps, class_name: self.to_s, inverse_of: :deps, validate: false, index: true
 
   scope :letter, ->(letter) { where(name: /^#{letter}/) }
@@ -74,7 +75,10 @@ class Formula
     self.head_version = formula_info['versions']['head']
     self.revision = formula_info['revision']
 
-    self.deps = formula_info['dependencies'].map do |dep|
+    self.deps = formula_info['build_dependencies'].map do |dep|
+      repository.formulae.find_by(name: dep) || Repository.core.formulae.find_by(name: dep)
+    end
+    self.optdeps = formula_info['optional_dependencies'].map do |dep|
       repository.formulae.find_by(name: dep) || Repository.core.formulae.find_by(name: dep)
     end
   end

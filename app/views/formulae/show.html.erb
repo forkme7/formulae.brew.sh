@@ -55,10 +55,23 @@
   <% deps = @formula.deps.reject { |formula| formula.removed? } %>
   <% unless deps.empty? %>
     <div id="deps">
-      <%= t '.deps_html', name: @formula.name, count: @formula.deps.size %>
+      <%= t '.deps_html', name: @formula.name, count: deps.size %>
 
       <table>
         <%= render partial: 'formula', collection: deps %>
+      </table>
+    </div>
+  <% end %>
+
+  <% reset_cycle %>
+
+  <% optdeps = @formula.optdeps.reject { |formula| formula.removed? } %>
+  <% unless optdeps.empty? %>
+    <div id="optdeps">
+      <%= t '.optdeps_html', name: @formula.name, count: optdeps.size %>
+
+      <table>
+        <%= render partial: 'formula', collection: optdeps %>
       </table>
     </div>
   <% end %>
@@ -69,7 +82,7 @@
   <% unless revdeps.empty? %>
     <div id="revdeps">
       <h2>Reverse dependencies</h2>
-      <%= t '.revdeps_html', name: @formula.name, count: @formula.revdeps.size %>
+      <%= t '.revdeps_html', name: @formula.name, count: revdeps.size %>
       <table>
         <%= render partial: 'formula', collection: revdeps %>
       </table>

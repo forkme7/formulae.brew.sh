@@ -344,6 +344,7 @@ module TapImport
 
     Formula.each do |formula|
       formula.update_attribute :dep_ids, formula.dep_ids.reject! { |i| i.starts_with? "#{id}/" }
+      formula.update_attribute :optdep_ids, formula.optdep_ids.reject! { |i| i.starts_with? "#{id}/" }
       formula.update_attribute :revdep_ids, formula.revdep_ids.reject! { |i| i.starts_with? "#{id}/" }
     end
 
