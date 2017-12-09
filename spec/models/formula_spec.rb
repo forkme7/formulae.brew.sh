@@ -38,7 +38,9 @@ describe Formula do
         'desc' => 'Example description',
         'homepage' => 'http://example.com',
         'keg_only' => true,
+        'dependencies' => [ 'dep1', 'dep2', 'dep3', 'dep4' ],
         'optional_dependencies' => [ 'dep3' ],
+        'recommended_dependencies' => [ 'dep4' ],
         'versions' => {
           'stable' => '1.0.0',
           'devel' =>  '1.1.0.beta',
@@ -52,7 +54,9 @@ describe Formula do
       formula.expects(:deps=).with [ dep1, dep2]
       dep3 = mock
       formula.repository.formulae.stubs(:find_by).with(name: 'dep3').returns dep3
-      formula.expects(:optdeps=).with [ dep3 ]
+      dep4 = mock
+      formula.repository.formulae.stubs(:find_by).with(name: 'dep4').returns dep4
+      formula.expects(:optdeps=).with [ dep3, dep4 ]
 
       formula.update_metadata formula_info
 

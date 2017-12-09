@@ -75,10 +75,14 @@ class Formula
     self.head_version = formula_info['versions']['head']
     self.revision = formula_info['revision']
 
-    self.deps = formula_info['build_dependencies'].map do |dep|
+    optdeps = formula_info['optional_dependencies'] +
+              formula_info['recommended_dependencies']
+    deps = formula_info['dependencies'] - optdeps
+
+    self.deps = deps.map do |dep|
       repository.formulae.find_by(name: dep) || Repository.core.formulae.find_by(name: dep)
     end
-    self.optdeps = formula_info['optional_dependencies'].map do |dep|
+    self.optdeps = optdeps.map do |dep|
       repository.formulae.find_by(name: dep) || Repository.core.formulae.find_by(name: dep)
     end
   end
