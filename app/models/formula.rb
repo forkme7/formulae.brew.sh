@@ -26,11 +26,15 @@ class Formula
   alias_method :to_param, :name
 
   belongs_to :repository, validate: false
-  has_and_belongs_to_many :revisions, inverse_of: nil, validate: false, index: true
+  has_and_belongs_to_many :revisions, inverse_of: nil, validate: false,
+                                      index: true
 
-  has_and_belongs_to_many :deps, class_name: self.to_s, inverse_of: :revdeps, validate: false, index: true
-  has_and_belongs_to_many :optdeps, class_name: self.to_s, validate: false, index: true
-  has_and_belongs_to_many :revdeps, class_name: self.to_s, inverse_of: :deps, validate: false, index: true
+  has_and_belongs_to_many :deps, class_name: self.to_s, inverse_of: :revdeps,
+                                 validate: false, index: true
+  has_and_belongs_to_many :optdeps, class_name: self.to_s, validate: false,
+                                    index: true
+  has_and_belongs_to_many :revdeps, class_name: self.to_s, inverse_of: :deps,
+                                    validate: false, index: true
 
   scope :letter, ->(letter) { where(name: /^#{letter}/) }
 
@@ -54,7 +58,7 @@ class Formula
   end
 
   def path
-    (repository.formula_path.nil? ? name : File.join(repository.formula_path, name)) + '.rb'
+    File.join([repository.formula_path, name].compact) + '.rb'
   end
 
   def raw_url
@@ -77,14 +81,9 @@ class Formula
 
     optdeps = formula_info['optional_dependencies'] +
               formula_info['recommended_dependencies']
+    self.optdeps = optdeps.map { |dep| find_dependency dep }
     deps = formula_info['dependencies'] - optdeps
-
-    self.deps = deps.map do |dep|
-      repository.formulae.find_by(name: dep) || Repository.core.formulae.find_by(name: dep)
-    end
-    self.optdeps = optdeps.map do |dep|
-      repository.formulae.find_by(name: dep) || Repository.core.formulae.find_by(name: dep)
-    end
+    self.deps = deps.map { |dep| find_dependency dep }
   end
 
   def version
@@ -97,6 +96,13 @@ class Formula
 
   def set_id
     self._id = "#{repository.name}/#{name}"
+  end
+
+  private
+
+  def find_dependency(name)
+    repository.formulae.find_by(name: name) ||
+      Repository.core.formulae.find_by(name: name)
   end
 
 end
