@@ -9,25 +9,27 @@ class ApiController < FormulaeController
   skip_before_action :ensure_html
 
   def version
-    @formula = self.formulae.where(name: params[:formula_id]).first
+    formula_id = params[:formula_id]
+
+    @formula = formulae.where(name: formula_id).first
     if @formula.nil?
-      @formula = self.formulae.all_in(aliases: [params[:formula_id]]).first
+      @formula = formulae.all_in(aliases: [formula_id]).first
       unless @formula.nil?
         redirect_to repository_formula_version_path(@formula.repository.name, @formula)
         return
       end
-      raise Mongoid::Errors::DocumentNotFound.new(Formula, [], params[:formula_id])
+      raise Mongoid::Errors::DocumentNotFound.new(Formula, [], formula_id)
     end
 
-    if stale? @formula.revisions.first.sha, public: true
-      respond_to do |format|
-        format.json do
-          render json: {
-            stable: @formula.stable_version,
-            devel: @formula.devel_version,
-            head: @formula.head_version
-          }
-        end
+    return unless stale? @formula.revisions.first.sha, public: true
+
+    respond_to do |format|
+      format.json do
+        render json: {
+          stable: @formula.stable_version,
+          devel: @formula.devel_version,
+          head: @formula.head_version
+        }
       end
     end
   end

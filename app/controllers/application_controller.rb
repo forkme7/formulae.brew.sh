@@ -1,3 +1,4 @@
+
 # This code is free software; you can redistribute it and/or modify it under
 # the terms of the new BSD License.
 #
@@ -38,7 +39,7 @@ class ApplicationController < ActionController::Base
   end
 
   def error_page(status = :internal_server_error)
-    view = 'application/%d' % [ Rack::Utils::SYMBOL_TO_STATUS_CODE[status] ]
+    view = 'application/%d'.format(Rack::Utils::SYMBOL_TO_STATUS_CODE[status])
 
     respond_to do |format|
       format.html { render view, status: status }
@@ -87,26 +88,18 @@ class ApplicationController < ActionController::Base
   private
 
   def main_page
-    @taps = Repository.only(:_id, :date, :letters, :name, :sha, :updated_at).
-            current_taps.order_by([:name, :asc]).to_a
-    @taps = ([ Repository.core ] + @taps).uniq
+    @taps = Repository.only(%i[_id date letters name sha updated_at])
+                      .current_taps.order_by(%i[name asc])
+                      .sort_by { |r| r.core? ? 0 : 1 }
 
-    @added = Formula.where(removed: false).
-            with_size(revision_ids: 1).
-            order_by(%i{date desc}).
-            only(:_id, :devel_version, :head_version, :name, :repository_id, :stable_version).
-            limit 5
+    top5 = Formula.limit(5).order_by(%i[date desc])
+                  .only %i[_id name repository_id]
+    linked_formulae = top5.where(removed: false)
+                          .only %i[devel_version head_version stable_version]
 
-    @updated = Formula.where(removed: false).
-            not.with_size(revision_ids: 1).
-            order_by(%i{date desc}).
-            only(:_id, :devel_version, :head_version, :name, :repository_id, :stable_version).
-            limit 5
-
-    @removed = Formula.where(removed: true).
-            order_by(%i{date desc}).
-            only(:_id, :name, :repository_id).
-            limit 5
+    @added = linked_formulae.with_size revision_ids: 1
+    @updated = linked_formulae.not.with_size revision_ids: 1
+    @removed = top5.where removed: true
   end
 
 end

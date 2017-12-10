@@ -5,8 +5,7 @@
 
 class CoreTap
 
-  def self.ensure_installed!(*_)
-  end
+  def self.ensure_installed!(*_); end
 
   def formula_dir
     Pathname $core_formula_path

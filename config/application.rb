@@ -13,7 +13,7 @@ Bundler.require :default, :assets, Rails.env
 module Braumeister
   class Application < Rails::Application
 
-    config.encoding = "utf-8"
+    config.encoding = 'utf-8'
 
     config.exceptions_app = ->(env) { ApplicationController.action(:error_page).call(env) }
 

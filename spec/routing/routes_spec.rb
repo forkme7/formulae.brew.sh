@@ -7,7 +7,7 @@ require 'rails_helper'
 
 describe 'routing' do
   it 'routes / to application#index' do
-    expect(get: '/' ).to route_to('application#index')
+    expect(get: '/').to route_to('application#index')
   end
 
   it 'routes /browse/:letter to formulae#browse' do

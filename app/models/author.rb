@@ -7,7 +7,7 @@ class Author
 
   include Mongoid::Document
 
-  field :_id, type: String, overwrite: true, default: ->{ email }
+  field :_id, type: String, overwrite: true, default: -> { email }
   field :email, type: String
   field :name, type: String
 

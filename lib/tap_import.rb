@@ -107,9 +107,11 @@ module TapImport
 
   def find_formula(file)
     file = file.to_s
-    file.gsub! /(?<=[^\\])\+/, '\\\\+'
-    file = file + '.rb' unless file.end_with? '.rb'
-    git("ls-files | grep -E '(^|/)#{file}'").lines.first.strip rescue nil
+    file.gsub!(/(?<=[^\\])\+/, '\\\\+')
+    file += '.rb' unless file.end_with? '.rb'
+    git("ls-files | grep -E '(^|/)#{file}'").lines.first.strip
+  rescue StandardError
+    nil
   end
 
   def formulae_info(formulae, sha = nil)
@@ -160,9 +162,7 @@ module TapImport
                  SyntaxError, TypeError
             error_msg = "Formula '#{name}' could not be imported because of an error:\n" <<
                     "    #{$!.class}: #{$!.message}"
-            if $DEBUG
-              $!.backtrace.each { |line| error_msg << "  #{line}\n" }
-            end
+            $!.backtrace.each { |line| error_msg << "  #{line}\n" } if $DEBUG
             Rails.logger.warn error_msg
             if defined? Rollbar
               Rollbar.warning $!, error_msg, {
@@ -259,9 +259,7 @@ module TapImport
         end
       rescue
         error_msg = "Commit #{sha} could not be imported because of an error: #{$!.message}"
-        if $DEBUG
-          $!.backtrace.each { |line| error_msg << "  #{line}\n" }
-        end
+        $!.backtrace.each { |line| error_msg << "  #{line}\n" } if $DEBUG
         Rails.logger.debug error_msg
         retry unless sha =~ /\^\^\^\^\^/
       end
@@ -317,7 +315,7 @@ module TapImport
       else
         alias_path = File.join path, apath
         next unless FileTest.symlink? alias_path
-        formula_name  = File.basename File.readlink(alias_path), '.rb'
+        formula_name = File.basename File.readlink(alias_path), '.rb'
         formula = self.formulae.find_by name: formula_name
         next if formula.nil?
         formula.aliases ||= []
@@ -332,7 +330,7 @@ module TapImport
       self.formulae.letter(letter).where(removed: false).exists?
     end
 
-    self.outdated = self.letters.empty?
+    self.outdated = letters.empty?
 
     last_sha
   end
@@ -380,7 +378,7 @@ module TapImport
 
     return [], [], sha if sha == last_sha
 
-    self.formula_path = File.exists?(File.join path, 'Formula') ? 'Formula' : nil
+    self.formula_path = File.exist?(File.join path, 'Formula') ? 'Formula' : nil
 
     if last_sha.nil?
       formulae = git "ls-files -- #{formula_pathspec}"
@@ -394,11 +392,11 @@ module TapImport
       end
     else
       formulae = git "diff --name-status #{last_sha}..HEAD -- #{formula_pathspec}"
-      formulae = formulae.lines.map { |file| file.split }
+      formulae = formulae.lines.map(&:split)
 
       if core?
         aliases = git "diff --name-status #{last_sha}..HEAD -- Aliases/"
-        aliases = aliases.lines.map { |file| file.split }
+        aliases = aliases.lines.map(&:split)
       else
         aliases = []
       end
