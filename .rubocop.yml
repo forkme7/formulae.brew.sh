@@ -9,6 +9,8 @@ Layout/EmptyLinesAroundModuleBody:
   EnforcedStyle: empty_lines_except_namespace
 Layout/EndOfLine:
   EnforcedStyle: lf
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
 Style/FrozenStringLiteralComment:
   Enabled: false
 Style/SpecialGlobalVars:

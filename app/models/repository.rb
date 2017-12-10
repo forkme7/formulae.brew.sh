@@ -11,7 +11,7 @@ class Repository
   CORE = 'Homebrew/homebrew-core'
   MAIN = 'Homebrew/brew'
 
-  field :_id, type: String, overwrite: true, default: ->{ name }
+  field :_id, type: String, overwrite: true, default: -> { name }
   field :date, type: Time
   field :formula_path, type: String
   field :letters, type: Array, default: []
@@ -38,8 +38,8 @@ class Repository
   end
 
   def first_letter
-    first_formula = formulae.order_by(%i[name asc]).only(:name).limit(1).to_a.first
-    first_formula ? first_formula.name[0] : nil
+    first_formula = formulae.order_by(%i[name asc]).only(:name).limit 1
+    first_formula.empty? ? nil : first_formula.first.name[0]
   end
 
   def to_param

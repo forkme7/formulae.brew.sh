@@ -4,7 +4,7 @@ Rollbar.configure do |config|
   config.environment = ENV['ROLLBAR_ENV'] || Rails.env
   config.use_async = true
 
-  config.exception_level_filters.merge!('ActionController::BadRequest' => 'ignore')
-  config.exception_level_filters.merge!('ActionController::InvalidAuthenticityToken' => 'ignore')
-  config.exception_level_filters.merge!('ActionController::InvalidCrossOriginRequest' => 'ignore')
+  config.exception_level_filters['ActionController::BadRequest'] = 'ignore'
+  config.exception_level_filters['ActionController::InvalidAuthenticityToken'] = 'ignore'
+  config.exception_level_filters['ActionController::InvalidCrossOriginRequest'] = 'ignore'
 end if defined? Rollbar

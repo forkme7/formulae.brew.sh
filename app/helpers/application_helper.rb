@@ -7,7 +7,7 @@ module ApplicationHelper
 
   def formula_link(formula, options = {})
     options = { class: 'formula' }.merge options
-    url_options = formula.dupe? ? [ formula.repository, formula ] : formula
+    url_options = formula.dupe? ? [formula.repository, formula] : formula
     link_to formula.name, url_for(url_options), options
   end
 
@@ -21,7 +21,7 @@ module ApplicationHelper
 
   def title
     title = 'Homebrew Formulae'
-    title = "#@title – #{title}" unless @title.nil?
+    title = "#{@title} – #{title}" unless @title.nil?
     title
   end
 

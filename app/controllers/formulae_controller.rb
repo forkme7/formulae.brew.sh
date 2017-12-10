@@ -15,18 +15,18 @@ class FormulaeController < ApplicationController
     @title = "Browse formulae – #{letter.upcase}"
     @title << " – #{helpers.name}" unless all?
 
-    @formulae = formulae.letter(letter).
-            where(removed: false).order_by([:name, :asc]).
-            page(params[:page]).per 30
+    @formulae = formulae.letter(letter)
+                        .where(removed: false).order_by(%i[name asc])
+                        .page(params[:page]).per 30
 
     fresh_when etag: etag, public: true
   end
 
   def feed
     revisions = all? ? Revision : @repository.revisions
-    @revisions = revisions.without_bot.
-            includes(:author, :added_formulae, :updated_formulae, :removed_formulae).
-            order_by([:date, :desc]).limit 50
+    @revisions = revisions.without_bot
+                          .includes(:author, :added_formulae, :updated_formulae, :removed_formulae)
+                          .order_by(%i[date desc]).limit 50
 
     respond_to do |format|
       format.atom
@@ -42,11 +42,12 @@ class FormulaeController < ApplicationController
     @title = "Search for: #{term}"
     @title << " in #{helpers.name}" unless all?
     search_term = /#{Regexp.escape term}/i
-    @formulae = formulae.and(removed: false, :$or => [
-      { aliases: search_term },
-      { description: search_term },
-      { name: search_term }
-    ])
+    @formulae = formulae.and removed: false, :$or =>
+      [
+        { aliases: search_term },
+        { description: search_term },
+        { name: search_term }
+      ]
 
     if @formulae.size == 1 && term == @formulae.first.name
       redirect_to @formulae.first
@@ -55,10 +56,9 @@ class FormulaeController < ApplicationController
 
     @formulae = @formulae.sort_by! do |formula|
       Text::Levenshtein.distance(formula.name[0..term.size - 1], term) * 10 +
-      Text::Levenshtein.distance(formula.name, term)
+        Text::Levenshtein.distance(formula.name, term)
     end
-    @formulae = Kaminari.paginate_array(@formulae).
-            page(params[:page]).per 30
+    @formulae = Kaminari.paginate_array(@formulae).page(params[:page]).per 30
 
     respond_to do |format|
       format.html { render 'formulae/browse' }
@@ -88,7 +88,8 @@ class FormulaeController < ApplicationController
     @formula = @formulae.first
     @title = @formula.name.dup
     @title << " – #{helpers.name}" unless all?
-    @revisions = @formula.revisions.limit(5).without_bot.includes(:author).order_by(%i{date desc}).to_a
+    @revisions = @formula.revisions.limit(5).without_bot.includes(:author)
+                         .order_by(%i[date desc]).to_a
 
     fresh_when etag: etag, public: true
   end
@@ -120,8 +121,8 @@ class FormulaeController < ApplicationController
     repository_id = params[:repository_id]
     return if repository_id.nil?
 
-    @repository = Repository.where(_id: /^#{repository_id}$/i).
-            only(:_id, :letters, :name, :sha, :updated_at).first
+    @repository = Repository.where(_id: /^#{repository_id}$/i)
+                            .only(:_id, :letters, :name, :sha, :updated_at).first
     if @repository.nil?
       raise Mongoid::Errors::DocumentNotFound.new Repository, [], repository_id
     end

@@ -107,9 +107,11 @@ module TapImport
 
   def find_formula(file)
     file = file.to_s
-    file.gsub! /(?<=[^\\])\+/, '\\\\+'
-    file = file + '.rb' unless file.end_with? '.rb'
-    git("ls-files | grep -E '(^|/)#{file}'").lines.first.strip rescue nil
+    file.gsub!(/(?<=[^\\])\+/, '\\\\+')
+    file += '.rb' unless file.end_with? '.rb'
+    git("ls-files | grep -E '(^|/)#{file}'").lines.first.strip
+  rescue StandardError
+    nil
   end
 
   def formulae_info(formulae, sha = nil)
@@ -328,7 +330,7 @@ module TapImport
       self.formulae.letter(letter).where(removed: false).exists?
     end
 
-    self.outdated = self.letters.empty?
+    self.outdated = letters.empty?
 
     last_sha
   end
