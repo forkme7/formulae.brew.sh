@@ -38,7 +38,7 @@ class Repository
   end
 
   def first_letter
-    first_formula = formulae.order_by(%i{name asc}).only(:name).limit(1).to_a.first
+    first_formula = formulae.order_by(%i[name asc]).only(:name).limit(1).to_a.first
     first_formula ? first_formula.name[0] : nil
   end
 
@@ -47,7 +47,7 @@ class Repository
   end
 
   def short_name
-    name.gsub("/homebrew-", "/")
+    name.gsub('/homebrew-', '/')
   end
 
   def url

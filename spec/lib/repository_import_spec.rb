@@ -45,7 +45,7 @@ describe RepositoryImport do
   describe '#clone_or_pull' do
 
     it 'clones a new repository' do
-      File.expects(:exists?).with(repo.path).returns false
+      File.expects(:exist?).with(repo.path).returns false
       repo.expects(:git).with "clone --quiet #{repo.url} #{repo.path}"
 
       repo.clone_or_pull
@@ -54,14 +54,14 @@ describe RepositoryImport do
     context 'updates an already known repository' do
 
       it 'and clones it if it doesn\'t exist yet' do
-        File.expects(:exists?).with(repo.path).returns false
+        File.expects(:exist?).with(repo.path).returns false
         repo.expects(:git).with "clone --quiet #{repo.url} #{repo.path}"
 
         repo.clone_or_pull
       end
 
       it 'and fetches updates if it already exists' do
-        File.expects(:exists?).with(repo.path).returns true
+        File.expects(:exist?).with(repo.path).returns true
         repo.expects(:git).with('fetch --force --quiet origin master')
         repo.expects(:git).with('diff --shortstat HEAD FETCH_HEAD').returns '1'
         repo.expects(:git).with("--work-tree #{repo.path} reset --hard --quiet FETCH_HEAD")

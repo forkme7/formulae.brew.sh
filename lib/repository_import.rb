@@ -6,7 +6,7 @@
 module RepositoryImport
 
   def clone_or_pull(reset = true)
-    if File.exists? path
+    if File.exist? path
       Rails.logger.info "Pulling changes from #{name} into #{path}"
       git 'fetch --force --quiet origin master'
       if reset

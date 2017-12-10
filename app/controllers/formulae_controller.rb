@@ -38,14 +38,14 @@ class FormulaeController < ApplicationController
   def search
     return not_found if params[:search].nil?
 
-    term = params[:search].force_encoding('UTF-8').gsub "\u0000", ''
+    term = params[:search].force_encoding('UTF-8').delete "\u0000"
     @title = "Search for: #{term}"
     @title << " in #{helpers.name}" unless all?
     search_term = /#{Regexp.escape term}/i
     @formulae = formulae.and(removed: false, :$or => [
-            { aliases: search_term },
-            { description: search_term },
-            { name: search_term }
+      { aliases: search_term },
+      { description: search_term },
+      { name: search_term }
     ])
 
     if @formulae.size == 1 && term == @formulae.first.name

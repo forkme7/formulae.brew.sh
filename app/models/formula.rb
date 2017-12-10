@@ -33,8 +33,8 @@ class Formula
 
   scope :letter, ->(letter) { where(name: /^#{letter}/) }
 
-  index( { repository_id: 1 }, { unique: false })
-  index( { name: 1 }, { unique: false })
+  index({ repository_id: 1 }, { unique: false })
+  index({ name: 1 }, { unique: false })
 
   def best_spec
     if stable_version

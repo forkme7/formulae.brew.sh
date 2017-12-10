@@ -19,15 +19,15 @@ class ApiController < FormulaeController
       raise Mongoid::Errors::DocumentNotFound.new(Formula, [], params[:formula_id])
     end
 
-    if stale? @formula.revisions.first.sha, public: true
-      respond_to do |format|
-        format.json do
-          render json: {
-            stable: @formula.stable_version,
-            devel: @formula.devel_version,
-            head: @formula.head_version
-          }
-        end
+    return unless stale? @formula.revisions.first.sha, public: true
+
+    respond_to do |format|
+      format.json do
+        render json: {
+          stable: @formula.stable_version,
+          devel: @formula.devel_version,
+          head: @formula.head_version
+        }
       end
     end
   end
