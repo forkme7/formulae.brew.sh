@@ -38,8 +38,4 @@ module FormulaeHelper
     all? ? nil : @repository.name
   end
 
-  def repository_data
-    { repository: @repository.name } unless all?
-  end
-
 end
