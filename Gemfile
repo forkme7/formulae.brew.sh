@@ -11,7 +11,7 @@ gem 'puma', '~> 3.11'
 gem 'rails', '5.1.4'
 gem 'sass-rails', '~> 5.0'
 gem 'text', '~> 1.3.0'
-gem 'uglifier', '~> 4.0'
+gem 'uglifier', '~> 4.1'
 
 group :development do
   gem 'foreman', '~> 0.60'
