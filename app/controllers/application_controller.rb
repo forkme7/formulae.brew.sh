@@ -82,7 +82,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def ensure_html
-    head 406 unless request.format == :html
+    head 406 unless request.format.html? || request.request_method == 'HEAD'
   end
 
   private
