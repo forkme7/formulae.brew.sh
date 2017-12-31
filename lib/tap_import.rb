@@ -120,63 +120,59 @@ module TapImport
     repositories = ([ Repository.core, self ] + Repository.all).uniq
 
     pid = fork do
-      begin
-        Object.send(:remove_const, :Formula) if Object.const_defined? :Formula
+      Object.send(:remove_const, :Formula) if Object.const_defined? :Formula
 
-        $homebrew_path = main_repo.path
-        $core_formula_path = repo.path
-        $LOAD_PATH.unshift File.join($homebrew_path, 'Library', 'Homebrew')
-        $LOADED_FEATURES.reject! { |path| path =~ /\/formula\.rb$/ }
+      $homebrew_path = main_repo.path
+      $core_formula_path = repo.path
+      $LOAD_PATH.unshift File.join($homebrew_path, 'Library', 'Homebrew')
+      $LOADED_FEATURES.reject! { |path| path =~ /\/formula\.rb$/ }
 
-        ENV['HOMEBREW_BREW_FILE'] = File.join $homebrew_path, 'bin', 'brew'
-        ENV['HOMEBREW_CACHE'] = File.join $homebrew_path, 'Cache'
-        ENV['HOMEBREW_CELLAR'] = File.join $homebrew_path, 'Cellar'
-        ENV['HOMEBREW_LIBRARY'] = File.join $homebrew_path, 'Library'
-        ENV['HOMEBREW_MACOS_VERSION'] = '10.12'
-        ENV['HOMEBREW_PREFIX'] = $homebrew_path
-        ENV['HOMEBREW_REPOSITORY'] = File.join $homebrew_path, '.git'
+      ENV['HOMEBREW_BREW_FILE'] = File.join $homebrew_path, 'bin', 'brew'
+      ENV['HOMEBREW_CACHE'] = File.join $homebrew_path, 'Cache'
+      ENV['HOMEBREW_CELLAR'] = File.join $homebrew_path, 'Cellar'
+      ENV['HOMEBREW_LIBRARY'] = File.join $homebrew_path, 'Library'
+      ENV['HOMEBREW_MACOS_VERSION'] = '10.12'
+      ENV['HOMEBREW_PREFIX'] = $homebrew_path
+      ENV['HOMEBREW_REPOSITORY'] = File.join $homebrew_path, '.git'
 
-        require 'global'
-        require 'formula'
-        require 'os/mac'
+      require 'global'
+      require 'formula'
+      require 'os/mac'
 
-        Homebrew.raise_deprecation_exceptions = false
+      Homebrew.raise_deprecation_exceptions = false
 
-        require 'sandbox/argv'
-        require 'sandbox/coretap'
-        require 'sandbox/formulary'
-        require 'sandbox/utils' unless sha.nil?
+      require 'sandbox/argv'
+      require 'sandbox/coretap'
+      require 'sandbox/formulary'
+      require 'sandbox/utils' unless sha.nil?
 
-        Formulary.repositories = repositories
+      Formulary.repositories = repositories
 
-        formulae_info = {}
-        formulae.each do |path|
-          begin
-            name = File.basename path, '.rb'
-            contents = file_contents_for_sha path, sha
+      formulae_info = {}
+      formulae.each do |path|
+        name = File.basename path, '.rb'
+        contents = file_contents_for_sha path, sha
 
-            formula = Formulary.sandboxed_formula_from_contents name, path, contents
-            formulae_info[name] = formula.to_hash
-          rescue FormulaSpecificationError, FormulaUnavailableError,
-                 FormulaValidationError, NoMethodError, RuntimeError,
-                 SyntaxError, TypeError
-            error_msg = "Formula '#{name}' could not be imported because of an error:\n" <<
-                    "    #{$!.class}: #{$!.message}"
-            $!.backtrace.each { |line| error_msg << "  #{line}\n" } if $DEBUG
-            Rails.logger.warn error_msg
-            if defined? Rollbar
-              Rollbar.warning $!, error_msg, {
-                formula: name,
-                repository: self.name
-              }
-            end
-          end
+        formula = Formulary.sandboxed_formula_from_contents name, path, contents
+        formulae_info[name] = formula.to_hash
+      rescue FormulaSpecificationError, FormulaUnavailableError,
+             FormulaValidationError, NoMethodError, RuntimeError,
+             SyntaxError, TypeError
+        error_msg = "Formula '#{name}' could not be imported because of an error:\n" <<
+                "    #{$!.class}: #{$!.message}"
+        $!.backtrace.each { |line| error_msg << "  #{line}\n" } if $DEBUG
+        Rails.logger.warn error_msg
+        if defined? Rollbar
+          Rollbar.warning $!, error_msg, {
+            formula: name,
+            repository: self.name
+          }
         end
-
-        File.binwrite tmp_file, Marshal.dump(formulae_info)
-      rescue
-        File.binwrite tmp_file, Marshal.dump($!)
       end
+
+      File.binwrite tmp_file, Marshal.dump(formulae_info)
+    rescue
+      File.binwrite tmp_file, Marshal.dump($!)
     end
 
     Process.wait pid
